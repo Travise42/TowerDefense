@@ -1,0 +1,40 @@
+package func;
+
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+
+public class ImageHandler {
+
+    public static BufferedImage loadImage( String file ) {
+        try {
+            return ImageIO.read(new File( file ));
+        }
+        catch (IOException e) {
+            System.out.println("Error opening image file: " + e.getMessage());
+            System.out.println("Input file: \"" + file + "\"");
+        }
+        return new BufferedImage(0, 0, 0);
+    }
+
+    public static BufferedImage[] loadImages( String... files ) {
+        BufferedImage[] images = new BufferedImage[files.length];
+
+        for ( int i = 0; i < files.length; i++ ) {
+            images[i] = loadImage( files[i] );
+        }
+        return images;
+    }
+
+    public static BufferedImage resizeImage( BufferedImage image, int width, int height ) {
+        BufferedImage newImage = new BufferedImage( width, height, BufferedImage.TYPE_INT_RGB );
+        Graphics2D g2d = newImage.createGraphics();
+        g2d.drawImage( image, 0, 0, width, height, null );
+        g2d.dispose();
+        return newImage;
+    }
+    
+}

@@ -7,12 +7,12 @@ public class Main {
 
     private static void init() {
         // Create and name window
-        JFrame window = new JFrame("TowerDefence");
+        JFrame window = new JFrame("TowerDefense");
         // Allow game to close
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         // Create JPanel
-        TowerDefence td = new TowerDefence();
+        TowerDefense td = new TowerDefense();
         window.add(td);
         window.addKeyListener(td);
         window.addMouseListener(td);

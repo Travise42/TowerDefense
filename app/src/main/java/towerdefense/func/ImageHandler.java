@@ -33,10 +33,14 @@ public class ImageHandler {
     }
 
     public static BufferedImage resizeImage( BufferedImage image, int width, int height ) {
+        // Create a new surface
         BufferedImage newImage = new BufferedImage( width, height, BufferedImage.TYPE_INT_RGB );
+
+        // Draw the old image onto the new image with new dimensions
         Graphics2D g2d = newImage.createGraphics();
         g2d.drawImage( image, 0, 0, width, height, null );
         g2d.dispose();
+
         return newImage;
     }
     

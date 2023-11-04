@@ -10,8 +10,6 @@ import towerdefense.game.Panel;
 
 public class MapHandler {
 
-    final private static int TILE_SIZE = 32;
-
     final private static int T_TREE = 0;
     final private static int T_TILE = 1;
 
@@ -28,20 +26,29 @@ public class MapHandler {
     }
 
     public void draw( Graphics g ) {
-        float dx = ( Panel.WIDTH - Map.COLUMNS * getTileSize() ) / 2;
-        float dy = ( Panel.HEIGHT - Map.ROWS * getTileSize() ) / 2;
+        float size = getTileSize();
+        float dx = ( Panel.WIDTH - Map.COLUMNS*size ) / 2;
+        float dy = ( Panel.HEIGHT - Map.ROWS*size ) / 2;
 
-        for ( int r = 0; r < Map.ROWS; r++ ) {
-            for ( int c = 0; c < Map.COLUMNS; c++ ) {
-                g.drawImage( tiles[ map.getMap()[c][r] ? T_TILE : T_TREE ],
-                    (int)( dx + c * getTileSize() ), (int)( dy + r * getTileSize() ), game.panel );
+        for ( int row = 0; row < Map.ROWS; row++ ) {
+            for ( int column = 0; column < Map.COLUMNS; column++ ) {
+                boolean isPath = map.getMap()[column][row];
+                
+                g.drawImage( 
+                    tiles[ isPath ? T_TILE : T_TREE ],
+                    (int)( column*size + dx ),
+                    (int)( row*size + dy ),
+                    game.panel );
             }
         }
     }
 
     public void update() {
         for ( int i = 0; i < tiles.length; i++ ) {
-            tiles[i] = resizeImage( tiles[i], (int) getTileSize(), (int) getTileSize() );
+            tiles[i] = resizeImage( 
+                tiles[i], 
+                getTileSize(), 
+                getTileSize() );
         }
     }
 

@@ -17,7 +17,20 @@ public class Map {
 
     public Map( Game gameInstance ) {
         game = gameInstance;
+
         stage = 0;
+        setup();
+    }
+
+    private void setup() {
+        int ic = (INITIAL_OPEN_COLUMNS - 1)/2;
+        int ir = (INITIAL_OPEN_ROWS - 1)/2;
+
+        for ( int c = COLUMNS/2 - ic; c < COLUMNS/2 + ic; c++ ) {
+            for ( int r = ROWS/2 - ir; r < ROWS/2 + ir; r++ ) {
+                map[c][r] = true;
+            }
+        }
     }
 
     public void nextStage() {
@@ -26,9 +39,15 @@ public class Map {
         int ic = (INITIAL_OPEN_COLUMNS - 1)/2;
         int ir = (INITIAL_OPEN_ROWS - 1)/2;
 
-        for ( int c = COLUMNS/2 - ic - stage; c < COLUMNS/2 + ic + stage; c++ ) {
-            for ( int r = ROWS/2 - ir - stage; r < ROWS/2 + ir + stage; r++ ) {
-                map[c][r] = true;
+        for ( int c = -(ic+stage); c < ic+stage; c++ ) {
+            System.out.println( "-----------------------------------" );
+            for ( int r = -(int)(ir+stage*0.7f); r < ir + (int)(stage*0.7f); r++ ) {
+                if ( 0.6 > Math.cos( 2*( (float)c / ( ic+stage ) + ( ic+stage )/2 - 1 ) )*Math.cos( 2*( (float)r / ( ir+stage*0.7f ) + ( ic+stage*0.7f )/2 - 1 ) ) )
+                    map[c + COLUMNS/2][r + ROWS/2] = true;
+                
+                System.out.print( 2*( (float)(c + ic+stage) / ( ic+stage ) ) );
+                System.out.print(" ");
+                System.out.println( 2*( (float)(r + ir+stage*0.7f) / ( ir+stage*0.7f ) ) );
             }
         }
 

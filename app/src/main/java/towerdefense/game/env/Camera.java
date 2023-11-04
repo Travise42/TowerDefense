@@ -1,7 +1,6 @@
 package towerdefense.game.env;
 
 import towerdefense.game.Game;
-import towerdefense.game.Panel;
 
 public class Camera {
 
@@ -12,8 +11,8 @@ public class Camera {
     public Camera( Game gameInstance ) {
         game = gameInstance;
 
-        viewy = 0;
-        viewy = 0;
+        viewy = Map.INITIAL_OPEN_COLUMNS + 2;
+        viewy = Map.INITIAL_OPEN_ROWS + 2;
     }
 
     public void expand() {

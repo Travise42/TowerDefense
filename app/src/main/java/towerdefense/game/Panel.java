@@ -1,4 +1,4 @@
-package main;
+package towerdefense.game;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -14,9 +14,7 @@ import javax.swing.JPanel;
 import javax.swing.Timer;
 import javax.swing.event.MouseInputListener;
 
-import game.Game;
-
-public class TowerDefense extends JPanel implements ActionListener, KeyListener, MouseInputListener {
+public class Panel extends JPanel implements ActionListener, KeyListener, MouseInputListener {
 
     public static final int WIDTH = 1200;
     public static final int HEIGHT = 800;
@@ -28,7 +26,7 @@ public class TowerDefense extends JPanel implements ActionListener, KeyListener,
     public int tick = 0;
 
     // Initiate the program
-    public TowerDefense() {
+    public Panel() {
         setPreferredSize( new Dimension( WIDTH, HEIGHT ) );
         setBackground( new Color( 10,10,10 ) );
 

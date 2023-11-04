@@ -1,22 +1,20 @@
-package game;
+package towerdefense.game;
 
-import main.TowerDefense;
-
-import static func.ImageHandler.*;
+import static towerdefense.func.ImageHandler.*;
 
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
 public class Game {
 
-    TowerDefense td;
+    Panel td;
 
     BufferedImage testImage;
 
-    public Game( TowerDefense towerDefense ) {
+    public Game( Panel towerDefense ) {
         td = towerDefense;
 
-        testImage = resizeImage( loadImage( "src/assets/testImage.png" ), 120, 120 );
+        testImage = resizeImage( loadImage( "testImage.png" ), 120, 120 );
     }
 
     public void update() {

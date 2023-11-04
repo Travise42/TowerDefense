@@ -1,9 +1,12 @@
-package main;
+package towerdefense;
+
 
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
-public class Main {
+import towerdefense.game.Panel;
+
+public class App {
 
     private static void init() {
         // Create and name window
@@ -12,7 +15,7 @@ public class Main {
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         // Create JPanel
-        TowerDefense td = new TowerDefense();
+        Panel td = new Panel();
         window.add(td);
         window.addKeyListener(td);
         window.addMouseListener(td);

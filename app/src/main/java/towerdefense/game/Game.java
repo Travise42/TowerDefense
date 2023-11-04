@@ -5,16 +5,21 @@ import static towerdefense.func.ImageHandler.*;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
+import towerdefense.game.env.Map;
+
 public class Game {
 
-    Panel td;
+    Panel panel;
+    Map map;
 
     BufferedImage testImage;
 
-    public Game( Panel towerDefense ) {
-        td = towerDefense;
+    public Game( Panel jpanel ) {
+        panel = jpanel;
 
-        testImage = resizeImage( loadImage( "testImage.png" ), 120, 120 );
+        map = new Map( this );
+
+        //testImage = resizeImage( loadImage( "testImage.png" ), 120, 120 );
     }
 
     public void update() {
@@ -22,7 +27,7 @@ public class Game {
     }
 
     public void draw( Graphics g ) {
-        g.drawImage( testImage, td.tick, 100, td );
+        //g.drawImage( testImage, panel.tick, 100, panel );
     }
     
 }

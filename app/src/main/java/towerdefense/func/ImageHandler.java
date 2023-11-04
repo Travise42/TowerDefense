@@ -19,6 +19,7 @@ public class ImageHandler {
             System.out.println("Error opening image file: " + e.getMessage());
             System.out.println("Input file: \"" + DIR + file + "\"");
         }
+        // Return an empty image for missing textures
         return new BufferedImage(16, 16, BufferedImage.TYPE_INT_RGB);
     }
 

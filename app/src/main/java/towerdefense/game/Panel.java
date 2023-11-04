@@ -25,7 +25,6 @@ public class Panel extends JPanel implements ActionListener, KeyListener, MouseI
 
     public int tick = 0;
 
-    // Initiate the program
     public Panel() {
         setPreferredSize( new Dimension( WIDTH, HEIGHT ) );
         setBackground( new Color( 10,10,10 ) );
@@ -61,25 +60,21 @@ public class Panel extends JPanel implements ActionListener, KeyListener, MouseI
 
     }
 
-    // Mouse initially pressed
     @Override
     public void mousePressed( MouseEvent e ) {
 
     }
 
-    // Mouse released
     @Override
     public void mouseReleased( MouseEvent e ) {
 
     }
 
-    // Mouse enters the screen
     @Override
     public void mouseEntered( MouseEvent e ) {
         
     }
 
-    // Mouse leaves the screen
     @Override
     public void mouseExited( MouseEvent e ) {
 
@@ -103,13 +98,11 @@ public class Panel extends JPanel implements ActionListener, KeyListener, MouseI
         
     }
 
-    // Key is initally pressed
     @Override
     public void keyPressed( KeyEvent e ) {
         
     }
 
-    // Key is released
     @Override
     public void keyReleased( KeyEvent e ) {
         

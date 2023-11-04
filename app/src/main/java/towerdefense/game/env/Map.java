@@ -13,25 +13,14 @@ public class Map {
     private Game game;
     private final boolean[][] map = new boolean[COLUMNS][ROWS];
 
-    private int stage = 8;
+    public int stage;
 
     public Map( Game gameInstance ) {
         game = gameInstance;
-        nextStage();
+        stage = 0;
     }
 
-    public String toString() {
-        String string = "";
-        for ( int r = 0; r < ROWS; r++ ) {
-            for ( int c = 0; c < COLUMNS; c++ ) {
-                string += map[c][r] ? "  " : "F ";
-            }
-            string += "\n";
-        }
-        return string;
-    }
-
-    private void nextStage() {
+    public void nextStage() {
         stage++;
 
         int ic = (INITIAL_OPEN_COLUMNS - 1)/2;
@@ -42,6 +31,24 @@ public class Map {
                 map[c][r] = true;
             }
         }
+
+        game.camera.expand();
+    }
+
+    // Print a string representing the open (F) and closed (_) spaces
+    public String toString() {
+        String string = "";
+        for ( int r = 0; r < ROWS; r++ ) {
+            for ( int c = 0; c < COLUMNS; c++ ) {
+                string += map[c][r] ? "_ " : "F ";
+            }
+            string += "\n";
+        }
+        return string;
+    }
+
+    public boolean[][] getMap() {
+        return map;
     }
 
 }

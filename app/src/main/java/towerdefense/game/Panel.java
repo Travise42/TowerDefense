@@ -40,6 +40,8 @@ public class Panel extends JPanel implements ActionListener, KeyListener, MouseI
     public void actionPerformed( ActionEvent e ) {
         tick ++;
 
+        game.update();
+
         repaint();
     }
 

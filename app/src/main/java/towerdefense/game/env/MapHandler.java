@@ -32,7 +32,7 @@ public class MapHandler {
 
         for ( int row = 0; row < Map.ROWS; row++ ) {
             for ( int column = 0; column < Map.COLUMNS; column++ ) {
-                boolean isPath = map.getMap()[column][row];
+                boolean isPath = map.getGrid()[column][row];
                 
                 g.drawImage( 
                     tiles[ isPath ? T_TILE : T_TREE ],
@@ -47,13 +47,13 @@ public class MapHandler {
         for ( int i = 0; i < tiles.length; i++ ) {
             tiles[i] = resizeImage( 
                 tiles[i], 
-                getTileSize(), 
-                getTileSize() );
+                (int) Math.ceil( getTileSize() ), 
+                (int) Math.ceil( getTileSize() ) );
         }
     }
 
-    public int getTileSize() {
-        return (int)( Panel.HEIGHT / game.camera.viewy );
+    public float getTileSize() {
+        return Panel.WIDTH / (game.camera.viewx);
     }
 
 }

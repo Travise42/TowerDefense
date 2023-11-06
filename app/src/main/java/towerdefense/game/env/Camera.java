@@ -11,25 +11,17 @@ public class Camera {
     public Camera( Game gameInstance ) {
         game = gameInstance;
 
-        viewy = Map.INITIAL_OPEN_COLUMNS + 2;
-        viewy = Map.INITIAL_OPEN_ROWS + 2;
+        viewx = Map.INITIAL_OPEN_COLUMNS + 4;
+        viewy = Map.INITIAL_OPEN_ROWS + 4;
     }
 
     public void expand() {
-        viewx = Map.INITIAL_OPEN_COLUMNS + 2 + 2*game.getStage();
-        viewy = Map.INITIAL_OPEN_ROWS + 2 + 2*game.getStage();
+        viewx = Map.INITIAL_OPEN_COLUMNS + 4 + 2*game.getStage();
+        viewy = Map.INITIAL_OPEN_ROWS + 4 + 2*0.7f*game.getStage();
     }
 
     public void update() {
 
-    }
-
-    public float getWidth() {
-        return viewx * game.map.getTileSize();
-    }
-
-    public float getHeight() {
-        return viewy * game.map.getTileSize();
     }
     
 }

@@ -10,7 +10,7 @@ import towerdefense.game.Panel;
 
 public class MapHandler {
 
-    final private static int T_TREE = 0;
+    final private static int T_WALL = 0;
     final private static int T_TILE = 1;
 
     private static BufferedImage[] tiles;
@@ -22,7 +22,7 @@ public class MapHandler {
         game = gameInstance;
         map = new Map( game );
 
-        tiles = loadImages( "map/tree.png", "map/tile.png" );
+        tiles = loadImages( "map/wall.png", "map/tile.png" );
     }
 
     public void draw( Graphics g ) {
@@ -35,7 +35,7 @@ public class MapHandler {
                 boolean isPath = map.getGrid()[column][row];
                 
                 g.drawImage( 
-                    tiles[ isPath ? T_TILE : T_TREE ],
+                    tiles[ isPath ? T_TILE : T_WALL ],
                     (int)( column*size + dx ),
                     (int)( row*size + dy ),
                     game.panel );

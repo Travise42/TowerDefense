@@ -31,6 +31,15 @@ public class Map {
                 grid[c][r] = true;
             }
         }
+        
+        for ( int r = ROWS/2 - 1; r <= ROWS/2; r++ ) {
+            for ( int c = 0; c < COLUMNS/2 - ic; c++ ) {
+                grid[c][r] = true;
+            }
+            for ( int c = COLUMNS/2 + ic; c < COLUMNS; c++ ) {
+                grid[c][r] = true;
+            }
+        }
     }
 
     public void nextStage() {

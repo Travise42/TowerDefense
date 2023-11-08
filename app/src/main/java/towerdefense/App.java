@@ -15,10 +15,11 @@ public class App {
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         // Create JPanel
-        Panel td = new Panel();
+        Panel td = new Panel(window);
         window.add(td);
         window.addKeyListener(td);
         window.addMouseListener(td);
+        window.addMouseMotionListener(td);
 
         // Edit window attributes
         window.setResizable(false);

@@ -8,6 +8,11 @@ import java.awt.image.BufferedImage;
 import towerdefense.game.Game;
 import towerdefense.game.Panel;
 
+import towerdefense.game.towers.Tower;
+
+import java.util.List;
+import java.util.ArrayList;
+
 public class MapHandler {
 
     final private static int T_WALL = 0;
@@ -17,12 +22,16 @@ public class MapHandler {
 
     private Game game;
     public Map map;
+
+    public List<Tower> towers;
     
     public MapHandler( Game gameInstance ) {
         game = gameInstance;
         map = new Map( game );
 
         tiles = loadImages( "map/wall.png", "map/tile.png" );
+
+        towers = new ArrayList<>();
     }
 
     public void draw( Graphics g ) {
@@ -32,13 +41,14 @@ public class MapHandler {
 
         for ( int row = 0; row < Map.ROWS; row++ ) {
             for ( int column = 0; column < Map.COLUMNS; column++ ) {
-                boolean isPath = map.getGrid()[column][row];
+                boolean isPath = map.getGrid()[ column ][ row ];
                 
                 g.drawImage( 
-                    tiles[ isPath ? T_TILE : T_WALL ],
-                    (int)( column*size + dx ),
-                    (int)( row*size + dy ),
-                    game.panel );
+                        tiles[ isPath ? T_TILE : T_WALL ],
+                        (int)( column*size + dx ),
+                        (int)( row*size + dy ),
+                        game.panel
+                );
             }
         }
     }

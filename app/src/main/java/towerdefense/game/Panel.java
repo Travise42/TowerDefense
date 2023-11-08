@@ -11,6 +11,7 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 
 import javax.swing.JPanel;
+import javax.swing.JFrame;
 import javax.swing.Timer;
 import javax.swing.event.MouseInputListener;
 
@@ -22,13 +23,15 @@ public class Panel extends JPanel implements ActionListener, KeyListener, MouseI
 
     private Timer timer;
     Game game;
+    JFrame frame;
 
     public int tick = 0;
 
-    public Panel() {
+    public Panel( JFrame jframe ) {
         setPreferredSize( new Dimension( WIDTH, HEIGHT ) );
         setBackground( new Color( 10,10,10 ) );
 
+        frame = jframe;
         game = new Game( this );
         
         timer = new Timer( DELAY, this );
@@ -97,12 +100,12 @@ public class Panel extends JPanel implements ActionListener, KeyListener, MouseI
     // Key is pressed and released without interuption
     @Override
     public void keyTyped( KeyEvent e ) {
-        
+
     }
 
     @Override
     public void keyPressed( KeyEvent e ) {
-        
+        game.keyCalled( e.getKeyCode() );
     }
 
     @Override

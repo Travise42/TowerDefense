@@ -4,11 +4,11 @@ import towerdefense.game.Game;
 
 public class Map {
 
-    final static int INITIAL_OPEN_COLUMNS = 10;
-    final static int INITIAL_OPEN_ROWS = 6;
+    final public static int INITIAL_OPEN_COLUMNS = 10;
+    final public static int INITIAL_OPEN_ROWS = 6;
     
-    final static int COLUMNS = 36;
-    final static int ROWS = 32;
+    final public static int COLUMNS = 36;
+    final public static int ROWS = 32;
     
     private Game game;
     private final boolean[][] grid = new boolean[COLUMNS][ROWS];

@@ -3,6 +3,7 @@ package towerdefense.game;
 ////import static towerdefense.func.ImageHandler.*;
 
 import java.awt.Graphics;
+import java.awt.event.MouseEvent;
 ////import java.awt.image.BufferedImage;
 
 import towerdefense.game.env.Camera;
@@ -39,6 +40,10 @@ public class Game {
     public void draw( Graphics g ) {
         ////g.drawImage( testImage, panel.tick, 100, panel );
         map.draw( g );
+    }
+
+    public void updateMouse( MouseEvent e ) {
+
     }
 
     public int getStage() {

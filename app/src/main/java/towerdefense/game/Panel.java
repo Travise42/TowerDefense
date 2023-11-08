@@ -85,13 +85,13 @@ public class Panel extends JPanel implements ActionListener, KeyListener, MouseI
     // Mouse is moved while pressed
     @Override
     public void mouseDragged( MouseEvent e ) {
-
+        game.updateMouse( e );
     }
 
     // Mouse is moved while not pressed
     @Override
     public void mouseMoved( MouseEvent e ) {
-
+        game.updateMouse( e );
     }
 
     // Key is pressed and released without interuption

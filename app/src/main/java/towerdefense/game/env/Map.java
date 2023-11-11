@@ -7,8 +7,8 @@ public class Map {
     final public static int INITIAL_OPEN_COLUMNS = 10;
     final public static int INITIAL_OPEN_ROWS = 6;
     
-    final public static int COLUMNS = 36;
-    final public static int ROWS = 32;
+    final public static int COLUMNS = 30;
+    final public static int ROWS = 26;
     
     private Game game;
     private final boolean[][] grid = new boolean[COLUMNS][ROWS];
@@ -29,6 +29,12 @@ public class Map {
         for ( int c = COLUMNS/2 - ic; c < COLUMNS/2 + ic; c++ ) {
             for ( int r = ROWS/2 - ir; r < ROWS/2 + ir; r++ ) {
                 grid[c][r] = true;
+            }
+        }
+
+        for( int c = 0; c < COLUMNS; c++ ) {
+            for ( int r = 0; r < 2; r++ ) {
+                grid[c][r + ROWS / 2 - 1] = true;
             }
         }
     }

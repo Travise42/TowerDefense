@@ -62,7 +62,8 @@ public class Panel extends JPanel implements ActionListener, KeyListener, MouseI
     // Mouse pressed and released without moving
     @Override
     public void mouseClicked( MouseEvent e ) {
-        game.map.map.nextStage();
+        game.updateMouse( e );
+        game.click();
     }
 
     @Override
@@ -89,12 +90,14 @@ public class Panel extends JPanel implements ActionListener, KeyListener, MouseI
     @Override
     public void mouseDragged( MouseEvent e ) {
         game.updateMouse( e );
+        game.moveMouse( e );
     }
 
     // Mouse is moved while not pressed
     @Override
     public void mouseMoved( MouseEvent e ) {
         game.updateMouse( e );
+        game.moveMouse( e );
     }
 
     // Key is pressed and released without interuption

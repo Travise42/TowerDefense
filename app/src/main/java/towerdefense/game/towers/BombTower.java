@@ -9,18 +9,15 @@ public class BombTower extends Tower {
     final private static int width = 2;
     final private static int height = 2;
 
+    final private static String IMG_PATH = "";
+
     public BombTower( Game game, int column, int row ) {
-        super( game, column, row, width, height );
+        super( game, column, row, width, height, IMG_PATH );
     }
 
     @Override
     public void draw( Graphics g ) {
-        g.fillOval(
-                (int)( column * game.map.getTileSize() ), 
-                (int)( row * game.map.getTileSize() ), 
-                (int)( columnspan * game.map.getTileSize() ), 
-                (int)( rowspan * game.map.getTileSize() )
-        );
+        drawTower( g );
     }
     
 }

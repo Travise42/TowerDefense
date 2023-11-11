@@ -10,6 +10,7 @@ import java.awt.event.MouseEvent;
 import towerdefense.game.env.Camera;
 import towerdefense.game.env.MapHandler;
 import towerdefense.game.gui.MapInteractions;
+import towerdefense.game.towers.Tower;
 
 public class Game {
 
@@ -48,7 +49,22 @@ public class Game {
     public void draw( Graphics g ) {
         ////g.drawImage( testImage, panel.tick, 100, panel );
         map.draw( g );
+        
+        for ( Tower tower : map.towers ) {
+            tower.draw( g );
+        }
+
         mi.drawHighlightedRegion( g, mx, my );
+    }
+
+    public void click() {
+        //map.map.nextStage();
+
+        mi.interactWithMap( mx, my );
+    }
+
+    public void moveMouse( MouseEvent e ) {
+        
     }
 
     public void updateMouse( MouseEvent e ) {

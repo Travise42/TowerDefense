@@ -42,19 +42,37 @@ public class MapInteractions {
         }
     }
 
-    public void drawHighlightedRegion( Graphics g, int mousex, int mousey ) {
-        float tileSize = game.map.getTileSize();
-        float screenx = ( Map.COLUMNS*tileSize - Panel.WIDTH ) / 2;
-        float screeny = ( Map.ROWS*tileSize - Panel.HEIGHT ) / 2;
-
+    public void drawHighlightedRegion( Graphics g, int mouseX, int mouseY ) {
         g.setColor( new Color( 255, 255, 255, 100 ) );
 
         g.fillRect(
-                (int)( Math.floor( ( mousex + screenx ) / tileSize ) * tileSize - screenx ), //(int)( mousex - ( mousex + screenx ) % tileSize ),
-                (int)( Math.floor( ( mousey + screeny ) / tileSize ) * tileSize - screeny ), //(int)( mousey - ( mousey + screeny ) % tileSize ),
-                (int) tileSize * size,
-                (int) tileSize * size
+                (int)( getColumn( mouseX ) * game.map.getTileSize() - game.camera.getX() ), //(int)( mousex - ( mousex + screenx ) % tileSize ),
+                (int)( getRow( mouseY ) * game.map.getTileSize() - game.camera.getY() ), //(int)( mousey - ( mousey + screeny ) % tileSize ),
+                (int) game.map.getTileSize() * size,
+                (int) game.map.getTileSize() * size
         );
+    }
+
+    public void interactWithMap( int mouseX, int mouseY ) {
+        if ( selected == NO_TOWER ) {
+            return;
+        }
+
+        switch ( selected ) {
+            case WIZARD_TOWER -> game.map.towers.add( new WizardTower( game, getColumn(mouseX), getRow(mouseY) ) );
+            case BOMB_TOWER -> game.map.towers.add( new BombTower( game, getColumn(mouseX), getRow(mouseY) ) );
+            case ARCHER_TOWER -> game.map.towers.add( new ArcherTower( game, getColumn(mouseX), getRow(mouseY) ) );
+            case WALL_TOWER -> game.map.towers.add( new WallTower( game, getColumn(mouseX), getRow(mouseY) ) );
+            case TROOP_TOWER -> game.map.towers.add( new TroopTower( game, getColumn(mouseX), getRow(mouseY) ) );
+        }
+    }
+
+    private int getColumn( int x ) {
+        return (int) ( ( x + game.camera.getX() ) / game.map.getTileSize() );
+    }
+
+    private int getRow( int y ) {
+        return (int) ( ( y + game.camera.getY() ) / game.map.getTileSize() );
     }
     
 }

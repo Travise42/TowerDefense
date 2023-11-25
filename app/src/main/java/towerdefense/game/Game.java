@@ -76,6 +76,9 @@ public class Game {
         if ( 0 <= key - 48 && key - 48 <= 5 ) {
             mi.selectTowerPlacement( key - 48 );
         }
+        if ( key == 32 ) {
+            map.map.nextStage();
+        }
     }
 
     public int getStage() {

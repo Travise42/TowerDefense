@@ -9,18 +9,18 @@ import javax.imageio.ImageIO;
 
 public class ImageHandler {
 
-    private static String DIR = "app/src/main/resources/";
+    private static String DIR = "/app/src/main/resources/";
 
-    public static BufferedImage loadImage( String file ) {
+    public static BufferedImage loadImage( String path ) {
         try {
-            return ImageIO.read(new File( DIR + file ));
+            return ImageIO.read( ImageHandler.class.getClassLoader().getResourceAsStream( path ) );
         }
-        catch (IOException e) {
+        catch (IOException | IllegalArgumentException e) {
             System.out.println("Error opening image file: " + e.getMessage());
-            System.out.println("Input file: \"" + DIR + file + "\"");
+            System.out.println("Input file: \"" + DIR + path + "\"");
         }
         // Return an empty image for missing textures
-        return new BufferedImage(16, 16, BufferedImage.TYPE_INT_RGB);
+        return new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
     }
 
     public static BufferedImage[] loadImages( String... files ) {
@@ -32,9 +32,15 @@ public class ImageHandler {
         return images;
     }
 
+    public static BufferedImage restoreTransparencyOf( BufferedImage image ) {
+        BufferedImage transparentImage = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_ARGB);
+        transparentImage.getGraphics().drawImage(image, 0, 0, null);
+        return transparentImage;
+    }
+
     public static BufferedImage resizeImage( BufferedImage image, int width, int height ) {
         // Create a new surface
-        BufferedImage newImage = new BufferedImage( width, height, BufferedImage.TYPE_INT_RGB );
+        BufferedImage newImage = new BufferedImage( width, height, BufferedImage.TYPE_INT_ARGB );
 
         // Draw the old image onto the new image with new dimensions
         Graphics2D g2d = newImage.createGraphics();

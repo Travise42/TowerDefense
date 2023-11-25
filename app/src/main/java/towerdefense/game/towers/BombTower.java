@@ -9,7 +9,7 @@ public class BombTower extends Tower {
     final private static int width = 2;
     final private static int height = 2;
 
-    final private static String IMG_PATH = "";
+    final private static String IMG_PATH = "map/towers/bomb_tower/example.png";
 
     public BombTower( Game game, int column, int row ) {
         super( game, column, row, width, height, IMG_PATH );

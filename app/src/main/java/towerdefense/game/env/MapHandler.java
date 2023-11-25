@@ -29,7 +29,7 @@ public class MapHandler {
         game = gameInstance;
         map = new Map( game );
 
-        tiles = loadImages( "map/wall.png", "map/tile.png" );
+        tiles = loadImages( "map/terrain/wall.png", "map/terrain/tile.png" );
 
         towers = new ArrayList<>();
     }
@@ -59,6 +59,9 @@ public class MapHandler {
                 tiles[i], 
                 (int) Math.ceil( getTileSize() ), 
                 (int) Math.ceil( getTileSize() ) );
+        }
+        for ( int i = 0; i < towers.size(); i++ ) {
+            towers.get(i).updateScale();
         }
     }
 

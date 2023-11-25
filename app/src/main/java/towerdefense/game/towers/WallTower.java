@@ -9,7 +9,7 @@ public class WallTower extends Tower {
     final private static int width = 1;
     final private static int height = 1;
 
-    final private static String IMG_PATH = "";
+    final private static String IMG_PATH = "map/towers/wall_tower/example.png";
 
     public WallTower( Game game, int column, int row ) {
         super( game, column, row, width, height, IMG_PATH );

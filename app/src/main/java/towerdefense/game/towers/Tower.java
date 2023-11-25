@@ -28,6 +28,13 @@ public abstract class Tower {
         this.rowspan = rowspan;
 
         this.image = loadImage( img_path );
+
+        updateScale();
+    }
+
+    public void updateScale() {
+        int size = (int) ( columnspan * game.map.getTileSize() );
+        image = resizeImage(image, size, size );
     }
 
     public abstract void draw( Graphics g );
@@ -35,13 +42,15 @@ public abstract class Tower {
     protected void drawTower( Graphics g ) {
         int x = (int)( column * game.map.getTileSize() - game.camera.getX() );
         int y = (int)( row * game.map.getTileSize() - game.camera.getY() );
-        g.fillOval(
-                x, 
-                y, 
-                (int)( columnspan * game.map.getTileSize() ), 
-                (int)( rowspan * game.map.getTileSize() )
-        );
-        //g.drawImage( image, x, y, game.panel );
+
+        g.drawImage( image, x, y, game.panel );
+
+        ////g.fillOval(
+        ////        x, 
+        ////        y, 
+        ////        (int)( columnspan * game.map.getTileSize() ), 
+        ////        (int)( rowspan * game.map.getTileSize() )
+        ////);
     }
     
 }

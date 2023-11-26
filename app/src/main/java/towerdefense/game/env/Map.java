@@ -11,6 +11,9 @@ public class Map {
     final public static int ROWS = 26;
     
     private Game game;
+
+    // true: open
+    // false: obstructed
     private final boolean[][] grid = new boolean[COLUMNS][ROWS];
 
     public int stage;
@@ -23,37 +26,55 @@ public class Map {
     }
 
     private void setup() {
-        int ic = INITIAL_OPEN_COLUMNS/2;
-        int ir = INITIAL_OPEN_ROWS/2;
+        fill(
+            ( COLUMNS - INITIAL_OPEN_COLUMNS ) / 2, // leftmost colummn
+            ( ROWS - INITIAL_OPEN_ROWS ) / 2, // upmost row
+            INITIAL_OPEN_COLUMNS,
+            INITIAL_OPEN_ROWS,
+            true
+        );
 
-        for ( int c = COLUMNS/2 - ic; c < COLUMNS/2 + ic; c++ ) {
-            for ( int r = ROWS/2 - ir; r < ROWS/2 + ir; r++ ) {
-                grid[c][r] = true;
-            }
-        }
-
+        /*
+        // Create an entrence
         for( int c = 0; c < COLUMNS; c++ ) {
             for ( int r = 0; r < 2; r++ ) {
                 grid[c][r + ROWS / 2 - 1] = true;
             }
         }
+        */
+    }
+    
+    public void fill( int column, int row, int columnspan, int rowspan, boolean open ) {
+        for ( int c = column; c < column + columnspan; c++ ) {
+            for ( int r = row; r < row + rowspan; r++ ) {
+                grid[c][r] = open;
+            }
+        }
+    }
+    
+    // return if the given region is obstructed
+    public boolean check( int column, int row, int columnspan, int rowspan ) {
+        for ( int c = column; c < column + columnspan; c++ ) {
+            for ( int r = row; r < row + rowspan; r++ ) {
+                if ( !grid[c][r] ) return true;
+            }
+        }
+        return false;
     }
 
     public void nextStage() {
         stage++;
 
-        int ic = INITIAL_OPEN_COLUMNS/2 + stage;
-        int ir = (int)( INITIAL_OPEN_ROWS/2 + stage*0.7f );
+        int COLUMNS_FROM_CENTER = INITIAL_OPEN_COLUMNS/2 + stage;
+        int ROWS_FROM_CENTER = (int)( INITIAL_OPEN_ROWS/2 + stage*0.7f );
 
-        for ( int c = -ic; c < ic; c++ ) {
-            for ( int r = -ir; r < ir; r++ ) {
-                grid[c + COLUMNS/2][r + ROWS/2] = true;
-
-                //// double sx = (float)( c + ic + stage ) * Math.PI / ( INITIAL_OPEN_COLUMNS + stage*2 - 3 );
-                //// double sy = (float)( r + ir + stage*0.7f ) * Math.PI / ( INITIAL_OPEN_ROWS + stage*1.4f - 3 );
-                //// if ( 0.5 < Math.sin( sx ) + Math.pow( Math.sin( sy ), 3 ) ) {...}
-            }
-        }
+        fill(
+            COLUMNS/2 - COLUMNS_FROM_CENTER, // leftmost column
+            ROWS/2 - ROWS_FROM_CENTER, // upmost row
+            2*COLUMNS_FROM_CENTER,
+            2*ROWS_FROM_CENTER,
+            true
+        );
 
         game.camera.expand();
     }

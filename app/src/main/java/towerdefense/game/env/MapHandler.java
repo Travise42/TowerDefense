@@ -61,8 +61,22 @@ public class MapHandler {
                 (int) Math.ceil( getTileSize() ) );
         }
         for ( int i = 0; i < towers.size(); i++ ) {
-            towers.get(i).updateScale();
+            towers.get(i).resize();
         }
+
+        //System.out.println(map);
+    }
+
+    public void editGrid( int column, int row, int columnspan, int rowspan, boolean open ) {
+        map.fill( column, row, columnspan, rowspan, open );
+    }
+
+    public boolean isObstructed( int column, int row, int size ) {
+        return map.check( column, row, size, size );
+    }
+
+    public boolean isObstructed( int column, int row, int columnspan, int rowspan ) {
+        return map.check( column, row, columnspan, rowspan );
     }
 
     public float getTileSize() {

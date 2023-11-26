@@ -4,6 +4,7 @@ package towerdefense.game;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 ////import java.awt.image.BufferedImage;
 
@@ -73,8 +74,8 @@ public class Game {
     }
 
     public void keyCalled( int key ) {
-        if ( 0 <= key - 48 && key - 48 <= 5 ) {
-            mi.selectTowerPlacement( key - 48 );
+        if ( KeyEvent.VK_0 <= key && key <= KeyEvent.VK_0 + 5 ) {
+            mi.selectTowerPlacement( key - KeyEvent.VK_1 );
         }
         if ( key == 32 ) {
             map.map.nextStage();

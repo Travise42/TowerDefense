@@ -12,29 +12,28 @@ public abstract class Tower {
     protected int column;
     protected int row;
 
-    protected int columnspan;
-    protected int rowspan;
-
     protected BufferedImage image;
 
-    protected Game game;
+    public Game game;
 
-    protected Tower( Game game, int column, int row, int columnspan, int rowspan, String img_path ) {
+    protected Tower( Game game, int column, int row, String img_path ) {
         this.game = game;
         
         this.column = column;
         this.row = row;
-        this.columnspan = columnspan;
-        this.rowspan = rowspan;
 
         this.image = loadImage( img_path );
 
-        updateScale();
+        game.map.editGrid( column, row, size(), size(), false );
+
+        resize();
     }
 
-    public void updateScale() {
-        int size = (int) ( columnspan * game.map.getTileSize() );
-        image = resizeImage(image, size, size );
+    protected Tower() {}
+
+    public void resize() {
+        int graphicSize = (int) ( size() * game.map.getTileSize() );
+        image = resizeImage(image, graphicSize, graphicSize );
     }
 
     public abstract void draw( Graphics g );
@@ -44,13 +43,10 @@ public abstract class Tower {
         int y = (int)( row * game.map.getTileSize() - game.camera.getY() );
 
         g.drawImage( image, x, y, game.panel );
-
-        ////g.fillOval(
-        ////        x, 
-        ////        y, 
-        ////        (int)( columnspan * game.map.getTileSize() ), 
-        ////        (int)( rowspan * game.map.getTileSize() )
-        ////);
     }
+
+    public abstract Tower copy( Game game, int column, int row );
+
+    abstract public int size();
     
 }

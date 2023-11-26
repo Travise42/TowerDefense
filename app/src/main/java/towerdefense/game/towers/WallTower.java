@@ -6,18 +6,27 @@ import towerdefense.game.Game;
 
 public class WallTower extends Tower {
 
-    final private static int width = 1;
-    final private static int height = 1;
-
     final private static String IMG_PATH = "map/towers/wall_tower/example.png";
 
     public WallTower( Game game, int column, int row ) {
-        super( game, column, row, width, height, IMG_PATH );
+        super( game, column, row, IMG_PATH );
     }
+
+    public WallTower() { super(); }
 
     @Override
     public void draw( Graphics g ) {
         drawTower( g );
+    }
+
+    @Override
+    public WallTower copy( Game game, int column, int row ) {
+        return new WallTower( game, column, row );
+    }
+
+    @Override
+    public int size() {
+        return 1;
     }
     
 }

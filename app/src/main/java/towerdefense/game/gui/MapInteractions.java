@@ -68,6 +68,8 @@ public class MapInteractions {
         if ( SPACE_IS_NOT_AVAIABLE ) return;
 
         game.map.towers.add( TOWER.get(selected).copy( game, column, row ) );
+
+        selected = NO_TOWER;
     }
 
     private int getColumn( int x ) {

@@ -1,5 +1,7 @@
 package towerdefense.game.env;
 
+import java.util.Arrays;
+
 import towerdefense.game.Game;
 
 public class Map {
@@ -46,9 +48,10 @@ public class Map {
     
     public void fill( int column, int row, int columnspan, int rowspan, boolean open ) {
         for ( int c = column; c < column + columnspan; c++ ) {
-            for ( int r = row; r < row + rowspan; r++ ) {
-                grid[c][r] = open;
-            }
+            //// for ( int r = row; r < row + rowspan; r++ ) {
+            ////     grid[c][r] = open;
+            //// }
+            Arrays.fill( grid[c], row, row + rowspan, open );
         }
     }
     
@@ -68,13 +71,24 @@ public class Map {
         int COLUMNS_FROM_CENTER = INITIAL_OPEN_COLUMNS/2 + stage;
         int ROWS_FROM_CENTER = (int)( INITIAL_OPEN_ROWS/2 + stage*0.7f );
 
-        fill(
-            COLUMNS/2 - COLUMNS_FROM_CENTER, // leftmost column
-            ROWS/2 - ROWS_FROM_CENTER, // upmost row
-            2*COLUMNS_FROM_CENTER,
-            2*ROWS_FROM_CENTER,
-            true
-        );
+        int INITIAL_COLUMN = COLUMNS/2 - COLUMNS_FROM_CENTER;
+        int FINAL_COLUMN = COLUMNS/2 + COLUMNS_FROM_CENTER - 1;
+
+        int INITIAL_ROW = ROWS/2 - ROWS_FROM_CENTER;
+        int FINAL_ROW = ROWS/2 + ROWS_FROM_CENTER - 1;
+
+        // Top and Bottom
+        if ( stage*0.7f % 1 < 0.7f )
+            for ( int column = INITIAL_COLUMN; column <= FINAL_COLUMN; column++ ) {
+                grid[ column ][ INITIAL_ROW ] = true;
+                grid[ column ][ FINAL_ROW ] = true;
+        }
+
+        // Left and Right
+        for ( int row = INITIAL_ROW; row <= FINAL_ROW; row++ ) {
+            grid[ INITIAL_COLUMN ][ row ] = true;
+            grid[ FINAL_COLUMN ][ row ] = true;
+        }
 
         game.camera.expand();
     }

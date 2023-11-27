@@ -47,12 +47,16 @@ public class MapInteractions {
     public void drawHighlightedRegion( Graphics g, int mouseX, int mouseY ) {
         if ( selected == NO_TOWER ) return;
 
-        int graphicSize = (int) game.map.getTileSize() * TOWER.get(selected).size();
+        float tileSize = game.map.getTileSize();
+        int graphicSize = (int) ( tileSize * TOWER.get(selected).size() );
+
+        int towerColumn = getColumn( mouseX - ( graphicSize - ( int )( tileSize ) ) / 2 );
+        int towerRow = getRow( mouseY - ( graphicSize - ( int )( tileSize ) ) / 2 );
 
         g.setColor( new Color( 255, 255, 255, 100 ) );
         g.fillRect(
-                ( int )( getColumn( mouseX ) * game.map.getTileSize() - game.camera.getX() ),
-                ( int )( getRow( mouseY ) * game.map.getTileSize() - game.camera.getY() ),
+                ( int )( towerColumn * tileSize - game.camera.getX() ),
+                ( int )( towerRow * tileSize - game.camera.getY() ),
                 graphicSize,
                 graphicSize
         );

@@ -65,13 +65,16 @@ public class MapInteractions {
     public void interactWithMap( int mouseX, int mouseY ) {
         if ( selected == NO_TOWER ) return;
 
-        int column = getColumn( mouseX );
-        int row = getRow( mouseY );
+        float tileSize = game.map.getTileSize();
+        int graphicSize = (int) ( tileSize * TOWER.get(selected).size() );
 
-        boolean SPACE_IS_NOT_AVAIABLE = game.map.isObstructed( column, row, TOWER.get(selected).size() );
+        int towerColumn = getColumn( mouseX - ( graphicSize - ( int )( tileSize ) ) / 2 );
+        int towerRow = getRow( mouseY - ( graphicSize - ( int )( tileSize ) ) / 2 );
+
+        boolean SPACE_IS_NOT_AVAIABLE = game.map.isObstructed( towerColumn, towerRow, TOWER.get(selected).size() );
         if ( SPACE_IS_NOT_AVAIABLE ) return;
 
-        game.map.towers.add( TOWER.get(selected).copy( game, column, row ) );
+        game.map.towers.add( TOWER.get(selected).copy( game, towerColumn, towerRow ) );
 
         selected = NO_TOWER;
     }

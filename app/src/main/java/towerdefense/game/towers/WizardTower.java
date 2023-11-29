@@ -20,12 +20,12 @@ public class WizardTower extends Tower {
     }
 
     @Override
-    public WizardTower copy( Game game, int column, int row ) {
+    public WizardTower createNew( Game game, int column, int row ) {
         return new WizardTower( game, column, row );
     }
 
     @Override
-    public int size() {
+    public int getSize() {
         return 2;
     }
     

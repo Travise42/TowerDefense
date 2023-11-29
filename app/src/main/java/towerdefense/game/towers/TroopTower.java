@@ -20,12 +20,12 @@ public class TroopTower extends Tower {
     }
 
     @Override
-    public TroopTower copy( Game game, int column, int row ) {
+    public TroopTower createNew( Game game, int column, int row ) {
         return new TroopTower( game, column, row );
     }
 
     @Override
-    public int size() {
+    public int getSize() {
         return 2;
     }
     

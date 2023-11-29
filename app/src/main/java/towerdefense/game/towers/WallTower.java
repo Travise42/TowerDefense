@@ -20,12 +20,12 @@ public class WallTower extends Tower {
     }
 
     @Override
-    public WallTower copy( Game game, int column, int row ) {
+    public WallTower createNew( Game game, int column, int row ) {
         return new WallTower( game, column, row );
     }
 
     @Override
-    public int size() {
+    public int getSize() {
         return 1;
     }
     

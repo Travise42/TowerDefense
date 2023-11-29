@@ -20,12 +20,12 @@ public class ArcherTower extends Tower {
     }
 
     @Override
-    public ArcherTower copy( Game game, int column, int row ) {
+    public ArcherTower createNew( Game game, int column, int row ) {
         return new ArcherTower( game, column, row );
     }
 
     @Override
-    public int size() {
+    public int getSize() {
         return 2;
     }
     

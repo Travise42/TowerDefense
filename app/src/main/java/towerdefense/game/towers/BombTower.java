@@ -20,12 +20,12 @@ public class BombTower extends Tower {
     }
 
     @Override
-    public BombTower copy( Game game, int column, int row ) {
+    public BombTower createNew( Game game, int column, int row ) {
         return new BombTower( game, column, row );
     }
 
     @Override
-    public int size() {
+    public int getSize() {
         return 2;
     }
     

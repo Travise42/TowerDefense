@@ -14,7 +14,14 @@ public abstract class Tower {
 
     protected BufferedImage image;
 
-    public Game game;
+    private Game game;
+
+    protected int[] upgrades = { 0, 0 };
+
+    // Empty tower
+    protected Tower() {
+        upgrades = null;
+    }
 
     protected Tower( Game game, int column, int row, String img_path ) {
         this.game = game;
@@ -24,16 +31,9 @@ public abstract class Tower {
 
         this.image = loadImage( img_path );
 
-        game.map.editGrid( column, row, size(), size(), false );
+        game.map.editGrid( column, row, getSize(), getSize(), false );
 
         resize();
-    }
-
-    protected Tower() {}
-
-    public void resize() {
-        int graphicSize = (int) ( size() * game.map.getTileSize() );
-        image = resizeImage(image, graphicSize, graphicSize );
     }
 
     public abstract void draw( Graphics g );
@@ -45,8 +45,33 @@ public abstract class Tower {
         g.drawImage( image, x, y, game.panel );
     }
 
-    public abstract Tower copy( Game game, int column, int row );
+    public void resize() {
+        int graphicSize = ( int )( getSize() * game.map.getTileSize() );
+        image = resizeImage( image, graphicSize, graphicSize );
+    }
 
-    abstract public int size();
+    public void upgrade( int path ) {
+        if ( path < 0 || 1 < path ) {
+            System.out.println( "Invalid Path: " + path + "!" );
+            return;
+        }
+        if ( upgrades[ path ] == 4 ) {
+            System.out.println( "Invalid Tier: 5!" );
+            return;
+        }
+        upgrades[ path ] += 1;
+    }
+
+    public int getUpgrade( int path ) {
+        if ( path < 0 || 1 < path ) {
+            System.out.println( "Invalid Path: " + path + "!" );
+            return 0;
+        }
+        return upgrades[ path ];
+    }
+
+    public abstract Tower createNew( Game game, int column, int row );
+
+    public abstract int getSize();
     
 }

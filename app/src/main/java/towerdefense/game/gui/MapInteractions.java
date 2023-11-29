@@ -50,7 +50,7 @@ public class MapInteractions {
         float tileSize = game.map.getTileSize();
         int graphicSize = (int) ( tileSize * TOWER.get(selected).size() );
 
-        int towerColumn = getColumn( mouseX - ( graphicSize - ( int )( tileSize ) ) / 2 );
+        int towerColumn = getColumn( mouseX - (int)( graphicSize*0.95 - 15 - tileSize ) / 2 );
         int towerRow = getRow( mouseY - ( graphicSize - ( int )( tileSize ) ) / 2 );
 
         g.setColor( new Color( 255, 255, 255, 100 ) );
@@ -65,10 +65,14 @@ public class MapInteractions {
     public void interactWithMap( int mouseX, int mouseY ) {
         if ( selected == NO_TOWER ) return;
 
+        // Get tower dimensions
         float tileSize = game.map.getTileSize();
         int graphicSize = (int) ( tileSize * TOWER.get(selected).size() );
 
-        int towerColumn = getColumn( mouseX - ( graphicSize - ( int )( tileSize ) ) / 2 );
+        // Get the furthest left column of the tower
+        int towerColumn = getColumn( mouseX - (int)( graphicSize*0.95 - 15 - tileSize ) / 2 );
+
+        // Get the furthest up row of the tower
         int towerRow = getRow( mouseY - ( graphicSize - ( int )( tileSize ) ) / 2 );
 
         boolean SPACE_IS_NOT_AVAIABLE = game.map.isObstructed( towerColumn, towerRow, TOWER.get(selected).size() );

@@ -70,6 +70,14 @@ public abstract class Tower {
         return upgrades[ path ];
     }
 
+    public int getColumn() {
+        return column;
+    }
+
+    public int getRow() {
+        return row;
+    }
+
     public abstract Tower createNew( Game game, int column, int row );
 
     public abstract int getSize();

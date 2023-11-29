@@ -69,8 +69,8 @@ public class Game {
     }
 
     public void updateMouse( MouseEvent e ) {
-        mx = e.getX() - 8;
-        my = e.getY() - 30;
+        mx = e.getX(); //-8
+        my = e.getY() - 29; //-30
     }
 
     public void keyCalled( int key ) {

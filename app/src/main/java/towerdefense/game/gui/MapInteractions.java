@@ -32,42 +32,80 @@ public class MapInteractions {
         new TroopTower()
     );
 
-    private int selected;
+    private int selectedToPlace;
+    public Tower selectedTower;
 
     public MapInteractions( Game game ) {
         this.game = game;
 
-        selected = NO_TOWER;
+        selectedToPlace = NO_TOWER;
+        selectedTower = null;
     }
 
     public void selectTowerPlacement( int type ) {
-        selected = type;
+        selectedToPlace = type;
     }
 
     public void drawHighlightedRegion( Graphics g, int mouseX, int mouseY ) {
-        if ( selected == NO_TOWER ) return;
+        if ( selectedToPlace == NO_TOWER ) return;
 
+        // Get tower dimensions
         float tileSize = game.map.getTileSize();
-        int graphicSize = (int) ( tileSize * TOWER.get(selected).getSize() );
+        int towerSize = TOWER.get( selectedToPlace ).getSize();
+        int tileOffset = ( int )( tileSize * ( towerSize - 1 ) / 2 );
 
-        int towerColumn = getColumn( mouseX - (int)( graphicSize*0.95 - 15 - tileSize ) / 2 );
-        int towerRow = getRow( mouseY - ( graphicSize - ( int )( tileSize ) ) / 2 );
+        // Get the furthest left column of the tower
+        int towerColumn = getColumn( mouseX - tileOffset );
+
+        // Get the furthest up row of the tower
+        int towerRow = getRow( mouseY - tileOffset );
 
         g.setColor( new Color( 255, 255, 255, 100 ) );
         g.fillRect(
                 ( int )( towerColumn * tileSize - game.camera.getX() ),
                 ( int )( towerRow * tileSize - game.camera.getY() ),
-                graphicSize,
-                graphicSize
+                ( int )( towerSize * tileSize ),
+                ( int )( towerSize * tileSize )
         );
     }
 
     public void interactWithMap( int mouseX, int mouseY ) {
-        if ( selected == NO_TOWER ) return;
+        if ( selectedToPlace == NO_TOWER ) {
+            selectHoveredTower( mouseX, mouseY );
+            return;
+        };
 
+        placeTower( mouseX, mouseY, TOWER.get( selectedToPlace ) );
+
+        selectedToPlace = NO_TOWER;
+    }
+
+    private void selectHoveredTower( int mouseX, int mouseY ) {
+        int hoveredColumn = getColumn( mouseX );
+        int hoveredRow = getRow( mouseY );
+
+        deselectTower();
+        for ( Tower tower : game.map.towers ) {
+            if ( tower.getColumn() <= hoveredColumn && hoveredColumn < tower.getColumn() + tower.getSize()
+                    && tower.getRow() <= hoveredRow && hoveredRow < tower.getRow() + tower.getSize() ) {
+                selectTower( tower );
+                return;
+            }
+        }
+    }
+
+    private void deselectTower() {
+        selectedTower = null;
+    }
+
+    private void selectTower( Tower tower ) {
+        selectedTower = tower;
+    }
+
+    private void placeTower( int mouseX, int mouseY, Tower tower ) {
         // Get tower dimensions
         float tileSize = game.map.getTileSize();
-        int towerSize = TOWER.get(selected).getSize();
+        int towerSize = tower.getSize();
         int tileOffset = ( int )( tileSize * ( towerSize - 1 ) / 2 );
 
         // Get the furthest left column of the tower
@@ -79,9 +117,7 @@ public class MapInteractions {
         boolean SPACE_IS_NOT_AVAIABLE = game.map.isObstructed( towerColumn, towerRow, towerSize );
         if ( SPACE_IS_NOT_AVAIABLE ) return;
 
-        game.map.towers.add( TOWER.get(selected).createNew( game, towerColumn, towerRow ) );
-
-        selected = NO_TOWER;
+        game.map.towers.add( tower.createNew( game, towerColumn, towerRow ) );
     }
 
     private int getColumn( int x ) {

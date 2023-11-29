@@ -63,8 +63,6 @@ public class MapHandler {
         for ( int i = 0; i < towers.size(); i++ ) {
             towers.get(i).resize();
         }
-
-        //System.out.println(map);
     }
 
     public void editGrid( int column, int row, int columnspan, int rowspan, boolean open ) {

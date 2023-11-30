@@ -16,11 +16,13 @@ public abstract class Tower {
 
     private Game game;
 
-    protected int[] upgrades = { 0, 0 };
+    protected int[] upgrades = new int[2];
+    protected int[][] upgradeCosts = new int[2][4];
 
     // Empty tower
     protected Tower() {
         upgrades = null;
+        System.out.println( upgradeCosts );
     }
 
     protected Tower( Game game, int column, int row, String img_path ) {
@@ -62,12 +64,20 @@ public abstract class Tower {
         upgrades[ path ] += 1;
     }
 
-    public int getUpgrade( int path ) {
+    public int getUpgradeTier( int path ) {
         if ( path < 0 || 1 < path ) {
             System.out.println( "Invalid Path: " + path + "!" );
             return 0;
         }
         return upgrades[ path ];
+    }
+
+    public int getUpgradeCost( int path ) {
+        if ( path < 0 || 1 < path ) {
+            System.out.println( "Invalid Path: " + path + "!" );
+            return 0;
+        }
+        return upgradeCosts[ path ][ upgrades[ path ] ];
     }
 
     public int getColumn() {

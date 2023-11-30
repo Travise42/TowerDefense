@@ -120,6 +120,17 @@ public class MapInteractions {
         game.map.towers.add( tower.createNew( game, towerColumn, towerRow ) );
     }
 
+    public void upgradeSelectedTower( int path ) {
+        if ( path < 0 || 1 < path ) {
+            System.out.println( path + " is not a valid path to upgrade!" );
+            return;
+        }
+        if ( 4 <= selectedTower.getUpgradeTier( path ) ) return;
+        if ( game.player.gold < selectedTower.getUpgradeCost( path ) ) return;
+        selectedTower.upgrade( path );
+        System.out.println( selectedTower.getUpgradeTier( 0 ) + ", " + selectedTower.getUpgradeTier( 1 ) );
+    }
+
     private int getColumn( int x ) {
         return (int) ( ( x + game.camera.getX() ) / game.map.getTileSize() );
     }

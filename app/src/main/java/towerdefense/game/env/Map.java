@@ -16,7 +16,7 @@ public class Map {
 
     // true: open
     // false: obstructed
-    private final boolean[][] grid = new boolean[COLUMNS][ROWS];
+    private boolean[][] grid = new boolean[COLUMNS][ROWS];
 
     public int stage;
 
@@ -91,6 +91,12 @@ public class Map {
         }
 
         game.camera.expand();
+    }
+
+    public void reset() {
+        grid = new boolean[COLUMNS][ROWS];
+        stage = 0;
+        setup();
     }
 
     // Print a string representing the open (F) and closed (_) spaces

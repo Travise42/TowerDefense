@@ -65,6 +65,11 @@ public class MapHandler {
         }
     }
 
+    public void newGame() {
+        map.reset();
+        towers.clear();
+    }
+
     public void editGrid( int column, int row, int columnspan, int rowspan, boolean open ) {
         map.fill( column, row, columnspan, rowspan, open );
     }

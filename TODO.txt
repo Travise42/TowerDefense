@@ -1,6 +1,6 @@
 Add Upgrades to Towers
-[ ] Store the tower's tier
-[ ] Implement tower upgrading
+[X] Store the tower's tier
+[X] Implement tower upgrading
 [ ] Add hotkeys for testing
 [ ] Plan tier paths
 [ ] Plan art for different tiers

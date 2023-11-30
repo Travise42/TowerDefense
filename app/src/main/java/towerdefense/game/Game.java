@@ -11,6 +11,7 @@ import java.awt.event.MouseEvent;
 import towerdefense.game.env.Camera;
 import towerdefense.game.env.MapHandler;
 import towerdefense.game.gui.MapInteractions;
+import towerdefense.game.player.Player;
 import towerdefense.game.towers.Tower;
 
 public class Game {
@@ -19,6 +20,7 @@ public class Game {
     public Camera camera;
     public MapHandler map;
     public MapInteractions mi;
+    public Player player;
 
     public int gameTick;
 
@@ -32,12 +34,19 @@ public class Game {
         mi = new MapInteractions( this );
         camera = new Camera( this );
         map = new MapHandler( this );
+        player = new Player( this );
 
         gameTick = 0;
 
         mi.selectTowerPlacement( MapInteractions.NO_TOWER );
 
-        ////testImage = resizeImage( loadImage( "testImage.png" ), 120, 120 );
+        //newGame();
+        System.out.println("Started!");
+    }
+
+    public void newGame() {
+        player.newGame();
+        map.newGame();
     }
 
     public void update() {
@@ -77,8 +86,14 @@ public class Game {
         if ( KeyEvent.VK_0 <= key && key <= KeyEvent.VK_0 + 5 ) {
             mi.selectTowerPlacement( key - KeyEvent.VK_1 );
         }
-        if ( key == 32 ) {
+        if ( key == KeyEvent.VK_SPACE ) {
             map.map.nextStage();
+        }
+        if ( key == KeyEvent.VK_COMMA ) {
+            mi.upgradeSelectedTower( 0 );
+        }
+        if ( key == KeyEvent.VK_PERIOD ) {
+            mi.upgradeSelectedTower( 1 );
         }
     }
 

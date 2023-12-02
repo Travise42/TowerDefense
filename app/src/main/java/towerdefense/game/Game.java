@@ -26,8 +26,6 @@ public class Game {
 
     public int mx = 0, my = 0;
 
-    ////private BufferedImage testImage;
-
     public Game( Panel jpanel ) {
         panel = jpanel;
 
@@ -57,7 +55,6 @@ public class Game {
     }
 
     public void draw( Graphics g ) {
-        ////g.drawImage( testImage, panel.tick, 100, panel );
         map.draw( g );
         
         for ( Tower tower : map.towers ) {

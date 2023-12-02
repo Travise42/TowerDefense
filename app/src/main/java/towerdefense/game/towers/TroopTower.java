@@ -6,10 +6,12 @@ import towerdefense.game.Game;
 
 public class TroopTower extends Tower {
 
-    final private static String IMG_PATH = "map/towers/troop_tower/example.png";
+    final private static String TOWER_ID = "troop_tower";
+
+    public static TowerUpgrade upgradeInfo = new TowerUpgrade( TOWER_ID );
 
     public TroopTower( Game game, int column, int row ) {
-        super( game, column, row, IMG_PATH );
+        super( game, column, row, TOWER_ID );
     }
 
     public TroopTower() { super(); }

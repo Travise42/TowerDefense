@@ -126,7 +126,7 @@ public class MapInteractions {
             return;
         }
         if ( 4 <= selectedTower.getUpgradeTier( path ) ) return;
-        if ( game.player.gold < selectedTower.getUpgradeCost( path ) ) return;
+        if ( game.player.gold < selectedTower.upgradeInfo.getCost( path, selectedTower.getUpgradeTier( path ) ) ) return;
         selectedTower.upgrade( path );
         System.out.println( selectedTower.getUpgradeTier( 0 ) + ", " + selectedTower.getUpgradeTier( 1 ) );
     }

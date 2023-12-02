@@ -16,22 +16,21 @@ public abstract class Tower {
 
     private Game game;
 
-    protected int[] upgrades = new int[2];
-    protected int[][] upgradeCosts = new int[2][4];
+    protected int[] tiers = new int[2];
+    public static TowerUpgrade upgradeInfo;
 
     // Empty tower
     protected Tower() {
-        upgrades = null;
-        System.out.println( upgradeCosts );
+        tiers = null;
     }
 
-    protected Tower( Game game, int column, int row, String img_path ) {
+    protected Tower( Game game, int column, int row, String tower_id ) {
         this.game = game;
         
         this.column = column;
         this.row = row;
 
-        this.image = loadImage( img_path );
+        this.image = loadImage( "map/towers/" + tower_id + "/example.png" );
 
         game.map.editGrid( column, row, getSize(), getSize(), false );
 
@@ -57,11 +56,11 @@ public abstract class Tower {
             System.out.println( "Invalid Path: " + path + "!" );
             return;
         }
-        if ( upgrades[ path ] == 4 ) {
+        if ( tiers[ path ] == 4 ) {
             System.out.println( "Invalid Tier: 5!" );
             return;
         }
-        upgrades[ path ] += 1;
+        tiers[ path ] += 1;
     }
 
     public int getUpgradeTier( int path ) {
@@ -69,15 +68,7 @@ public abstract class Tower {
             System.out.println( "Invalid Path: " + path + "!" );
             return 0;
         }
-        return upgrades[ path ];
-    }
-
-    public int getUpgradeCost( int path ) {
-        if ( path < 0 || 1 < path ) {
-            System.out.println( "Invalid Path: " + path + "!" );
-            return 0;
-        }
-        return upgradeCosts[ path ][ upgrades[ path ] ];
+        return tiers[ path ];
     }
 
     public int getColumn() {

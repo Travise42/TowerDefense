@@ -125,10 +125,10 @@ public class MapInteractions {
             System.out.println( path + " is not a valid path to upgrade!" );
             return;
         }
-        if ( 4 <= selectedTower.getUpgradeTier( path ) ) return;
-        if ( game.player.gold < selectedTower.upgradeInfo.getCost( path, selectedTower.getUpgradeTier( path ) ) ) return;
+        if ( selectedTower.getUpgradeInfo() == null ) return;
+        if ( 4 <= selectedTower.getUpgradeTier() ) return;
+        if ( game.player.gold < selectedTower.getUpgradeInfo().getCost( path, selectedTower.getUpgradeTier() ) ) return;
         selectedTower.upgrade( path );
-        System.out.println( selectedTower.getUpgradeTier( 0 ) + ", " + selectedTower.getUpgradeTier( 1 ) );
     }
 
     private int getColumn( int x ) {

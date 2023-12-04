@@ -29,7 +29,8 @@ public class MapHandler {
         game = gameInstance;
         map = new Map( game );
 
-        tiles = loadImages( "map/terrain/wall.png", "map/terrain/tile.png" );
+        String map_dir = "map/tiles/";
+        tiles = loadImages( map_dir + "wall.png", map_dir + "tile.png" );
 
         towers = new ArrayList<>();
     }
@@ -54,6 +55,11 @@ public class MapHandler {
     }
 
     public void update() {
+        // Avoid this!!!!
+        resize();
+    }
+
+    public void resize() {
         for ( int i = 0; i < tiles.length; i++ ) {
             tiles[i] = resizeImage( 
                 tiles[i], 

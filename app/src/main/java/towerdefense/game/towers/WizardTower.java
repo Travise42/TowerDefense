@@ -7,8 +7,8 @@ import towerdefense.game.Game;
 public class WizardTower extends Tower {
 
     final private static String TOWER_ID = "wizard_tower";
-
-    public static TowerUpgrade upgradeInfo = new TowerUpgrade( TOWER_ID );
+    final private static TowerUpgrade upgradeInfo = new TowerUpgrade( TOWER_ID );
+    final private static TowerGraphics graphics = new TowerGraphics( TOWER_ID );
 
     public WizardTower( Game game, int column, int row ) {
         super( game, column, row, TOWER_ID );
@@ -29,6 +29,16 @@ public class WizardTower extends Tower {
     @Override
     public int getSize() {
         return 2;
+    }
+
+    @Override
+    public TowerUpgrade getUpgradeInfo() {
+        return upgradeInfo;
+    }
+
+    @Override
+    public TowerGraphics getGraphics() {
+        return graphics;
     }
     
 }

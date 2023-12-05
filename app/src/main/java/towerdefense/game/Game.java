@@ -22,7 +22,7 @@ public class Game {
     public MapInteractions mi;
     public Player player;
 
-    public int gameTick;
+    public int gameTick = 0;
 
     public int mx = 0, my = 0;
 
@@ -34,17 +34,15 @@ public class Game {
         map = new MapHandler( this );
         player = new Player( this );
 
-        gameTick = 0;
-
-        mi.selectTowerPlacement( MapInteractions.NO_TOWER );
-
-        //newGame();
+        newGame();
         System.out.println("Started!");
     }
 
     public void newGame() {
         player.newGame();
         map.newGame();
+
+        gameTick = 0;
     }
 
     public void update() {
@@ -56,17 +54,11 @@ public class Game {
 
     public void draw( Graphics g ) {
         map.draw( g );
-        
-        for ( Tower tower : map.towers ) {
-            tower.draw( g );
-        }
 
         mi.drawHighlightedRegion( g, mx, my );
     }
 
     public void click() {
-        //map.map.nextStage();
-
         mi.interactWithMap( mx, my );
     }
 
@@ -83,14 +75,11 @@ public class Game {
         if ( KeyEvent.VK_0 <= key && key <= KeyEvent.VK_0 + 5 ) {
             mi.selectTowerPlacement( key - KeyEvent.VK_1 );
         }
-        if ( key == KeyEvent.VK_SPACE ) {
-            map.map.nextStage();
-        }
-        if ( key == KeyEvent.VK_COMMA ) {
-            mi.upgradeSelectedTower( 0 );
-        }
-        if ( key == KeyEvent.VK_PERIOD ) {
-            mi.upgradeSelectedTower( 1 );
+        switch ( key ) {
+            case KeyEvent.VK_SPACE -> map.nextStage();
+            case KeyEvent.VK_COMMA -> mi.upgradeSelectedTower( 0 );
+            case KeyEvent.VK_PERIOD -> mi.upgradeSelectedTower( 1 );
+            case KeyEvent.VK_BACK_SPACE -> mi.deleteSelectedTower();
         }
     }
 

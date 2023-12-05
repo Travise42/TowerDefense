@@ -71,6 +71,7 @@ public class MapInteractions {
 
     public void interactWithMap( int mouseX, int mouseY ) {
         if ( selectedToPlace == NO_TOWER ) {
+            selectedTower = null;
             selectHoveredTower( mouseX, mouseY );
             return;
         };
@@ -100,6 +101,10 @@ public class MapInteractions {
 
     private void selectTower( Tower tower ) {
         selectedTower = tower;
+        int index1 = game.map.towers.indexOf( selectedTower );
+        int index2 = game.map.towers.size() - 1;
+        game.map.towers.set(index1, game.map.towers.get(index2));
+        game.map.towers.set(index2, selectedTower);
     }
 
     private void placeTower( int mouseX, int mouseY, Tower tower ) {
@@ -129,6 +134,11 @@ public class MapInteractions {
         if ( 4 <= selectedTower.getUpgradeTier() ) return;
         if ( game.player.gold < selectedTower.getUpgradeInfo().getCost( path, selectedTower.getUpgradeTier() ) ) return;
         selectedTower.upgrade( path );
+    }
+
+    public void deleteSelectedTower() {
+        selectedTower.remove();
+        game.map.towers.remove( selectedTower );
     }
 
     private int getColumn( int x ) {

@@ -7,7 +7,7 @@ import java.awt.image.BufferedImage;
 
 import towerdefense.game.Game;
 import towerdefense.game.Panel;
-
+import towerdefense.game.gui.MapInteractions;
 import towerdefense.game.towers.Tower;
 
 import java.util.List;
@@ -33,6 +33,8 @@ public class MapHandler {
         tiles = loadImages( map_dir + "wall.png", map_dir + "tile.png" );
 
         towers = new ArrayList<>();
+
+        resize();
     }
 
     public void draw( Graphics g ) {
@@ -42,7 +44,7 @@ public class MapHandler {
 
         for ( int row = 0; row < Map.ROWS; row++ ) {
             for ( int column = 0; column < Map.COLUMNS; column++ ) {
-                boolean isPath = map.getGrid()[ column ][ row ];
+                boolean isPath = map.isOpen( column, row );
                 
                 g.drawImage( 
                         tiles[ isPath ? T_TILE : T_WALL ],
@@ -52,11 +54,14 @@ public class MapHandler {
                 );
             }
         }
+
+        for ( Tower tower : towers ) {
+            tower.draw( g, tower == game.mi.selectedTower );
+        }
     }
 
     public void update() {
-        // Avoid this!!!!
-        resize();
+
     }
 
     public void resize() {
@@ -74,6 +79,11 @@ public class MapHandler {
     public void newGame() {
         map.reset();
         towers.clear();
+    }
+
+    public void nextStage() {
+        map.nextStage();
+        resize();
     }
 
     public void editGrid( int column, int row, int columnspan, int rowspan, boolean open ) {

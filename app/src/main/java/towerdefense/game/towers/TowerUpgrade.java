@@ -1,9 +1,5 @@
 package towerdefense.game.towers;
 
-import static towerdefense.func.ImageHandler.*;
-
-import java.awt.image.BufferedImage;
-
 public class TowerUpgrade {
 
     private String[][] upgradeNames, upgradeDescriptions;

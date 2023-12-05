@@ -4,6 +4,7 @@ import static towerdefense.func.ImageHandler.*;
 
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+import java.awt.Color;
 
 import towerdefense.game.Game;
 
@@ -36,6 +37,11 @@ public abstract class Tower {
         resize();
     }
 
+    public void draw( Graphics g, boolean selected ) {
+        if ( selected ) drawHighlight( g );
+        draw( g );
+    }
+
     public abstract void draw( Graphics g );
 
     protected void drawTower( Graphics g ) {
@@ -43,6 +49,16 @@ public abstract class Tower {
         int y = (int)( row * game.map.getTileSize() - game.camera.getY() );
 
         g.drawImage( image, x, y, game.panel );
+    }
+
+    protected void drawHighlight( Graphics g ) {
+        int x = (int)( column * game.map.getTileSize() - game.camera.getX() );
+        int y = (int)( row * game.map.getTileSize() - game.camera.getY() );
+        int radius = 10;
+        int size = 2*radius + ( int )( getSize() * game.map.getTileSize() );
+
+        g.setColor( Color.WHITE );
+        g.fillRoundRect( x - radius, y - radius, size, size, radius, radius );
     }
 
     public void resize() {
@@ -67,6 +83,11 @@ public abstract class Tower {
             return;
         }
         tier += 1;
+        resize();
+    }
+
+    public void remove() {
+        game.map.editGrid( column, row, getSize(), getSize(), true );
     }
 
     public int getUpgradeTier() {

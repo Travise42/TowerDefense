@@ -16,15 +16,14 @@ public class Map {
 
     // true: open
     // false: obstructed
-    private boolean[][] grid = new boolean[COLUMNS][ROWS];
+    private boolean[][] gridOccupancy;
 
     public int stage;
 
     public Map( Game gameInstance ) {
         game = gameInstance;
 
-        stage = 0;
-        setup();
+        reset();
     }
 
     private void setup() {
@@ -35,15 +34,6 @@ public class Map {
             INITIAL_OPEN_ROWS,
             true
         );
-
-        /*
-        // Create an entrence
-        for( int c = 0; c < COLUMNS; c++ ) {
-            for ( int r = 0; r < 2; r++ ) {
-                grid[c][r + ROWS / 2 - 1] = true;
-            }
-        }
-        */
     }
     
     public void fill( int column, int row, int columnspan, int rowspan, boolean open ) {
@@ -51,7 +41,7 @@ public class Map {
             //// for ( int r = row; r < row + rowspan; r++ ) {
             ////     grid[c][r] = open;
             //// }
-            Arrays.fill( grid[c], row, row + rowspan, open );
+            Arrays.fill( gridOccupancy[c], row, row + rowspan, open );
         }
     }
     
@@ -59,7 +49,7 @@ public class Map {
     public boolean check( int column, int row, int columnspan, int rowspan ) {
         for ( int c = column; c < column + columnspan; c++ ) {
             for ( int r = row; r < row + rowspan; r++ ) {
-                if ( !grid[c][r] ) return true;
+                if ( !gridOccupancy[c][r] ) return true;
             }
         }
         return false;
@@ -80,21 +70,21 @@ public class Map {
         // Top and Bottom
         if ( stage*0.7f % 1 < 0.7f )
             for ( int column = INITIAL_COLUMN; column <= FINAL_COLUMN; column++ ) {
-                grid[ column ][ INITIAL_ROW ] = true;
-                grid[ column ][ FINAL_ROW ] = true;
+                gridOccupancy[ column ][ INITIAL_ROW ] = true;
+                gridOccupancy[ column ][ FINAL_ROW ] = true;
         }
 
         // Left and Right
         for ( int row = INITIAL_ROW; row <= FINAL_ROW; row++ ) {
-            grid[ INITIAL_COLUMN ][ row ] = true;
-            grid[ FINAL_COLUMN ][ row ] = true;
+            gridOccupancy[ INITIAL_COLUMN ][ row ] = true;
+            gridOccupancy[ FINAL_COLUMN ][ row ] = true;
         }
 
         game.camera.expand();
     }
 
     public void reset() {
-        grid = new boolean[COLUMNS][ROWS];
+        gridOccupancy = new boolean[COLUMNS][ROWS];
         stage = 0;
         setup();
     }
@@ -104,15 +94,15 @@ public class Map {
         String string = "";
         for ( int r = 0; r < ROWS; r++ ) {
             for ( int c = 0; c < COLUMNS; c++ ) {
-                string += grid[c][r] ? "_ " : "F ";
+                string += gridOccupancy[c][r] ? "_ " : "F ";
             }
             string += "\n";
         }
         return string;
     }
 
-    public boolean[][] getGrid() {
-        return grid;
+    public boolean isOpen( int column, int row ) {
+        return gridOccupancy[ column ][ row ];
     }
 
 }

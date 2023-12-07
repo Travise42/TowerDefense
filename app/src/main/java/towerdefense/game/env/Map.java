@@ -9,7 +9,7 @@ public class Map {
     final public static int INITIAL_OPEN_COLUMNS = 10;
     final public static int INITIAL_OPEN_ROWS = 6;
     
-    final public static int COLUMNS = 30;
+    final public static int COLUMNS = 40;
     final public static int ROWS = 26;
     
     private Game game;
@@ -89,7 +89,7 @@ public class Map {
         setup();
     }
 
-    // Print a string representing the open (F) and closed (_) spaces
+    // Print a string representing the open (_) and closed (F) spaces
     public String toString() {
         String string = "";
         for ( int r = 0; r < ROWS; r++ ) {
@@ -99,6 +99,14 @@ public class Map {
             string += "\n";
         }
         return string;
+    }
+
+    public int getOpenColumns() {
+        return ( COLUMNS - INITIAL_OPEN_COLUMNS ) / 2 + stage;
+    }
+
+    public int getOpenRows() {
+        return ( ROWS - INITIAL_OPEN_ROWS ) / 2 + (int) ( ( stage - 2 )*0.7f ) * 2 - 2;
     }
 
     public boolean isOpen( int column, int row ) {

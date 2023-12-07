@@ -1,8 +1,2 @@
-Add Upgrades to Towers
-[X] Store the tower's tier
-[X] Implement tower upgrading
-[X] Add hotkeys for testing
-[ ] Plan tier paths
-[ ] Plan art for different tiers
-[ ] Make art for different tiers
+- Enemies
 

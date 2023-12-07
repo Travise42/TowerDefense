@@ -55,13 +55,13 @@ public class MapHandler {
             }
         }
 
-        for ( Tower tower : towers ) {
-            tower.draw( g, tower == game.mi.selectedTower );
+        for ( int i = towers.size() - 1; 0 <= i; i-- ) {
+            towers.get( i ).draw( g, towers.get( i ) == game.mi.selectedTower );
         }
     }
 
     public void update() {
-
+        System.out.println(map.getOpenRows());
     }
 
     public void resize() {
@@ -88,6 +88,10 @@ public class MapHandler {
 
     public void editGrid( int column, int row, int columnspan, int rowspan, boolean open ) {
         map.fill( column, row, columnspan, rowspan, open );
+    }
+
+    public int[] getEntrance() {
+        return new int[]{ ( Map.INITIAL_OPEN_COLUMNS - map.COLUMNS ) / 2 };
     }
 
     public boolean isObstructed( int column, int row, int size ) {

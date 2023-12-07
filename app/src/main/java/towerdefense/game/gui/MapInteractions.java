@@ -101,10 +101,11 @@ public class MapInteractions {
 
     private void selectTower( Tower tower ) {
         selectedTower = tower;
+
+        // Move tower to front of tower list
         int index1 = game.map.towers.indexOf( selectedTower );
-        int index2 = game.map.towers.size() - 1;
-        game.map.towers.set(index1, game.map.towers.get(index2));
-        game.map.towers.set(index2, selectedTower);
+        game.map.towers.set(index1, game.map.towers.get(0));
+        game.map.towers.set(0, selectedTower);
     }
 
     private void placeTower( int mouseX, int mouseY, Tower tower ) {

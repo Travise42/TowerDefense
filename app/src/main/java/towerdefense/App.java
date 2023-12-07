@@ -2,7 +2,7 @@ package towerdefense;
 
 
 import java.net.URL;
-import java.net.URLClassLoader;
+
 
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
@@ -16,7 +16,6 @@ public class App {
         JFrame window = new JFrame("TowerDefense");
         // Allow game to close
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
         // Create JPanel
         Panel td = new Panel(window);
         window.add(td);

@@ -7,6 +7,7 @@ import java.awt.image.BufferedImage;
 
 import towerdefense.game.Game;
 import towerdefense.game.Panel;
+import towerdefense.game.enemies.Enemy;
 import towerdefense.game.gui.MapInteractions;
 import towerdefense.game.towers.Tower;
 
@@ -24,6 +25,7 @@ public class MapHandler {
     public Map map;
 
     public List<Tower> towers;
+    public List<Enemy> enemies;
     
     public MapHandler( Game gameInstance ) {
         game = gameInstance;
@@ -33,6 +35,7 @@ public class MapHandler {
         tiles = loadImages( map_dir + "wall.png", map_dir + "tile.png" );
 
         towers = new ArrayList<>();
+        enemies = new ArrayList<>();
 
         resize();
     }
@@ -58,10 +61,16 @@ public class MapHandler {
         for ( int i = towers.size() - 1; 0 <= i; i-- ) {
             towers.get( i ).draw( g, towers.get( i ) == game.mi.selectedTower );
         }
+
+        for ( int i = 0; i < enemies.size(); i++ ) {
+            enemies.get( i ).draw( g );
+        }
     }
 
     public void update() {
-        System.out.println(map.getOpenRows());
+        for ( int i = 0; i < enemies.size(); i++ ) {
+            enemies.get( i ).move();
+        }
     }
 
     public void resize() {
@@ -75,10 +84,10 @@ public class MapHandler {
             towers.get(i).resize();
         }
     }
-
     public void newGame() {
         map.reset();
         towers.clear();
+        enemies.clear();
     }
 
     public void nextStage() {
@@ -90,8 +99,12 @@ public class MapHandler {
         map.fill( column, row, columnspan, rowspan, open );
     }
 
+    public void newEnemy( float enemy_type ) {
+        enemies.add( new Enemy( game, enemy_type ) );
+    }
+
     public int[] getEntrance() {
-        return new int[]{ ( Map.INITIAL_OPEN_COLUMNS - map.COLUMNS ) / 2 };
+        return new int[]{ ( int )( game.camera.getX() - getTileSize() ), ( int )( Map.ROWS/2f * getTileSize() ) };
     }
 
     public boolean isObstructed( int column, int row, int size ) {

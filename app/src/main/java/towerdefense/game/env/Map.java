@@ -19,6 +19,8 @@ public class Map {
     private boolean[][] gridOccupancy;
 
     public int stage;
+    public int openColumns;
+    public int openRows;
 
     public Map( Game gameInstance ) {
         game = gameInstance;
@@ -34,13 +36,12 @@ public class Map {
             INITIAL_OPEN_ROWS,
             true
         );
+        openColumns = INITIAL_OPEN_COLUMNS;
+        openRows = INITIAL_OPEN_ROWS;
     }
     
     public void fill( int column, int row, int columnspan, int rowspan, boolean open ) {
         for ( int c = column; c < column + columnspan; c++ ) {
-            //// for ( int r = row; r < row + rowspan; r++ ) {
-            ////     grid[c][r] = open;
-            //// }
             Arrays.fill( gridOccupancy[c], row, row + rowspan, open );
         }
     }
@@ -68,10 +69,12 @@ public class Map {
         int FINAL_ROW = ROWS/2 + ROWS_FROM_CENTER - 1;
 
         // Top and Bottom
-        if ( stage*0.7f % 1 < 0.7f )
+        if ( stage*0.7f % 1 < 0.7f ) {
             for ( int column = INITIAL_COLUMN; column <= FINAL_COLUMN; column++ ) {
                 gridOccupancy[ column ][ INITIAL_ROW ] = true;
                 gridOccupancy[ column ][ FINAL_ROW ] = true;
+            }
+            openRows += 2;
         }
 
         // Left and Right
@@ -79,6 +82,7 @@ public class Map {
             gridOccupancy[ INITIAL_COLUMN ][ row ] = true;
             gridOccupancy[ FINAL_COLUMN ][ row ] = true;
         }
+        openColumns += 2;
 
         game.camera.expand();
     }
@@ -99,14 +103,6 @@ public class Map {
             string += "\n";
         }
         return string;
-    }
-
-    public int getOpenColumns() {
-        return ( COLUMNS - INITIAL_OPEN_COLUMNS ) / 2 + stage;
-    }
-
-    public int getOpenRows() {
-        return ( ROWS - INITIAL_OPEN_ROWS ) / 2 + (int) ( ( stage - 2 )*0.7f ) * 2 - 2;
     }
 
     public boolean isOpen( int column, int row ) {

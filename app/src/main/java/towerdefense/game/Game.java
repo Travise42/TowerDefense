@@ -9,6 +9,7 @@ import java.awt.event.MouseEvent;
 ////import java.awt.image.BufferedImage;
 
 import towerdefense.game.enemies.Enemy;
+import towerdefense.game.enemies.EnemyMovement;
 import towerdefense.game.env.Camera;
 import towerdefense.game.env.MapHandler;
 import towerdefense.game.gui.MapInteractions;
@@ -22,6 +23,7 @@ public class Game {
     public MapHandler map;
     public MapInteractions mi;
     public Player player;
+    public EnemyMovement em;
 
     public int gameTick = 0;
 
@@ -34,6 +36,7 @@ public class Game {
         camera = new Camera( this );
         map = new MapHandler( this );
         player = new Player( this );
+        em = new EnemyMovement( this, EnemyMovement.BIRD );
 
         newGame();
         System.out.println("Started!");

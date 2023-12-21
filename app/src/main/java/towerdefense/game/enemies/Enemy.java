@@ -7,11 +7,11 @@ import towerdefense.game.Game;
 
 public class Enemy {
 
-    public static final float BULLET = 0.2f;
+    public static final float BULLET = 0.3f;
     public static final float NINJA = 0.4f;
     public static final float FAST = 0.6f;
 
-    public static final float NORMAL = 0.75f;
+    public static final float NORMAL = 0.7f;
 
     public static final float STRONG = 0.9f;
     public static final float BEAST = 1.2f;
@@ -48,16 +48,18 @@ public class Enemy {
     public void draw( Graphics g ) {
         int ex = ( int )( x - game.camera.getX() );
         int ey = ( int )( y - game.camera.getY() );
-        g.setColor( Color.RED );
-        drawCircle( g, ex, ey, size );
 
         ////double a = Math.PI/8 * ( Math.cos( animationFrame / 1000f ) + 2 );
         ////drawCircle( g, ex + ( int )( size*Math.cos( a ) / 2 ), ey + ( int )( size*Math.sin( a ) / 2 ), size/3 );
         ////drawCircle( g, ex + ( int )( size*Math.cos( a - Math.PI/2f ) / 2 ), ey - ( int )( size*Math.sin( a + Math.PI/2f ) / 2 ), size/3 );
     
+        g.setColor( Color.WHITE );
         double a = Math.sin( animationFrame / 600f );
         drawCircle( g, ( int )( ex - size*( a - 1 ) / 4 ), ( int )( ey + size*( a + 5 ) / 12 ), size / 3 );
         drawCircle( g, ( int )( ex + size*( a + 1 ) / 4 ), ( int )( ey + size*( a - 5 ) / 12 ), size / 3 );
+
+        g.setColor( Color.RED );
+        drawCircle( g, ex, ey, size );
     }
 
     private void drawCircle( Graphics g, int x, int y, int diameter ) {

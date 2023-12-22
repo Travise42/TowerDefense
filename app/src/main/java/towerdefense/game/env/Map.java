@@ -84,6 +84,7 @@ public class Map {
         }
         openColumns += 2;
 
+        game.em.generatePath();
         game.camera.expand();
     }
 

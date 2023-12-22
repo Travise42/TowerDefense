@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import towerdefense.game.Game;
+import towerdefense.game.env.Map;
 
 public class EnemyMovement {
 
@@ -32,6 +33,9 @@ public class EnemyMovement {
         POIs.add( new int[] { path.length, path[0].length / 2 - 1 } );
         POIs.add( new int[] { path.length, path[0].length / 2 } );
 
+        final int LEFT_COLUMN = ( Map.COLUMNS - game.map.map.openColumns ) / 2;
+        final int TOP_ROW = ( Map.ROWS - game.map.map.openRows ) / 2;
+
         while ( POIs.size() != 0 ) {
             int size = POIs.size();
 
@@ -45,19 +49,19 @@ public class EnemyMovement {
                         int r = poi[1] + ( 1 - x ) * m;
 
                         if ( game.map.map.openColumns <= c || c < 0 || game.map.map.openRows <= r || r < 0
-                            || path[c][r] != 0 ) continue;
+                            || path[c][r] != 0 || !game.map.map.isOpen( c + LEFT_COLUMN, r + TOP_ROW ) ) continue;
 
                         POIs.add( new int[] { c, r } );
                         path[c][r] = m * ( x + 1 );
-
-                        for ( int[] column : path ) {
-                            System.out.println( Arrays.toString( column ) );
-                        }
-                        System.out.println();
                     }
                 }
             }
         }
+
+        for ( int[] column : path ) {
+            System.out.println( Arrays.toString( column ) );
+        }
+        System.out.println();
     }
 
 }

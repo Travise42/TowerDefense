@@ -35,6 +35,7 @@ public abstract class Tower {
         game.map.editGrid( column, row, getSize(), getSize(), false );
 
         resize();
+        game.em.generatePath();
     }
 
     public void draw( Graphics g, boolean selected ) {

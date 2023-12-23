@@ -33,6 +33,8 @@ public class EnemyMovement {
         POIs.add( new int[] { path.length, path[0].length / 2 - 1 } );
         POIs.add( new int[] { path.length, path[0].length / 2 } );
 
+        List<int[]> delayedPOIs = new ArrayList<>();
+
         final int LEFT_COLUMN = ( Map.COLUMNS - game.map.map.openColumns ) / 2;
         final int TOP_ROW = ( Map.ROWS - game.map.map.openRows ) / 2;
 
@@ -49,12 +51,26 @@ public class EnemyMovement {
                         int r = poi[1] + ( 1 - x ) * m;
 
                         if ( game.map.map.openColumns <= c || c < 0 || game.map.map.openRows <= r || r < 0
-                            || path[c][r] != 0 || !game.map.map.isOpen( c + LEFT_COLUMN, r + TOP_ROW ) ) continue;
+                            || path[c][r] != 0 ) continue;
+
+                        if ( !game.map.map.isOpen( c + LEFT_COLUMN, r + TOP_ROW ) ) {
+                            delayedPOIs.add( new int[] { c, r, 5 } );
+                            continue;
+                        }
 
                         POIs.add( new int[] { c, r } );
                         path[c][r] = m * ( x + 1 );
                     }
                 }
+            }
+
+            for ( int d = 0; d < delayedPOIs.size(); ) {
+                if ( delayedPOIs.get( d )[2]-- == 0 ) {
+                    POIs.add( delayedPOIs.get( d ) );
+                    delayedPOIs.remove( d );
+                    continue;
+                }
+                d++;
             }
         }
 

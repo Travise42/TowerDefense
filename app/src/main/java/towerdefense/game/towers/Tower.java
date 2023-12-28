@@ -3,12 +3,16 @@ package towerdefense.game.towers;
 import static towerdefense.func.ImageHandler.*;
 
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.awt.BasicStroke;
 import java.awt.Color;
 
 import towerdefense.game.Game;
 
 public abstract class Tower {
+
+    final private static int HIGHLIGHT_BORDER_THICKNESS = 6;
 
     protected int column;
     protected int row;
@@ -16,6 +20,9 @@ public abstract class Tower {
     protected Game game;
 
     protected BufferedImage image;
+    protected BufferedImage highlight;
+
+    protected boolean selected;
 
     protected int path;
     protected int tier;
@@ -24,6 +31,7 @@ public abstract class Tower {
     protected Tower() {
         tier = 0;
         path = -1;
+        selected = false;
     }
 
     protected Tower( Game game, int column, int row, String tower_id ) {
@@ -41,8 +49,11 @@ public abstract class Tower {
         game.em.generatePath();
     }
 
-    public void draw( Graphics g, boolean selected ) {
-        if ( selected ) drawHighlight( g );
+    public void draw( Graphics g, boolean isSelected ) {
+        if ( selected != isSelected ) {
+            selected = isSelected;
+            if ( selected ) loadHighlight();
+        }
         draw( g );
     }
 
@@ -52,25 +63,51 @@ public abstract class Tower {
         int x = (int)( column * game.map.getTileSize() - game.camera.getX() );
         int y = (int)( ( row + getSize() ) * game.map.getTileSize() - image.getHeight() - game.camera.getY() );
 
+        if ( selected ) g.drawImage( highlight, x - HIGHLIGHT_BORDER_THICKNESS, y - HIGHLIGHT_BORDER_THICKNESS, game.panel );
         g.drawImage( image, x, y, game.panel );
     }
 
-    protected void drawHighlight( Graphics g ) {
-        int x = (int)( column * game.map.getTileSize() - game.camera.getX() );
-        int y = (int)( row * game.map.getTileSize() - game.camera.getY() );
-        int radius = 10;
-        int size = 2*radius + ( int )( getSize() * game.map.getTileSize() );
+    protected void loadHighlight() {
+        // Create scaled copy of tower
+        highlight = new BufferedImage(
+            image.getWidth() + HIGHLIGHT_BORDER_THICKNESS * 2,
+            image.getHeight() + HIGHLIGHT_BORDER_THICKNESS * 2,
+            BufferedImage.TYPE_INT_ARGB
+        );
 
-        g.setColor( Color.WHITE );
-        g.fillRoundRect( x - radius, y - radius, size, size, radius, radius );
+        Graphics2D g2d = highlight.createGraphics();
+        g2d.setStroke( new BasicStroke( HIGHLIGHT_BORDER_THICKNESS ) );
+        g2d.setColor( Color.WHITE );
+        
+        for ( int x = 0; x < image.getWidth(); x++ ) {
+        for ( int y = 0; y < image.getHeight(); y++ ) {
+            if ( isOpaque( x, y )  && isEdgePixel( x, y ) )
+                g2d.drawRect( x + HIGHLIGHT_BORDER_THICKNESS, y + HIGHLIGHT_BORDER_THICKNESS, 1, 1 );
+        } }
+        g2d.dispose();
+    }
+
+    private boolean isOpaque( int x, int y ) {
+        return ( image.getRGB( x, y ) >> 24 ) != 0x00;
+    }
+
+    private boolean isEdgePixel( int x, int y ) {
+        return x == 0 || y == 0 || x == image.getWidth() - 1 || y == image.getHeight() - 1 ||
+                (image.getRGB(x - 1, y) >> 24) == 0x00 || (image.getRGB(x + 1, y) >> 24) == 0x00 ||
+                (image.getRGB(x, y - 1) >> 24) == 0x00 || (image.getRGB(x, y + 1) >> 24) == 0x00;
     }
 
     public void resize() {
+        // Retrive image
         image = tier == 0 ? getGraphics().getTowerImage()
                             : getGraphics().getTowerImage( path, tier - 1, TowerGraphics.IDLE );
 
-        int graphicSize = ( int )( getSize() * game.map.getTileSize() );
-        image = resizeImage( image, graphicSize, image.getHeight() * graphicSize / image.getWidth() );
+        // Scale image
+        int size = ( int )( getSize() * game.map.getTileSize() );
+        image = resizeImage( image, size, image.getHeight() * size / image.getWidth() );
+
+        // Refresh highlight
+        if ( selected ) loadHighlight();
     }
 
     public void upgrade( int path ) {

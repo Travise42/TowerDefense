@@ -76,13 +76,13 @@ public class EnemyMovement {
             }
         }
 
-        for ( int row = 0; row < path[0].length; row++ ) {
-            for ( int[] column : path ) {
-                System.out.print( column[ row ] + ",\t" );
-            }
-            System.out.println();
-        }
-        System.out.println();
+        // for ( int row = 0; row < path[0].length; row++ ) {
+        //     for ( int[] column : path ) {
+        //         System.out.print( column[ row ] + ",\t" );
+        //     }
+        //     System.out.println();
+        // }
+        // System.out.println();
         //          1: up
         // 2: left        -2: right
         //        -1: down

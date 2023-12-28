@@ -17,7 +17,7 @@ public class EnemyMovement {
     private boolean mode;
 
     private List<Integer> brain;
-    private int[][] path;
+    public int[][] path;
     
     public EnemyMovement( Game game, boolean mode ) {
         this.game = game;
@@ -38,7 +38,7 @@ public class EnemyMovement {
         final int LEFT_COLUMN = ( Map.COLUMNS - game.map.map.openColumns ) / 2;
         final int TOP_ROW = ( Map.ROWS - game.map.map.openRows ) / 2;
 
-        while ( POIs.size() != 0 ) {
+        while ( POIs.size() + delayedPOIs.size() > 0 ) {
             int size = POIs.size();
 
             for ( int i = 0; i < size; i++ ) {
@@ -46,12 +46,14 @@ public class EnemyMovement {
                 POIs.remove( 0 );
 
                 for ( int m = -1; m <= 1; m += 2 ) {
-                    for ( int x = 1; x >= 0; x-- ) {
+                    for ( int x = 1; x > -1; x-- ) {
                         int c = poi[0] + x * m;
                         int r = poi[1] + ( 1 - x ) * m;
 
                         if ( game.map.map.openColumns <= c || c < 0 || game.map.map.openRows <= r || r < 0
                             || path[c][r] != 0 ) continue;
+
+                        path[c][r] = m * ( x + 1 );
 
                         if ( !game.map.map.isOpen( c + LEFT_COLUMN, r + TOP_ROW ) ) {
                             delayedPOIs.add( new int[] { c, r, 5 } );
@@ -59,25 +61,31 @@ public class EnemyMovement {
                         }
 
                         POIs.add( new int[] { c, r } );
-                        path[c][r] = m * ( x + 1 );
                     }
                 }
             }
 
             for ( int d = 0; d < delayedPOIs.size(); ) {
-                if ( delayedPOIs.get( d )[2]-- == 0 ) {
-                    POIs.add( delayedPOIs.get( d ) );
-                    delayedPOIs.remove( d );
+                if ( --delayedPOIs.get( d )[2] > 0 ) {
+                    d++;
                     continue;
                 }
-                d++;
+
+                POIs.add( delayedPOIs.get( d ) );
+                delayedPOIs.remove( d );
             }
         }
 
-        for ( int[] column : path ) {
-            System.out.println( Arrays.toString( column ) );
+        for ( int row = 0; row < path[0].length; row++ ) {
+            for ( int[] column : path ) {
+                System.out.print( column[ row ] + ",\t" );
+            }
+            System.out.println();
         }
         System.out.println();
+        //          1: up
+        // 2: left        -2: right
+        //        -1: down
     }
 
 }

@@ -31,6 +31,9 @@ public abstract class Tower {
         
         this.column = column;
         this.row = row;
+        
+        this.tier = 0;
+        this.path = -1;
 
         game.map.editGrid( column, row, getSize(), getSize(), false );
 
@@ -47,7 +50,7 @@ public abstract class Tower {
 
     protected void drawTower( Graphics g ) {
         int x = (int)( column * game.map.getTileSize() - game.camera.getX() );
-        int y = (int)( row * game.map.getTileSize() - game.camera.getY() );
+        int y = (int)( ( row + getSize() ) * game.map.getTileSize() - image.getHeight() - game.camera.getY() );
 
         g.drawImage( image, x, y, game.panel );
     }
@@ -67,7 +70,7 @@ public abstract class Tower {
                             : getGraphics().getTowerImage( path, tier - 1, TowerGraphics.IDLE );
 
         int graphicSize = ( int )( getSize() * game.map.getTileSize() );
-        image = resizeImage( image, graphicSize, graphicSize );
+        image = resizeImage( image, graphicSize, image.getHeight() * graphicSize / image.getWidth() );
     }
 
     public void upgrade( int path ) {

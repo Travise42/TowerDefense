@@ -23,6 +23,7 @@ public class Enemy {
     private float type;
     private float x, y;
     private float vx, vy;
+    private float friction;
     private int size;
     private float speed;
     private int damage;
@@ -42,6 +43,7 @@ public class Enemy {
 
         size = (int) ( type * tileSize ); // 20% - 180% of a square
         speed = ( 2 - enemy_type ) * tileSize / 500; // 20% - 180% of a square per frame
+        friction = 1 - speed / 5;
 
         animationFrame = 0;
     }
@@ -67,13 +69,12 @@ public class Enemy {
         if ( handleAcceleration() ) {
             //TODO damage the player
             game.map.enemies.remove( this );
-            System.out.println("ded");
             return;
         }
 
         // Decellerate
-        vx *= 0.96;
-        vy *= 0.96;
+        vx *= friction;
+        vy *= friction;
 
         // Move
         if ( checkIfOnTower( x, y ) || !checkIfOnTower( x + vx, y ) ) x += vx;
@@ -96,16 +97,18 @@ public class Enemy {
         final int LEFT_COLUMN = ( Map.COLUMNS - game.map.map.openColumns ) / 2;
         final int TOP_ROW = ( Map.ROWS - game.map.map.openRows ) / 2;
 
-        boolean offMap = false;
         int mx = 0, my = 0;
         final int[][] pointers = { { -1, -1 }, { 1, -1 }, { -1, 1 }, { 1, 1 }, { 0, 0 } };
         for ( int[] pointer : pointers ) {
-            int pc = ( int )( x / game.map.getTileSize() - LEFT_COLUMN - pointer[0] / 3 );
+            int pc = ( int )( x / game.map.getTileSize() - LEFT_COLUMN - pointer[0] / 3.0 );
             if ( game.map.map.openColumns + 2 < pc ) return true;
-            if ( pc <= 0 || game.map.map.openColumns <= pc) { offMap = true; break; }
+            if ( pc < 0 || game.map.map.openColumns <= pc) {
+                mx += 1;
+                continue;
+            }
 
-            int pr = ( int )( y / game.map.getTileSize() - TOP_ROW - pointer[1] / 3 );
-            if ( pr < 0 || game.map.map.openRows <= pr) { offMap = true; break; }
+            int pr = ( int )( y / game.map.getTileSize() - TOP_ROW - pointer[1] / 3.0 );
+            if ( pr < 0 || game.map.map.openRows <= pr) continue;
 
             int dir = -game.em.path[pc][pr];
             
@@ -114,15 +117,16 @@ public class Enemy {
                 my += dir;
                 continue;
             }
-            mx += dir;
-        }
-
-        if ( offMap ) {
-            vx += speed;
-            return false;
+            mx += dir / 2;
         }
 
         double hyp = Math.sqrt( mx*mx + my*my );
+        System.out.println(mx);
+
+        if ( hyp == 0 ) {
+            vx += speed;
+            return false;
+        }
 
         double dx = mx * speed / hyp;
         double dy = my * speed / hyp;

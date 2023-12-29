@@ -140,7 +140,6 @@ public class MapInteractions {
 
     public void deleteSelectedTower() {
         selectedTower.remove();
-        game.map.towers.remove( selectedTower );
     }
 
     private int getColumn( int x ) {

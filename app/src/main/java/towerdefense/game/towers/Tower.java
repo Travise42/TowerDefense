@@ -17,6 +17,9 @@ public abstract class Tower {
     protected int column;
     protected int row;
 
+    protected float health;
+    protected float maxHealth;
+
     protected Game game;
 
     protected BufferedImage image;
@@ -39,16 +42,21 @@ public abstract class Tower {
         
         this.tier = 0;
         this.path = -1;
+        
+        this.health = 300;
+        this.maxHealth = 300;
 
         resize();
     }
 
     public void draw( Graphics g) {
+        health += 0.1f;
         drawTower( g );
     }
 
     public void select() {
         loadHighlight();
+        System.out.println( health + "/" + maxHealth );
     }
 
     protected void drawTower( Graphics g ) {
@@ -122,11 +130,21 @@ public abstract class Tower {
             return;
         }
         tier += 1;
+
+        maxHealth += 150;
+        health += 150;
+
         resize();
+    }
+
+    public void damage( float damage ) {
+        health -= damage;
+        if ( health <= 0 ) remove();
     }
 
     public void remove() {
         game.map.editGrid( column, row, getSize(), getSize(), true );
+        game.map.towers.remove( this );
     }
 
     public int getUpgradeTier() {

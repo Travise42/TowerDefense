@@ -5,6 +5,7 @@ import java.awt.Color;
 
 import towerdefense.game.Game;
 import towerdefense.game.env.Map;
+import towerdefense.game.towers.Tower;
 
 public class Enemy {
 
@@ -16,14 +17,15 @@ public class Enemy {
 
     public static final float STRONG = 0.9f;
     public static final float BEAST = 1.2f;
-    public static final float TANK = 1.8f;
+    public static final float TANK = 1.5f;
+
+    public static final float FRICTION = 0.96f;
 
     private Game game;
 
     private float type;
     private float x, y;
     private float vx, vy;
-    private float friction;
     private int size;
     private float speed;
     private int damage;
@@ -37,13 +39,12 @@ public class Enemy {
 
         int[] pos = game.map.getEntrance();
         x = pos[0];
-        y = pos[1];
+        y = pos[1] + ( float )( Math.random() * ( game.map.map.openRows ) * game.map.getTileSize() ) - game.map.map.openRows * game.map.getTileSize() / 2f;
 
         float tileSize = gameInstance.map.getTileSize();
 
         size = (int) ( type * tileSize ); // 20% - 180% of a square
-        speed = ( 2 - enemy_type ) * tileSize / 500; // 20% - 180% of a square per frame
-        friction = 1 - speed / 5;
+        speed = ( 2 - enemy_type ) * tileSize / 1000; // 20% - 180% of a square per frame
 
         animationFrame = 0;
     }
@@ -73,11 +74,22 @@ public class Enemy {
         }
 
         // Decellerate
-        vx *= friction;
-        vy *= friction;
+        vx *= FRICTION;
+        vy *= FRICTION;
 
         // Move
         if ( checkIfOnTower( x, y ) || !checkIfOnTower( x + vx, y ) ) x += vx;
+        else {
+            int column = ( int )( ( x + vx ) / game.map.getTileSize() );
+            int row = ( int )( ( y + vy ) / game.map.getTileSize() );
+            for ( Tower tower : game.map.towers ) {
+                if ( tower.getColumn() <= column && column < tower.getColumn() + tower.getSize()
+                        && tower.getRow() <= row && row < tower.getRow() + tower.getSize() ) {
+                    tower.damage( type );
+                    break;
+                }
+            }
+        }
         if ( checkIfOnWall( x, y ) || !checkIfOnWall( x, y + vy ) ) y += vy;
 
         animationFrame += 40 * Math.sqrt( vx*vx + vy*vy );
@@ -121,7 +133,6 @@ public class Enemy {
         }
 
         double hyp = Math.sqrt( mx*mx + my*my );
-        System.out.println(mx);
 
         if ( hyp == 0 ) {
             vx += speed;

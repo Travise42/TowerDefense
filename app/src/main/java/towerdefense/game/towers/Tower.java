@@ -145,6 +145,7 @@ public abstract class Tower {
     public void remove() {
         game.map.editGrid( column, row, getSize(), getSize(), true );
         game.map.towers.remove( this );
+        game.mi.deselectTower();
     }
 
     public int getUpgradeTier() {

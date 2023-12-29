@@ -4,17 +4,17 @@ import java.awt.Graphics;
 
 import towerdefense.game.Game;
 
-public class BombTower extends Tower {
+public class CannonTower extends Tower {
 
-    final private static String TOWER_ID = "bomb_tower";
+    final private static String TOWER_ID = "cannon_tower";
     final private static TowerUpgrade upgradeInfo = new TowerUpgrade( TOWER_ID );
     final private static TowerGraphics graphics = new TowerGraphics( TOWER_ID );
 
-    public BombTower( Game game, int column, int row ) {
+    public CannonTower( Game game, int column, int row ) {
         super( game, column, row, TOWER_ID );
     }
 
-    public BombTower() { super(); }
+    public CannonTower() { super(); }
 
     @Override
     public void draw( Graphics g ) {
@@ -22,8 +22,8 @@ public class BombTower extends Tower {
     }
 
     @Override
-    public BombTower createNew( Game game, int column, int row ) {
-        return new BombTower( game, column, row );
+    public CannonTower createNew( Game game, int column, int row ) {
+        return new CannonTower( game, column, row );
     }
 
     @Override

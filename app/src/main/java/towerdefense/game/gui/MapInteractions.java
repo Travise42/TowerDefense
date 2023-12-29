@@ -19,14 +19,14 @@ public class MapInteractions {
 
     final public static int NO_TOWER = -1;
     final public static int WIZARD_TOWER = 0;
-    final public static int BOMB_TOWER = 1;
+    final public static int CANNON_TOWER = 1;
     final public static int ARCHER_TOWER = 2;
     final public static int WALL_TOWER = 3;
     final public static int TROOP_TOWER = 4;
 
     final public static List<Tower> TOWER = Arrays.asList( 
         new WizardTower(),
-        new BombTower(),
+        new CannonTower(),
         new ArcherTower(),
         new WallTower(),
         new TroopTower()
@@ -44,6 +44,7 @@ public class MapInteractions {
 
     public void selectTowerPlacement( int type ) {
         selectedToPlace = type;
+        deselectTower();
     }
 
     public void drawHighlightedRegion( Graphics g, int mouseX, int mouseY ) {
@@ -71,7 +72,6 @@ public class MapInteractions {
 
     public void interactWithMap( int mouseX, int mouseY ) {
         if ( selectedToPlace == NO_TOWER ) {
-            selectedTower = null;
             selectHoveredTower( mouseX, mouseY );
             return;
         };
@@ -85,17 +85,18 @@ public class MapInteractions {
         int hoveredColumn = getColumn( mouseX );
         int hoveredRow = getRow( mouseY );
 
-        deselectTower();
         for ( Tower tower : game.map.towers ) {
             if ( tower.getColumn() <= hoveredColumn && hoveredColumn < tower.getColumn() + tower.getSize()
                     && tower.getRow() <= hoveredRow && hoveredRow < tower.getRow() + tower.getSize() ) {
+                if ( selectedTower == tower ) break;
                 selectTower( tower );
                 return;
             }
         }
+        deselectTower();
     }
 
-    private void deselectTower() {
+    public void deselectTower() {
         selectedTower = null;
     }
 

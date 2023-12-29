@@ -101,11 +101,12 @@ public class MapInteractions {
 
     private void selectTower( Tower tower ) {
         selectedTower = tower;
+        selectedTower.select();
 
         // Move tower to front of tower list
-        int index1 = game.map.towers.indexOf( selectedTower );
-        game.map.towers.set(index1, game.map.towers.get(0));
-        game.map.towers.set(0, selectedTower);
+        // int index1 = game.map.towers.indexOf( selectedTower );
+        // game.map.towers.set(index1, game.map.towers.get(0));
+        // game.map.towers.set(0, selectedTower);
     }
 
     private void placeTower( int mouseX, int mouseY, Tower tower ) {
@@ -123,7 +124,7 @@ public class MapInteractions {
         boolean SPACE_IS_NOT_AVAIABLE = game.map.isObstructed( towerColumn, towerRow, towerSize );
         if ( SPACE_IS_NOT_AVAIABLE ) return;
 
-        game.map.towers.add( tower.createNew( game, towerColumn, towerRow ) );
+        game.map.addTower( tower.createNew( game, towerColumn, towerRow ) );
     }
 
     public void upgradeSelectedTower( int path ) {

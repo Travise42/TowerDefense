@@ -13,6 +13,8 @@ import towerdefense.game.towers.Tower;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class MapHandler {
 
@@ -41,30 +43,44 @@ public class MapHandler {
     }
 
     public void draw( Graphics g ) {
+        drawTestMap( g );
+
+        drawEnemies( g );
+        //drawMap( g );
+        drawTowers( g );
+    }
+
+    private void drawTestMap( Graphics g ) {
         float size = getTileSize();
         float dx = ( Panel.WIDTH - Map.COLUMNS*size ) / 2;
         float dy = ( Panel.HEIGHT - Map.ROWS*size ) / 2;
 
         for ( int row = 0; row < Map.ROWS; row++ ) {
-            for ( int column = 0; column < Map.COLUMNS; column++ ) {
-                boolean isPath = map.isOpen( column, row );
-                
-                g.drawImage( 
-                        tiles[ isPath ? T_TILE : T_WALL ],
-                        (int)( column*size + dx ),
-                        (int)( row*size + dy ),
-                        game.panel
-                );
-            }
-        }
+        for ( int column = 0; column < Map.COLUMNS; column++ ) {
+            g.drawImage( 
+                    tiles[ map.isOpen( column, row ) ? T_TILE : T_WALL ],
+                    (int)( column*size + dx ),
+                    (int)( row*size + dy ),
+                    game.panel
+            );
+        } }
+    }
 
-        for ( int i = towers.size() - 1; 0 <= i; i-- ) {
-            towers.get( i ).draw( g, towers.get( i ) == game.mi.selectedTower );
-        }
-
+    private void drawEnemies( Graphics g ) {
         for ( int i = 0; i < enemies.size(); i++ ) {
             enemies.get( i ).draw( g );
         }
+    }
+
+    private void drawMap( Graphics g ) {
+        
+    }
+
+    private void drawTowers( Graphics g ) {
+        for ( int i = towers.size() - 1; 0 <= i; i-- )
+            towers.get( i ).draw( g );
+        if ( game.mi.selectedTower != null )
+            game.mi.selectedTower.drawHighlight( g );
     }
 
     public void update() {
@@ -84,6 +100,7 @@ public class MapHandler {
             towers.get(i).resize();
         }
     }
+
     public void newGame() {
         map.reset();
         towers.clear();
@@ -97,6 +114,18 @@ public class MapHandler {
 
     public void editGrid( int column, int row, int columnspan, int rowspan, boolean open ) {
         map.fill( column, row, columnspan, rowspan, open );
+    }
+
+    public void addTower( Tower tower ) {
+        editGrid( tower.getColumn(), tower.getRow(), tower.getSize(), tower.getSize(), false );
+        game.em.generatePath();
+
+        towers.add( tower );
+        sortTowers();
+    }
+
+    public void sortTowers() {
+        Collections.sort( towers, Comparator.comparingInt( Tower::getRow ).reversed() );
     }
 
     public void newEnemy( float enemy_type ) {

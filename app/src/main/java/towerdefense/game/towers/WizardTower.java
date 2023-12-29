@@ -8,7 +8,7 @@ public class WizardTower extends Tower {
 
     final private static String TOWER_ID = "wizard_tower";
     final private static TowerUpgrade upgradeInfo = new TowerUpgrade( TOWER_ID );
-    final private static TowerGraphics graphics = new TowerGraphics( TOWER_ID );
+    final private static TowerGraphics graphics = new TowerGraphics( TOWER_ID, null );
 
     public WizardTower( Game game, int column, int row ) {
         super( game, column, row, TOWER_ID );

@@ -8,7 +8,7 @@ public class TroopTower extends Tower {
 
     final private static String TOWER_ID = "troop_tower";
     final private static TowerUpgrade upgradeInfo = new TowerUpgrade( TOWER_ID );
-    final private static TowerGraphics graphics = new TowerGraphics( TOWER_ID );
+    final private static TowerGraphics graphics = new TowerGraphics( TOWER_ID, null );
 
     public TroopTower( Game game, int column, int row ) {
         super( game, column, row, TOWER_ID );

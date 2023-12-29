@@ -24,32 +24,29 @@ public class TowerGraphics {
     private BufferedImage purchaseImage;
     private BufferedImage[][] towerImages; // [path][tier]
     private BufferedImage[][] upgradeImages; // [path][tier]
-    ////private List<BufferedImage> loadedImages;
+    private BufferedImage[] entityImages;
 
     private String towerId;
     private String map_dir;
     private String gui_dir;
 
-    public TowerGraphics( String tower_id ) {
-        init( tower_id );
-
-        loadBaseImages();
-        loadUpgradeImages();
+    public TowerGraphics( String tower_id, String[] entities ) {
+        init( tower_id, entities, true );
     }
 
-    public TowerGraphics( String tower_id, boolean hasTiers ) {
-        init( tower_id );
-
-        loadBaseImages();
-        if ( hasTiers ) loadUpgradeImages();
+    public TowerGraphics( String tower_id, String[] entities, boolean hasTiers ) {
+        init( tower_id, entities, hasTiers );
     }
 
-    private void init( String tower_id ) {
+    private void init( String tower_id, String[] entities, boolean hasTiers ) {
         towerId = tower_id;
-        ////loadedImages = new ArrayList<>();
 
         map_dir = "map/towers/" + towerId + "/";
         gui_dir = "gui/towers/" + towerId + "/";
+
+        loadBaseImages();
+        if ( hasTiers ) loadUpgradeImages();
+        if ( entities != null ) loadEntities( entities );
     }
 
     private void loadBaseImages() {
@@ -70,9 +67,13 @@ public class TowerGraphics {
         }
     }
 
-    ////public void load( String type, String name ) {
-    ////    loadedImages.add( loadImage( map_dir + type + "/" + name + ".png" ) );
-    ////}
+    private void loadEntities( String[] entities ) {
+        entityImages = new BufferedImage[ entities.length ];
+        
+        for ( int i = 0; i < entities.length; i++ ) {
+            entityImages[ i ] = loadImage( map_dir + "entities/" + entities[ i ] + ".png" );
+        }
+    }
 
     public BufferedImage getUpgradeImage( int path, int tier ) {
         return upgradeImages[ path ][ tier ];
@@ -80,6 +81,10 @@ public class TowerGraphics {
 
     public BufferedImage getTowerImage( int path, int tier ) {
         return towerImages[ path ][ tier ];
+    }
+
+    public BufferedImage getEntityImage( int id ) {
+        return entityImages[ id ];
     }
 
     public BufferedImage getPurchaseImage() {

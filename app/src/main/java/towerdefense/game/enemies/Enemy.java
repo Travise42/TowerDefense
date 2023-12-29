@@ -73,33 +73,52 @@ public class Enemy {
             return;
         }
 
+        animationFrame += 40 * Math.sqrt( vx*vx + vy*vy );
+
         // Decellerate
         vx *= FRICTION;
         vy *= FRICTION;
 
         // Move
-        if ( checkIfOnTower( x, y ) || !checkIfOnTower( x + vx, y ) ) x += vx;
-        else {
-            int column = ( int )( ( x + vx ) / game.map.getTileSize() );
-            int row = ( int )( ( y + vy ) / game.map.getTileSize() );
+        if ( checkIfOnWall( x, y ) || !checkIfOnWall( x, y + vy ) ) y += vy;
+        if ( checkIfOnTower( x, y ) || !checkIfOnTower( x + vx, y ) ) {
+            x += vx;
+            return;
+        }
+        
+        for ( int m = -1; m < 2; m += 2 ) {
+        for ( int n = -1; n < 2; n += 2 ) {
+            int column = ( int )( ( x + vx + m * size / 2 ) / game.map.getTileSize() );
+            int row = ( int )( ( y + vy + n * size / 2 ) / game.map.getTileSize() );
             for ( Tower tower : game.map.towers ) {
                 if ( tower.getColumn() <= column && column < tower.getColumn() + tower.getSize()
                         && tower.getRow() <= row && row < tower.getRow() + tower.getSize() ) {
                     tower.damage( type );
-                    break;
+                    return;
                 }
             }
-        }
-        if ( checkIfOnWall( x, y ) || !checkIfOnWall( x, y + vy ) ) y += vy;
-
-        animationFrame += 40 * Math.sqrt( vx*vx + vy*vy );
+        } }
     }
 
     public boolean checkIfOnWall( float x, float y ) {
+        return pointOnWall( x - size/2, y - size/2 )
+            || pointOnWall( x + size/2, y - size/2 )
+            || pointOnWall( x - size/2, y + size/2 )
+            || pointOnWall( x + size/2, y + size/2 );
+    }
+
+    public boolean pointOnWall( float x, float y ) {
         return !game.map.map.isOpen( ( int )( x / game.map.getTileSize() ), ( int )( y / game.map.getTileSize() ) );
     }
 
     public boolean checkIfOnTower( float x, float y ) {
+        return pointOnTower( x - size/2, y - size/2 )
+            || pointOnTower( x + size/2, y - size/2 )
+            || pointOnTower( x - size/2, y + size/2 )
+            || pointOnTower( x + size/2, y + size/2 );
+    }
+
+    public boolean pointOnTower( float x, float y ) {
         float c = x / game.map.getTileSize() - ( Map.COLUMNS - game.map.map.openColumns ) / 2;
         float r = y / game.map.getTileSize() - ( Map.ROWS - game.map.map.openRows ) / 2;
         return !( c < 0 || r < 0 || c > game.map.map.openColumns || r > game.map.map.openRows ) && !game.map.map.isOpen( ( int )( x / game.map.getTileSize() ), ( int )( y / game.map.getTileSize() ) );

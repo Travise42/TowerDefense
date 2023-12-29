@@ -19,6 +19,21 @@ public class ArcherTower extends Tower {
     @Override
     public void draw( Graphics g ) {
         drawTower( g );
+        drawEntity( g );
+        drawArrow( g );
+        drawBow( g );
+    }
+
+    private void drawEntity( Graphics g ) {
+
+    }
+
+    private void drawArrow( Graphics g ) {
+
+    }
+
+    private void drawBow( Graphics g ) {
+
     }
 
     @Override

@@ -56,21 +56,15 @@ public abstract class Tower {
 
     public void select() {
         loadHighlight();
-        System.out.println( health + "/" + maxHealth );
+        //System.out.println( health + "/" + maxHealth );
     }
 
     protected void drawTower( Graphics g ) {
-        int x = (int)( column * game.map.getTileSize() - game.camera.getX() );
-        int y = (int)( ( row + getSize() ) * game.map.getTileSize() - image.getHeight() - game.camera.getY() );
-
-        g.drawImage( image, x, y, game.panel );
+        g.drawImage( image, getX(), getY(), game.panel );
     }
 
     public void drawHighlight( Graphics g ) {
-        int x = (int)( column * game.map.getTileSize() - game.camera.getX() );
-        int y = (int)( ( row + getSize() ) * game.map.getTileSize() - image.getHeight() - game.camera.getY() );
-
-        g.drawImage( highlight, x - HIGHLIGHT_BORDER_THICKNESS, y - HIGHLIGHT_BORDER_THICKNESS, game.panel );
+        g.drawImage( highlight, getX() - HIGHLIGHT_BORDER_THICKNESS, getY() - HIGHLIGHT_BORDER_THICKNESS, game.panel );
     }
 
     protected void loadHighlight() {
@@ -106,7 +100,7 @@ public abstract class Tower {
     public void resize() {
         // Retrive image
         image = tier == 0 ? getGraphics().getTowerImage()
-                            : getGraphics().getTowerImage( path, tier - 1, TowerGraphics.IDLE );
+                            : getGraphics().getTowerImage( path, tier - 1 );
 
         // Scale image
         int size = ( int )( getSize() * game.map.getTileSize() );
@@ -162,6 +156,14 @@ public abstract class Tower {
 
     public int getRow() {
         return row;
+    }
+
+    public int getX() {
+        return (int)( column * game.map.getTileSize() - game.camera.getX() );
+    }
+
+    public int getY() {
+        return (int)( ( row + getSize() ) * game.map.getTileSize() - image.getHeight() - game.camera.getY() );
     }
 
     public abstract Tower createNew( Game game, int column, int row );

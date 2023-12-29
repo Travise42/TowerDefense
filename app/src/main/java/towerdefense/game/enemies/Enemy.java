@@ -50,10 +50,6 @@ public class Enemy {
         int ex = ( int )( x - game.camera.getX() );
         int ey = ( int )( y - game.camera.getY() );
 
-        ////double a = Math.PI/8 * ( Math.cos( animationFrame / 1000f ) + 2 );
-        ////drawCircle( g, ex + ( int )( size*Math.cos( a ) / 2 ), ey + ( int )( size*Math.sin( a ) / 2 ), size/3 );
-        ////drawCircle( g, ex + ( int )( size*Math.cos( a - Math.PI/2f ) / 2 ), ey - ( int )( size*Math.sin( a + Math.PI/2f ) / 2 ), size/3 );
-    
         g.setColor( new Color( 200, 30, 30 ) );
         double a = Math.sin( animationFrame / 600f );
         drawCircle( g, ( int )( ex - size*( a - 1 ) / 4 ), ( int )( ey + size*( a + 5 ) / 12 ), size / 3 );
@@ -69,14 +65,15 @@ public class Enemy {
 
     public void move() {
         if ( handleAcceleration() ) {
-            // damage the player
+            //TODO damage the player
             game.map.enemies.remove( this );
+            System.out.println("ded");
             return;
         }
 
         // Decellerate
-        vx *= 0.92;
-        vy *= 0.92;
+        vx *= 0.96;
+        vy *= 0.96;
 
         // Move
         if ( checkIfOnTower( x, y ) || !checkIfOnTower( x + vx, y ) ) x += vx;
@@ -104,8 +101,8 @@ public class Enemy {
         final int[][] pointers = { { -1, -1 }, { 1, -1 }, { -1, 1 }, { 1, 1 }, { 0, 0 } };
         for ( int[] pointer : pointers ) {
             int pc = ( int )( x / game.map.getTileSize() - LEFT_COLUMN - pointer[0] / 3 );
-            if ( game.map.map.openColumns + 2 <= pc ) return true;
-            if ( pc < 0 || game.map.map.openColumns <= pc) { offMap = true; break; }
+            if ( game.map.map.openColumns + 2 < pc ) return true;
+            if ( pc <= 0 || game.map.map.openColumns <= pc) { offMap = true; break; }
 
             int pr = ( int )( y / game.map.getTileSize() - TOP_ROW - pointer[1] / 3 );
             if ( pr < 0 || game.map.map.openRows <= pr) { offMap = true; break; }

@@ -1,9 +1,5 @@
 package towerdefense;
 
-
-import java.net.URL;
-
-
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
@@ -26,12 +22,12 @@ public class App {
         // Edit window attributes
         window.setResizable(false);
         window.pack();
-        //window.setLocation(100,100);
+        // window.setLocation(100,100);
         window.setVisible(true);
     }
 
     public static void main(String[] args) {
-        
+
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 init();

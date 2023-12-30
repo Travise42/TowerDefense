@@ -1,15 +1,10 @@
 package towerdefense.game.gui;
 
 import towerdefense.game.Game;
-import towerdefense.game.Panel;
-import towerdefense.game.env.Map;
 import towerdefense.game.towers.*;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.event.MouseEvent;
-import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -103,11 +98,6 @@ public class MapInteractions {
     private void selectTower( Tower tower ) {
         selectedTower = tower;
         selectedTower.select();
-
-        // Move tower to front of tower list
-        // int index1 = game.map.towers.indexOf( selectedTower );
-        // game.map.towers.set(index1, game.map.towers.get(0));
-        // game.map.towers.set(0, selectedTower);
     }
 
     private void placeTower( int mouseX, int mouseY, Tower tower ) {
@@ -131,6 +121,9 @@ public class MapInteractions {
     public void upgradeSelectedTower( int path ) {
         if ( path < 0 || 1 < path ) {
             System.out.println( path + " is not a valid path to upgrade!" );
+            return;
+        }
+        if ( selectedTower == null ) {
             return;
         }
         if ( selectedTower.getUpgradeInfo() == null ) return;

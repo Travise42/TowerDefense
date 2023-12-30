@@ -8,4 +8,5 @@
 build
 
 # Ignore builds
-bin
+bin/
+*.class

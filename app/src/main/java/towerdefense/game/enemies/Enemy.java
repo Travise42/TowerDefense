@@ -21,8 +21,6 @@ public class Enemy {
 
     public static final float FRICTION = 0.96f;
 
-    private Game game;
-
     private float type;
     private float x, y;
     private float vx, vy;
@@ -33,15 +31,14 @@ public class Enemy {
 
     private int animationFrame;
 
-    public Enemy( Game gameInstance, float enemy_type ) {
-        game = gameInstance;
+    public Enemy(float enemy_type ) {
         type = enemy_type;
 
-        int[] pos = game.map.getEntrance();
+        int[] pos = Game.instance.map.getEntrance();
         x = pos[0];
-        y = pos[1] + ( float )( Math.random() * ( game.map.map.openRows ) * game.map.getTileSize() ) - game.map.map.openRows * game.map.getTileSize() / 2f;
+        y = pos[1] + ( float )( Math.random() * ( Game.instance.map.map.openRows ) * Game.instance.map.getTileSize() ) - Game.instance.map.map.openRows * Game.instance.map.getTileSize() / 2f;
 
-        float tileSize = gameInstance.map.getTileSize();
+        float tileSize = Game.instance.map.getTileSize();
 
         size = (int) ( type * tileSize ); // 20% - 180% of a square
         speed = ( 2 - enemy_type ) * tileSize / 1000; // 20% - 180% of a square per frame
@@ -50,8 +47,8 @@ public class Enemy {
     }
 
     public void draw( Graphics g ) {
-        int ex = ( int )( x - game.camera.getX() );
-        int ey = ( int )( y - game.camera.getY() );
+        int ex = ( int )( x - Game.instance.camera.getX() );
+        int ey = ( int )( y - Game.instance.camera.getY() );
 
         g.setColor( new Color( 200, 30, 30 ) );
         double a = Math.sin( animationFrame / 600f );
@@ -69,7 +66,7 @@ public class Enemy {
     public void move() {
         if ( handleAcceleration() ) {
             //TODO damage the player
-            game.map.enemies.remove( this );
+            Game.instance.map.enemies.remove( this );
             return;
         }
 
@@ -88,9 +85,9 @@ public class Enemy {
         
         for ( int m = -1; m < 2; m += 2 ) {
         for ( int n = -1; n < 2; n += 2 ) {
-            int column = ( int )( ( x + vx + m * size / 2 ) / game.map.getTileSize() );
-            int row = ( int )( ( y + vy + n * size / 2 ) / game.map.getTileSize() );
-            for ( Tower tower : game.map.towers ) {
+            int column = ( int )( ( x + vx + m * size / 2 ) / Game.instance.map.getTileSize() );
+            int row = ( int )( ( y + vy + n * size / 2 ) / Game.instance.map.getTileSize() );
+            for ( Tower tower : Game.instance.map.towers ) {
                 if ( tower.getColumn() <= column && column < tower.getColumn() + tower.getSize()
                         && tower.getRow() <= row && row < tower.getRow() + tower.getSize() ) {
                     tower.damage( type );
@@ -108,7 +105,7 @@ public class Enemy {
     }
 
     public boolean pointOnWall( float x, float y ) {
-        return !game.map.map.isOpen( ( int )( x / game.map.getTileSize() ), ( int )( y / game.map.getTileSize() ) );
+        return !Game.instance.map.map.isOpen( ( int )( x / Game.instance.map.getTileSize() ), ( int )( y / Game.instance.map.getTileSize() ) );
     }
 
     public boolean checkIfOnTower( float x, float y ) {
@@ -119,29 +116,29 @@ public class Enemy {
     }
 
     public boolean pointOnTower( float x, float y ) {
-        float c = x / game.map.getTileSize() - ( Map.COLUMNS - game.map.map.openColumns ) / 2;
-        float r = y / game.map.getTileSize() - ( Map.ROWS - game.map.map.openRows ) / 2;
-        return !( c < 0 || r < 0 || c > game.map.map.openColumns || r > game.map.map.openRows ) && !game.map.map.isOpen( ( int )( x / game.map.getTileSize() ), ( int )( y / game.map.getTileSize() ) );
+        float c = x / Game.instance.map.getTileSize() - ( Map.COLUMNS - Game.instance.map.map.openColumns ) / 2;
+        float r = y / Game.instance.map.getTileSize() - ( Map.ROWS - Game.instance.map.map.openRows ) / 2;
+        return !( c < 0 || r < 0 || c > Game.instance.map.map.openColumns || r > Game.instance.map.map.openRows ) && !Game.instance.map.map.isOpen( ( int )( x / Game.instance.map.getTileSize() ), ( int )( y / Game.instance.map.getTileSize() ) );
     }
 
     public boolean handleAcceleration() {
-        final int LEFT_COLUMN = ( Map.COLUMNS - game.map.map.openColumns ) / 2;
-        final int TOP_ROW = ( Map.ROWS - game.map.map.openRows ) / 2;
+        final int LEFT_COLUMN = ( Map.COLUMNS - Game.instance.map.map.openColumns ) / 2;
+        final int TOP_ROW = ( Map.ROWS - Game.instance.map.map.openRows ) / 2;
 
         int mx = 0, my = 0;
         final int[][] pointers = { { -1, -1 }, { 1, -1 }, { -1, 1 }, { 1, 1 }, { 0, 0 } };
         for ( int[] pointer : pointers ) {
-            int pc = ( int )( x / game.map.getTileSize() - LEFT_COLUMN - pointer[0] / 3.0 );
-            if ( game.map.map.openColumns + 2 < pc ) return true;
-            if ( pc < 0 || game.map.map.openColumns <= pc) {
+            int pc = ( int )( x / Game.instance.map.getTileSize() - LEFT_COLUMN - pointer[0] / 3.0 );
+            if ( Game.instance.map.map.openColumns + 2 < pc ) return true;
+            if ( pc < 0 || Game.instance.map.map.openColumns <= pc) {
                 mx += 1;
                 continue;
             }
 
-            int pr = ( int )( y / game.map.getTileSize() - TOP_ROW - pointer[1] / 3.0 );
-            if ( pr < 0 || game.map.map.openRows <= pr) continue;
+            int pr = ( int )( y / Game.instance.map.getTileSize() - TOP_ROW - pointer[1] / 3.0 );
+            if ( pr < 0 || Game.instance.map.map.openRows <= pr) continue;
 
-            int dir = -game.em.path[pc][pr];
+            int dir = -Game.instance.em.path[pc][pr];
             
             if ( Math.abs(dir) == 1 ) {
                 // Accelerate

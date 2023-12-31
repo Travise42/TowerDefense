@@ -8,10 +8,12 @@ import towerdefense.game.enemies.Enemy;
 import towerdefense.game.enemies.EnemyMovement;
 import towerdefense.game.env.Camera;
 import towerdefense.game.env.MapHandler;
-import towerdefense.game.gui.MapInteractions;
+import towerdefense.game.env.MapInteractions;
 import towerdefense.game.player.Player;
 
 public class Game {
+
+    public static Game instance;
 
     public Panel panel;
     public Player player;
@@ -24,13 +26,14 @@ public class Game {
     public int mx = 0, my = 0;
 
     public Game(Panel jpanel) {
+        instance = this;
         panel = jpanel;
 
-        mi = new MapInteractions(this);
-        camera = new Camera(this);
-        map = new MapHandler(this);
-        player = new Player(this);
-        em = new EnemyMovement(this, EnemyMovement.BIRD);
+        mi = new MapInteractions();
+        camera = new Camera();
+        map = new MapHandler();
+        player = new Player();
+        em = new EnemyMovement(EnemyMovement.BIRD);
 
         newGame();
         System.out.println("Started!");

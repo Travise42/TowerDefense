@@ -8,7 +8,6 @@ import java.awt.image.BufferedImage;
 import towerdefense.game.Game;
 import towerdefense.game.Panel;
 import towerdefense.game.enemies.Enemy;
-import towerdefense.game.gui.MapInteractions;
 import towerdefense.game.towers.Tower;
 
 import java.util.List;
@@ -23,15 +22,13 @@ public class MapHandler {
 
     private static BufferedImage[] tiles;
 
-    private Game game;
     public Map map;
 
     public List<Tower> towers;
     public List<Enemy> enemies;
     
-    public MapHandler( Game gameInstance ) {
-        game = gameInstance;
-        map = new Map( game );
+    public MapHandler() {
+        map = new Map();
 
         String map_dir = "map/tiles/";
         tiles = loadImages( map_dir + "wall.png", map_dir + "tile.png" );
@@ -61,7 +58,7 @@ public class MapHandler {
                     tiles[ map.isOpen( column, row ) ? T_TILE : T_WALL ],
                     (int)( column*size + dx ),
                     (int)( row*size + dy ),
-                    game.panel
+                    Game.instance.panel
             );
         } }
     }
@@ -77,10 +74,10 @@ public class MapHandler {
     }
 
     private void drawTowers( Graphics g ) {
-        for ( int i = towers.size() - 1; 0 <= i; i-- )
+        for ( int i = 0; i < towers.size(); i++ )
             towers.get( i ).draw( g );
-        if ( game.mi.selectedTower != null )
-            game.mi.selectedTower.drawHighlight( g );
+        if ( Game.instance.mi.getSelectedTower() != null )
+            Game.instance.mi.getSelectedTower().drawHighlight( g );
     }
 
     public void update() {
@@ -119,22 +116,22 @@ public class MapHandler {
 
     public void addTower( Tower tower ) {
         editGrid( tower.getColumn(), tower.getRow(), tower.getSize(), tower.getSize(), false );
-        game.em.generatePath();
+        Game.instance.em.generatePath();
 
         towers.add( tower );
         sortTowers();
     }
 
     public void sortTowers() {
-        Collections.sort( towers, Comparator.comparingInt( Tower::getRow ).reversed() );
+        Collections.sort( towers, Comparator.comparingInt( Tower::getRow ) );
     }
 
     public void newEnemy( float enemy_type ) {
-        enemies.add( new Enemy( game, enemy_type ) );
+        enemies.add( new Enemy( enemy_type ) );
     }
 
     public int[] getEntrance() {
-        return new int[]{ ( int )( game.camera.getX() - getTileSize() ), ( int )( Map.ROWS/2f * getTileSize() ) };
+        return new int[]{ ( int )( Game.instance.camera.getX() - getTileSize() ), ( int )( Map.ROWS/2f * getTileSize() ) };
     }
 
     public boolean isObstructed( int column, int row, int size ) {
@@ -146,7 +143,7 @@ public class MapHandler {
     }
 
     public float getTileSize() {
-        return Panel.WIDTH / (game.camera.viewx);
+        return Panel.WIDTH / (Game.instance.camera.viewx);
     }
 
 }

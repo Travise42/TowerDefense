@@ -107,7 +107,7 @@ public abstract class Tower {
         image = resizeImage( image, size, image.getHeight() * size / image.getWidth() );
 
         // Refresh highlight
-        if ( this == game.mi.selectedTower ) loadHighlight();
+        if ( this == game.mi.getSelectedTower() ) loadHighlight();
     }
 
     public void upgrade( int path ) {

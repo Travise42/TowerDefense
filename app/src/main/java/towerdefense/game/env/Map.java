@@ -11,8 +11,6 @@ public class Map {
     
     final public static int COLUMNS = 40;
     final public static int ROWS = 26;
-    
-    private Game game;
 
     // true: open
     // false: obstructed
@@ -22,9 +20,7 @@ public class Map {
     public int openColumns;
     public int openRows;
 
-    public Map( Game gameInstance ) {
-        game = gameInstance;
-
+    public Map() {
         reset();
     }
 
@@ -84,8 +80,8 @@ public class Map {
         }
         openColumns += 2;
 
-        game.em.generatePath();
-        game.camera.expand();
+        Game.instance.em.generatePath();
+        Game.instance.camera.expand();
     }
 
     public void reset() {

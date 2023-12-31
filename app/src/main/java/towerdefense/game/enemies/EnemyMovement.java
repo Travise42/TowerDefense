@@ -12,22 +12,19 @@ public class EnemyMovement {
     final public static boolean BAT = false; // AI
     final public static boolean BIRD = true; // PATHFIND
 
-    private Game game;
-    
     private boolean mode;
 
     private List<Integer> brain;
     public int[][] path;
     
-    public EnemyMovement( Game game, boolean mode ) {
-        this.game = game;
+    public EnemyMovement(boolean mode) {
         this.mode = mode;
 
         generatePath();
     }
 
     public void generatePath() {
-        path = new int[game.map.map.openColumns][game.map.map.openRows];
+        path = new int[Game.instance.map.map.openColumns][Game.instance.map.map.openRows];
 
         List<int[]> POIs = new ArrayList<>();
         POIs.add( new int[] { path.length, path[0].length / 2 - 1 } );
@@ -35,8 +32,8 @@ public class EnemyMovement {
 
         List<int[]> delayedPOIs = new ArrayList<>();
 
-        final int LEFT_COLUMN = ( Map.COLUMNS - game.map.map.openColumns ) / 2;
-        final int TOP_ROW = ( Map.ROWS - game.map.map.openRows ) / 2;
+        final int LEFT_COLUMN = ( Map.COLUMNS - Game.instance.map.map.openColumns ) / 2;
+        final int TOP_ROW = ( Map.ROWS - Game.instance.map.map.openRows ) / 2;
 
         while ( POIs.size() + delayedPOIs.size() > 0 ) {
             int size = POIs.size();
@@ -50,12 +47,12 @@ public class EnemyMovement {
                         int c = poi[0] + x * m;
                         int r = poi[1] + ( 1 - x ) * m;
 
-                        if ( game.map.map.openColumns <= c || c < 0 || game.map.map.openRows <= r || r < 0
+                        if ( Game.instance.map.map.openColumns <= c || c < 0 || Game.instance.map.map.openRows <= r || r < 0
                             || path[c][r] != 0 ) continue;
 
                         path[c][r] = m * ( x + 1 );
 
-                        if ( !game.map.map.isOpen( c + LEFT_COLUMN, r + TOP_ROW ) ) {
+                        if ( !Game.instance.map.map.isOpen( c + LEFT_COLUMN, r + TOP_ROW ) ) {
                             delayedPOIs.add( new int[] { c, r, 5 } );
                             continue;
                         }

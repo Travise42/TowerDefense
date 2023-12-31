@@ -1,37 +1,47 @@
 package towerdefense.game.env;
 
-import static towerdefense.func.ImageHandler.*;
+import static towerdefense.func.ImageHandler.loadImage;
+import static towerdefense.func.ImageHandler.resizeImage;
 
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 import towerdefense.game.Game;
 import towerdefense.game.Panel;
 import towerdefense.game.enemies.Enemy;
 import towerdefense.game.towers.Tower;
 
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-
+/**
+ * Map Handler handles the game map and all the towers and enemies.
+ * This means updating the towers and enemies.
+ * 
+ * Map Hander stores the map images and is equiped to draw the map. Towers and
+ * enemies shoudl be drawn using their classes.
+ */
 public class MapHandler {
 
-    final private static int T_WALL = 0;
-    final private static int T_TILE = 1;
+    final private static String MAP_DIR = "map/tiles/";
 
-    private static BufferedImage[] tiles;
+    private static BufferedImage[] tileImages;
+    private static BufferedImage[] testTileImages;
+
+    private static String[] tileDests = { "wall", "tile" };
+    private static String[] testTileDests = { "testObstructed", "testOpen" };
 
     public Map map;
 
     public List<Tower> towers;
     public List<Enemy> enemies;
-    
+
     public MapHandler() {
         map = new Map();
 
-        String map_dir = "map/tiles/";
-        tiles = loadImages( map_dir + "wall.png", map_dir + "tile.png" );
+        loadTileImages();
+        loadTestTileImages();
 
         towers = new ArrayList<>();
         enemies = new ArrayList<>();
@@ -39,65 +49,79 @@ public class MapHandler {
         resize();
     }
 
-    public void draw( Graphics g ) {
-        drawTestMap( g );
+    /// Graphics /// ------------------------------------------------------------ ///
 
-        drawEnemies( g );
-        //drawMap( g );
-        drawTowers( g );
+    private void loadTileImages() {
+        tileImages = new BufferedImage[tileDests.length];
+        for (int i = 0; i < tileDests.length; i++)
+            tileImages[i] = loadImage(MAP_DIR + tileDests[i] + ".png");
     }
 
-    private void drawTestMap( Graphics g ) {
-        float size = getTileSize();
-        float dx = ( Panel.WIDTH - Map.COLUMNS*size ) / 2;
-        float dy = ( Panel.HEIGHT - Map.ROWS*size ) / 2;
-
-        for ( int row = 0; row < Map.ROWS; row++ ) {
-        for ( int column = 0; column < Map.COLUMNS; column++ ) {
-            g.drawImage( 
-                    tiles[ map.isOpen( column, row ) ? T_TILE : T_WALL ],
-                    (int)( column*size + dx ),
-                    (int)( row*size + dy ),
-                    Game.instance.panel
-            );
-        } }
+    private void loadTestTileImages() {
+        testTileImages = new BufferedImage[testTileDests.length];
+        for (int i = 0; i < testTileDests.length; i++)
+            testTileImages[i] = loadImage(MAP_DIR + testTileDests[i] + ".png");
     }
 
-    private void drawEnemies( Graphics g ) {
-        for ( int i = 0; i < enemies.size(); i++ ) {
-            enemies.get( i ).draw( g );
-        }
+    public void draw(Graphics g) {
+        // temp for testing
+        drawTestMap(g);
+
+        drawEnemies(g);
+        drawMap(g);
+        drawTowers(g);
     }
 
-    private void drawMap( Graphics g ) {
-        
+    private void drawTestMap(Graphics g) {
+        for (int row = 0; row < Map.ROWS; row++)
+            for (int column = 0; column < Map.COLUMNS; column++)
+                g.drawImage(
+                        testTileImages[map.isOpen(column, row) ? 1 : 0],
+                        (int) (column * getTileSize() - Game.instance.camera.getX()),
+                        (int) (row * getTileSize() - Game.instance.camera.getY()),
+                        Game.instance.panel);
     }
 
-    private void drawTowers( Graphics g ) {
-        for ( int i = 0; i < towers.size(); i++ )
-            towers.get( i ).draw( g );
-        if ( Game.instance.mi.getSelectedTower() != null )
-            Game.instance.mi.getSelectedTower().drawHighlight( g );
+    private void drawEnemies(Graphics g) {
+        for (int i = 0; i < enemies.size(); i++)
+            enemies.get(i).draw(g);
     }
 
-    public void update() {
-        // Move all the enemies
-        for ( int i = 0; i < enemies.size(); i++ ) {
-            enemies.get( i ).move();
-        }
+    private void drawMap(Graphics g) {
+
+    }
+
+    private void drawTowers(Graphics g) {
+        // Draw towers top to bottom ( furthest to closest )
+        for (int i = 0; i < towers.size(); i++)
+            towers.get(i).draw(g);
+
+        // Draw selection outline infront of all the towers
+        if (Game.instance.mi.getSelectedTower() != null)
+            Game.instance.mi.getSelectedTower().drawHighlight(g);
     }
 
     public void resize() {
-        for ( int i = 0; i < tiles.length; i++ ) {
-            tiles[i] = resizeImage( 
-                tiles[i], 
-                (int) Math.ceil( getTileSize() ), 
-                (int) Math.ceil( getTileSize() ) );
-        }
-        for ( int i = 0; i < towers.size(); i++ ) {
+        // Resize tiles
+        for (int i = 0; i < tileImages.length; i++)
+            tileImages[i] = resizeImage(
+                    tileImages[i],
+                    (int) getTileSize() + 1,
+                    (int) getTileSize() + 1);
+
+        // Resize test tiles
+        for (int i = 0; i < testTileImages.length; i++)
+            testTileImages[i] = resizeImage(
+                    testTileImages[i],
+                    (int) getTileSize() + 1,
+                    (int) getTileSize() + 1);
+
+        // Resize towers
+        for (int i = 0; i < towers.size(); i++)
             towers.get(i).resize();
-        }
     }
+
+    /// Game Loop /// ------------------------------------------------------------ ///
 
     public void newGame() {
         map.reset();
@@ -105,45 +129,62 @@ public class MapHandler {
         enemies.clear();
     }
 
+    public void update() {
+        // Move all the enemies
+        for (int i = 0; i < enemies.size(); i++)
+            enemies.get(i).move();
+    }
+
     public void nextStage() {
         map.nextStage();
         resize();
     }
 
-    public void editGrid( int column, int row, int columnspan, int rowspan, boolean open ) {
-        map.fill( column, row, columnspan, rowspan, open );
+    /// Enemies /// ------------------------------------------------------------ ///
+    
+    public void newEnemy(float enemy_type) {
+        enemies.add(new Enemy(enemy_type));
     }
 
-    public void addTower( Tower tower ) {
-        editGrid( tower.getColumn(), tower.getRow(), tower.getSize(), tower.getSize(), false );
+    /// Map /// ------------------------------------------------------------ ///
+
+    public void addTower(Tower tower) {
+        editGrid(tower.getColumn(), tower.getRow(), tower.getSize(), tower.getSize(), false);
         Game.instance.em.generatePath();
 
-        towers.add( tower );
-        sortTowers();
+        // Insert tower in list ordered lowest to highest y values
+        int pointer = -1;
+        do if (towers.size() <= ++pointer) break;
+        while (towers.get(pointer).getY() < tower.getY());
+        towers.add(pointer, tower);
     }
 
+    public void editGrid(int column, int row, int columnspan, int rowspan, boolean open) {
+        map.fill(column, row, columnspan, rowspan, open);
+    }
+
+    @Deprecated
     public void sortTowers() {
-        Collections.sort( towers, Comparator.comparingInt( Tower::getRow ) );
+        Collections.sort(towers, Comparator.comparingInt(Tower::getRow));
     }
 
-    public void newEnemy( float enemy_type ) {
-        enemies.add( new Enemy( enemy_type ) );
+    public boolean isObstructed(int column, int row, int size) {
+        return map.check(column, row, size, size);
     }
 
-    public int[] getEntrance() {
-        return new int[]{ ( int )( Game.instance.camera.getX() - getTileSize() ), ( int )( Map.ROWS/2f * getTileSize() ) };
-    }
-
-    public boolean isObstructed( int column, int row, int size ) {
-        return map.check( column, row, size, size );
-    }
-
-    public boolean isObstructed( int column, int row, int columnspan, int rowspan ) {
-        return map.check( column, row, columnspan, rowspan );
+    public boolean isObstructed(int column, int row, int columnspan, int rowspan) {
+        return map.check(column, row, columnspan, rowspan);
     }
 
     public float getTileSize() {
         return Panel.WIDTH / (Game.instance.camera.viewx);
+    }
+
+    public float[] getEntrance() {
+        return new float[] {
+            Game.instance.camera.getX() - getTileSize(),
+            Map.ROWS * getTileSize() / 2
+        };
     }
 
 }

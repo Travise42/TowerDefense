@@ -34,7 +34,7 @@ public class Enemy {
     public Enemy(float enemy_type ) {
         type = enemy_type;
 
-        int[] pos = Game.instance.map.getEntrance();
+        float[] pos = Game.instance.map.getEntrance();
         x = pos[0];
         y = pos[1] + ( float )( Math.random() * ( Game.instance.map.map.openRows ) * Game.instance.map.getTileSize() ) - Game.instance.map.map.openRows * Game.instance.map.getTileSize() / 2f;
 

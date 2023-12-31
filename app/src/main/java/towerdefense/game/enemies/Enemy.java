@@ -36,7 +36,7 @@ public class Enemy {
 
         float[] pos = Game.instance.map.getEntrance();
         x = pos[0];
-        y = pos[1] + ( float )( Math.random() * ( Game.instance.map.map.openRows ) * Game.instance.map.getTileSize() ) - Game.instance.map.map.openRows * Game.instance.map.getTileSize() / 2f;
+        y = pos[1] + ( float )( Math.random() * ( Game.instance.map.map.getOpenRows() ) * Game.instance.map.getTileSize() ) - Game.instance.map.map.getOpenRows() * Game.instance.map.getTileSize() / 2f;
 
         float tileSize = Game.instance.map.getTileSize();
 
@@ -116,27 +116,27 @@ public class Enemy {
     }
 
     public boolean pointOnTower( float x, float y ) {
-        float c = x / Game.instance.map.getTileSize() - ( Map.COLUMNS - Game.instance.map.map.openColumns ) / 2;
-        float r = y / Game.instance.map.getTileSize() - ( Map.ROWS - Game.instance.map.map.openRows ) / 2;
-        return !( c < 0 || r < 0 || c > Game.instance.map.map.openColumns || r > Game.instance.map.map.openRows ) && !Game.instance.map.map.isOpen( ( int )( x / Game.instance.map.getTileSize() ), ( int )( y / Game.instance.map.getTileSize() ) );
+        float c = x / Game.instance.map.getTileSize() - ( Map.COLUMNS - Game.instance.map.map.getOpenColumns() ) / 2;
+        float r = y / Game.instance.map.getTileSize() - ( Map.ROWS - Game.instance.map.map.getOpenRows() ) / 2;
+        return !( c < 0 || r < 0 || c > Game.instance.map.map.getOpenColumns() || r > Game.instance.map.map.getOpenRows() ) && !Game.instance.map.map.isOpen( ( int )( x / Game.instance.map.getTileSize() ), ( int )( y / Game.instance.map.getTileSize() ) );
     }
 
     public boolean handleAcceleration() {
-        final int LEFT_COLUMN = ( Map.COLUMNS - Game.instance.map.map.openColumns ) / 2;
-        final int TOP_ROW = ( Map.ROWS - Game.instance.map.map.openRows ) / 2;
+        final int LEFT_COLUMN = ( Map.COLUMNS - Game.instance.map.map.getOpenColumns() ) / 2;
+        final int TOP_ROW = ( Map.ROWS - Game.instance.map.map.getOpenRows() ) / 2;
 
         int mx = 0, my = 0;
         final int[][] pointers = { { -1, -1 }, { 1, -1 }, { -1, 1 }, { 1, 1 }, { 0, 0 } };
         for ( int[] pointer : pointers ) {
             int pc = ( int )( x / Game.instance.map.getTileSize() - LEFT_COLUMN - pointer[0] / 3.0 );
-            if ( Game.instance.map.map.openColumns + 2 < pc ) return true;
-            if ( pc < 0 || Game.instance.map.map.openColumns <= pc) {
+            if ( Game.instance.map.map.getOpenColumns() + 2 < pc ) return true;
+            if ( pc < 0 || Game.instance.map.map.getOpenColumns() <= pc) {
                 mx += 1;
                 continue;
             }
 
             int pr = ( int )( y / Game.instance.map.getTileSize() - TOP_ROW - pointer[1] / 3.0 );
-            if ( pr < 0 || Game.instance.map.map.openRows <= pr) continue;
+            if ( pr < 0 || Game.instance.map.map.getOpenRows() <= pr) continue;
 
             int dir = -Game.instance.em.path[pc][pr];
             

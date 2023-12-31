@@ -149,7 +149,7 @@ public class MapHandler {
     /// Map /// ------------------------------------------------------------ ///
 
     public void addTower(Tower tower) {
-        editGrid(tower.getColumn(), tower.getRow(), tower.getSize(), tower.getSize(), false);
+        map.fill(tower.getColumn(), tower.getRow(), tower.getSize(), tower.getSize(), false);
         Game.instance.em.generatePath();
 
         // Insert tower in list ordered lowest to highest y values
@@ -159,21 +159,9 @@ public class MapHandler {
         towers.add(pointer, tower);
     }
 
-    public void editGrid(int column, int row, int columnspan, int rowspan, boolean open) {
-        map.fill(column, row, columnspan, rowspan, open);
-    }
-
     @Deprecated
     public void sortTowers() {
         Collections.sort(towers, Comparator.comparingInt(Tower::getRow));
-    }
-
-    public boolean isObstructed(int column, int row, int size) {
-        return map.check(column, row, size, size);
-    }
-
-    public boolean isObstructed(int column, int row, int columnspan, int rowspan) {
-        return map.check(column, row, columnspan, rowspan);
     }
 
     public float getTileSize() {

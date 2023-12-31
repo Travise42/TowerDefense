@@ -2,6 +2,7 @@ package towerdefense.game.enemies;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 import towerdefense.game.Game;
@@ -24,16 +25,16 @@ public class EnemyMovement {
     }
 
     public void generatePath() {
-        path = new int[Game.instance.map.map.openColumns][Game.instance.map.map.openRows];
+        path = new int[Game.instance.map.map.getOpenColumns()][Game.instance.map.map.getOpenRows()];
 
-        List<int[]> POIs = new ArrayList<>();
+        LinkedList<int[]> POIs = new LinkedList<>();
         POIs.add( new int[] { path.length, path[0].length / 2 - 1 } );
         POIs.add( new int[] { path.length, path[0].length / 2 } );
 
-        List<int[]> delayedPOIs = new ArrayList<>();
+        LinkedList<int[]> delayedPOIs = new LinkedList<>();
 
-        final int LEFT_COLUMN = ( Map.COLUMNS - Game.instance.map.map.openColumns ) / 2;
-        final int TOP_ROW = ( Map.ROWS - Game.instance.map.map.openRows ) / 2;
+        final int LEFT_COLUMN = ( Map.COLUMNS - Game.instance.map.map.getOpenColumns() ) / 2;
+        final int TOP_ROW = ( Map.ROWS - Game.instance.map.map.getOpenRows() ) / 2;
 
         while ( POIs.size() + delayedPOIs.size() > 0 ) {
             int size = POIs.size();
@@ -47,7 +48,7 @@ public class EnemyMovement {
                         int c = poi[0] + x * m;
                         int r = poi[1] + ( 1 - x ) * m;
 
-                        if ( Game.instance.map.map.openColumns <= c || c < 0 || Game.instance.map.map.openRows <= r || r < 0
+                        if ( Game.instance.map.map.getOpenColumns() <= c || c < 0 || Game.instance.map.map.getOpenRows() <= r || r < 0
                             || path[c][r] != 0 ) continue;
 
                         path[c][r] = m * ( x + 1 );

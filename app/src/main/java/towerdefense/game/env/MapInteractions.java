@@ -85,7 +85,7 @@ public class MapInteractions {
         int towerColumn = MapCalculations.getColumnOf(mouseX - OFFSET);
         int towerRow = MapCalculations.getRowOf(mouseY - OFFSET);
 
-        boolean SPACE_IS_NOT_AVAIABLE = Game.instance.map.isObstructed(towerColumn, towerRow, tower.getSize());
+        boolean SPACE_IS_NOT_AVAIABLE = !Game.instance.map.map.isOpen(towerColumn, towerRow, tower.getSize(), tower.getSize());
         if (SPACE_IS_NOT_AVAIABLE)
             return;
 

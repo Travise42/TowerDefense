@@ -20,17 +20,18 @@ public class Enemy {
     public static final float BEAST = 1.2f;
     public static final float TANK = 1.5f;
 
-    public static final float FRICTION = 0.96f;
+    private static final float FRICTION = 0.96f;
 
     private float type;
     private float x, y;
     private float vx, vy;
     private int size;
     private float speed;
-    private int damage;
-    private int health;
 
     private int animationFrame;
+
+    private static final int[] POINTER_X = { -1, 1, -1, 1, 0 };
+    private static final int[] POINTER_Y = { -1, -1, 1, 1, 0 };
 
     public Enemy(float enemy_type) {
         type = enemy_type;
@@ -76,7 +77,7 @@ public class Enemy {
 
         animationFrame += 40 * Math.sqrt(vx * vx + vy * vy);
 
-        // Decellerate
+        // Decelerate
         vx *= FRICTION;
         vy *= FRICTION;
 
@@ -103,26 +104,26 @@ public class Enemy {
         }
     }
 
-    public boolean checkIfOnWall(float x, float y) {
+    private boolean checkIfOnWall(float x, float y) {
         return pointOnWall(x - size / 2, y - size / 2)
                 || pointOnWall(x + size / 2, y - size / 2)
                 || pointOnWall(x - size / 2, y + size / 2)
                 || pointOnWall(x + size / 2, y + size / 2);
     }
 
-    public boolean pointOnWall(float x, float y) {
+    private boolean pointOnWall(float x, float y) {
         return !Game.instance.map.map.isOpen((int) (x / Game.instance.map.getTileSize()),
                 (int) (y / Game.instance.map.getTileSize()));
     }
 
-    public boolean checkIfOnTower(float x, float y) {
+    private boolean checkIfOnTower(float x, float y) {
         return pointOnTower(x - size / 2, y - size / 2)
                 || pointOnTower(x + size / 2, y - size / 2)
                 || pointOnTower(x - size / 2, y + size / 2)
                 || pointOnTower(x + size / 2, y + size / 2);
     }
 
-    public boolean pointOnTower(float x, float y) {
+    private boolean pointOnTower(float x, float y) {
         float c = x / Game.instance.map.getTileSize() - (Map.COLUMNS - Game.instance.map.map.getOpenColumns()) / 2;
         float r = y / Game.instance.map.getTileSize() - (Map.ROWS - Game.instance.map.map.getOpenRows()) / 2;
         return !(c < 0 || r < 0 || c > Game.instance.map.map.getOpenColumns()
@@ -131,14 +132,13 @@ public class Enemy {
                         (int) (y / Game.instance.map.getTileSize()));
     }
 
-    public boolean handleAcceleration() {
+    private boolean handleAcceleration() {
         final int LEFT_COLUMN = (Map.COLUMNS - Game.instance.map.map.getOpenColumns()) / 2;
         final int TOP_ROW = (Map.ROWS - Game.instance.map.map.getOpenRows()) / 2;
 
         int mx = 0, my = 0;
-        final int[][] pointers = { { -1, -1 }, { 1, -1 }, { -1, 1 }, { 1, 1 }, { 0, 0 } };
-        for (int[] pointer : pointers) {
-            int pc = (int) (x / Game.instance.map.getTileSize() - LEFT_COLUMN - pointer[0] / 3.0);
+        for (int i = 0; i < POINTER_X.length; i++) {
+            int pc = (int) (x / Game.instance.map.getTileSize() - LEFT_COLUMN - POINTER_X[i] / 3.0);
             if (Game.instance.map.map.getOpenColumns() + 2 < pc)
                 return true;
             if (pc < 0 || Game.instance.map.map.getOpenColumns() <= pc) {
@@ -146,7 +146,7 @@ public class Enemy {
                 continue;
             }
 
-            int pr = (int) (y / Game.instance.map.getTileSize() - TOP_ROW - pointer[1] / 3.0);
+            int pr = (int) (y / Game.instance.map.getTileSize() - TOP_ROW - POINTER_Y[i] / 3.0);
             if (pr < 0 || Game.instance.map.map.getOpenRows() <= pr)
                 continue;
 
@@ -184,5 +184,5 @@ public class Enemy {
     public int getY() {
         return (int) y;
     }
-
 }
+

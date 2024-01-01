@@ -137,9 +137,11 @@ public abstract class Tower {
     }
 
     public void remove() {
-        game.map.map.fill( column, row, getSize(), getSize(), true );
         game.map.towers.remove( this );
         game.mi.deselectTower();
+        
+        game.map.map.fill( column, row, getSize(), getSize(), true );
+        game.em.generatePath();
     }
 
     public int getUpgradeTier() {

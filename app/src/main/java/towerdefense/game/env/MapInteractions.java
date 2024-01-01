@@ -123,7 +123,7 @@ public class MapInteractions {
     }
 
     @Deprecated
-    private void selectHoveredTowerInBinary(int mouseX, int mouseY) {
+    public void selectHoveredTowerInBinary(int mouseX, int mouseY) {
         if (Game.instance.map.towers.size() == 0)
             return;
 

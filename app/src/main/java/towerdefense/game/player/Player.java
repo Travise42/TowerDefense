@@ -1,7 +1,5 @@
 package towerdefense.game.player;
 
-import towerdefense.game.Game;
-
 public class Player {
     
     public int gold = 0;

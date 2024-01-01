@@ -50,18 +50,18 @@ public class MapInteractions {
             return;
 
         final int TILE_SIZE = (int) Game.instance.map.getTileSize();
-        final int TOWER_SIZSE = TOWER.get(selectedToPlace).getSize() * TILE_SIZE;
+        final int TOWER_SIZE = TOWER.get(selectedToPlace).getSize() * TILE_SIZE;
 
         // Offset mouse to center of selections
-        final int OFFSET = (TOWER_SIZSE - TILE_SIZE) / 2;
+        final int OFFSET = (TOWER_SIZE - TILE_SIZE) / 2;
 
-        // Get dimensions
-        int x = MapCalculations.getCameraXOf(MapCalculations.getColumnOf(mouseX - OFFSET));
-        int y = MapCalculations.getCameraYOf(MapCalculations.getRowOf(mouseY - OFFSET));
+        // Get floor view cords to grid
+        int x = MapConversions.columnToViewX(MapConversions.viewXToColumn(mouseX - OFFSET));
+        int y = MapConversions.rowToViewY(MapConversions.viewYToRow(mouseY - OFFSET));
 
         // Draw transparent rectangle
         g.setColor(new Color(255, 255, 255, 100));
-        g.fillRect(x, y, TOWER_SIZSE, TOWER_SIZSE);
+        g.fillRect(x, y, TOWER_SIZE, TOWER_SIZE);
     }
 
     // Handle selecting and placing towers
@@ -82,10 +82,11 @@ public class MapInteractions {
         // Offset mouse to center of selections
         final int OFFSET = (TOWER_SIZSE - TILE_SIZE) / 2;
 
-        int towerColumn = MapCalculations.getColumnOf(mouseX - OFFSET);
-        int towerRow = MapCalculations.getRowOf(mouseY - OFFSET);
+        int towerColumn = MapConversions.viewXToColumn(mouseX - OFFSET);
+        int towerRow = MapConversions.viewYToRow(mouseY - OFFSET);
 
-        boolean SPACE_IS_NOT_AVAIABLE = !Game.instance.map.map.isOpen(towerColumn, towerRow, tower.getSize(), tower.getSize());
+        boolean SPACE_IS_NOT_AVAIABLE = !Game.instance.map.map.isOpen(towerColumn, towerRow, tower.getSize(),
+                tower.getSize());
         if (SPACE_IS_NOT_AVAIABLE)
             return;
 
@@ -93,8 +94,8 @@ public class MapInteractions {
     }
 
     private void selectHoveredTower(int mouseX, int mouseY) {
-        final int HOVERED_COLUMN = MapCalculations.getColumnOf(mouseX);
-        final int HOVERED_ROW = MapCalculations.getRowOf(mouseY);
+        final int HOVERED_COLUMN = MapConversions.viewXToColumn(mouseX);
+        final int HOVERED_ROW = MapConversions.viewYToRow(mouseY);
 
         // Check if mouse is touching any of the towers
         for (Tower tower : Game.instance.map.towers) {
@@ -126,8 +127,8 @@ public class MapInteractions {
         if (Game.instance.map.towers.size() == 0)
             return;
 
-        final int HOVERED_COLUMN = MapCalculations.getColumnOf(mouseX);
-        final int HOVERED_ROW = MapCalculations.getRowOf(mouseY);
+        final int HOVERED_COLUMN = MapConversions.viewXToColumn(mouseX);
+        final int HOVERED_ROW = MapConversions.viewYToRow(mouseY);
         int pointer = (Game.instance.map.towers.size() - 1) / 2;
         boolean leftmost = false;
         Tower tower;

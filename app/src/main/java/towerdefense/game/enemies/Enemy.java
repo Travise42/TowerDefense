@@ -30,7 +30,7 @@ public class Enemy {
     private int size;
     private float speed;
 
-    private int animationFrame;
+    private float animationFrame;
 
     // Pointers used for acceleration calculation
     private static final int[] POINTER_X = { -1, 1, -1, 1, 0 };
@@ -48,6 +48,9 @@ public class Enemy {
         size = (int) (type * tileSize);
         speed = (2 - enemy_type) * tileSize / 1000;
 
+        vx = 0;
+        vy = 0;
+
         animationFrame = 0;
     }
 
@@ -56,15 +59,28 @@ public class Enemy {
         int viewX = MapConversions.xToViewX(x);
         int viewY = MapConversions.yToViewY(y);
 
-        double a = Math.sin(animationFrame / 600f);
-        int thirdSize = size / 3;
-        double quarterSize = size / 4.0;
-        double twelthSize = quarterSize / 3.0;
+        // Calculate hand locations
+        double f = Math.sin(animationFrame/10);
+        
+        double X1 = -( f - 2 ) / 3.0;
+        double X2 = ( f + 2 ) / 3.0;
+        double Y1 = ( 2*f + 9 ) / 12.0;
+        double Y2 = ( 2*f - 9 ) / 12.0;
 
+        double factor = size / ( 2 * Math.sqrt( vx*vx + vy*vy ) );
+
+        int x1 = (int) ( factor * ( X1 * vx - Y1 * vy ) );
+        int y1 = (int) ( factor * ( X1 * vy + Y1 * vx ) );
+
+        int x2 = (int) ( factor * ( X2 * vx - Y2 * vy ) );
+        int y2 = (int) ( factor * ( X2 * vy + Y2 * vx ) );
+
+        // Draw hands
         g.setColor(new Color(200, 30, 30));
-        drawCircle(g, (int) (viewX - quarterSize * (a - 1)), (int) (viewY + twelthSize * (a + 5)), thirdSize);
-        drawCircle(g, (int) (viewX + quarterSize * (a + 1)), (int) (viewY + twelthSize * (a - 5)), thirdSize);
+        drawCircle(g, viewX + x1, viewY + y1, size/3 );
+        drawCircle(g, viewX + x2, viewY + y2, size/3 );
 
+        // Draw body
         g.setColor(new Color(240, 15, 15));
         drawCircle(g, viewX, viewY, size);
     }
@@ -84,7 +100,7 @@ public class Enemy {
             return;
         }
 
-        animationFrame += 40 * Math.sqrt(vx * vx + vy * vy);
+        animationFrame += Math.sqrt(vx * vx + vy * vy);
 
         // Apply friction to decelerate
         vx *= FRICTION;

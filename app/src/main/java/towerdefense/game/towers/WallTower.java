@@ -21,6 +21,11 @@ public class WallTower extends Tower {
     }
 
     @Override
+    public void update() {
+        
+    }
+
+    @Override
     public WallTower createNew( Game game, int column, int row ) {
         return new WallTower( game, column, row );
     }

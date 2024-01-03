@@ -22,6 +22,11 @@ public class CannonTower extends Tower {
     }
 
     @Override
+    public void update() {
+        
+    }
+
+    @Override
     public CannonTower createNew( Game game, int column, int row ) {
         return new CannonTower( game, column, row );
     }

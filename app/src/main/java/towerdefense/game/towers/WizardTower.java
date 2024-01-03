@@ -22,6 +22,11 @@ public class WizardTower extends Tower {
     }
 
     @Override
+    public void update() {
+        
+    }
+
+    @Override
     public WizardTower createNew( Game game, int column, int row ) {
         return new WizardTower( game, column, row );
     }

@@ -2,7 +2,6 @@ package towerdefense.func;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
@@ -52,6 +51,20 @@ public class ImageHandler {
         g2d.dispose();
 
         return newImage;
+    }
+
+    public static BufferedImage rotateImage( BufferedImage image, double radians) {
+        int width = image.getWidth();
+        int height = image.getHeight();
+
+        BufferedImage rotatedImage = new BufferedImage(width, height, image.getType());
+        Graphics2D g2d = rotatedImage.createGraphics();
+        
+        g2d.rotate(radians, width / 2, height / 2);
+        g2d.drawImage(image, 0, 0, null);
+        g2d.dispose();
+
+        return rotatedImage;
     }
     
 }

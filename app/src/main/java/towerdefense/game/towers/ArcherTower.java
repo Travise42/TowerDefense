@@ -1,9 +1,14 @@
 package towerdefense.game.towers;
 
+import static towerdefense.func.ImageHandler.resizeImage;
+import static towerdefense.func.ImageHandler.rotateImage;
+
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
 import towerdefense.game.Game;
+import towerdefense.game.enemies.Enemy;
+import towerdefense.game.env.MapConversions;
 
 public class ArcherTower extends Tower {
 
@@ -37,15 +42,45 @@ public class ArcherTower extends Tower {
     }
 
     private void drawArrow(Graphics g) {
-        g.drawImage(arrowImage, getX(), getY(), game.panel);
+        int x = getX() + (getSize() - 1) * (int) Game.instance.map.getTileSize() / 2;
+        int y = getY() + (getSize() - 1) * (int) Game.instance.map.getTileSize() / 2;
+
+        g.drawImage(arrowImage, x, y, game.panel);
     }
 
     private void drawBow(Graphics g) {
 
     }
 
+    @Override
     public void update() {
-        arrowImage = graphics.getEntityImage(ARROW);
+        Enemy firstEnemyInRange = null;
+        float dx = -5, dy = 1;
+        for (Enemy enemy : Game.instance.map.enemies) {
+            float temp_dx = MapConversions.cordToSoftGrid( enemy.getX() ) - (column + getSize()/2);
+            float temp_dy = MapConversions.cordToSoftGrid( enemy.getY() ) - (row + getSize()/2);
+            double distance = Math.sqrt( temp_dx*temp_dx + temp_dy*temp_dy );
+
+            if ( distance > 5 ) continue;
+
+            if (firstEnemyInRange == null || firstEnemyInRange.getX() < enemy.getX()) {
+                firstEnemyInRange = enemy;
+
+                dx = temp_dx;
+                dy = temp_dy;
+            }
+        }
+
+        if ( dx == 0 ) dx = 0.0001f;
+        double angleToEnemy = Math.atan( dy / dx );
+        if ( dx > 0 ) angleToEnemy += Math.PI;
+
+        arrowImage = rotateImage(
+                resizeImage(
+                        graphics.getEntityImage(ARROW),
+                        (int) Game.instance.map.getTileSize(),
+                        (int) Game.instance.map.getTileSize()),
+                angleToEnemy);
     }
 
     @Override

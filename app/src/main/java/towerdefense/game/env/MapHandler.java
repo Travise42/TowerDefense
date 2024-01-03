@@ -93,8 +93,11 @@ public class MapHandler {
 
     private void drawTowers(Graphics g) {
         // Draw towers top to bottom ( furthest to closest )
-        for (int i = 0; i < towers.size(); i++)
+        for (int i = 0; i < towers.size(); i++) {
+            towers.get(i).update();
+            
             towers.get(i).draw(g);
+        }
 
         // Draw selection outline infront of all the towers
         if (Game.instance.mi.getSelectedTower() != null)

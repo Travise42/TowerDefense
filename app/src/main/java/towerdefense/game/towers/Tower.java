@@ -49,11 +49,6 @@ public abstract class Tower {
         resize();
     }
 
-    public void draw( Graphics g) {
-        health += 0.1f;
-        drawTower( g );
-    }
-
     public void select() {
         loadHighlight();
         //System.out.println( health + "/" + maxHealth );
@@ -139,7 +134,7 @@ public abstract class Tower {
     public void remove() {
         game.map.towers.remove( this );
         game.mi.deselectTower();
-        
+
         game.map.map.fill( column, row, getSize(), getSize(), true );
         game.em.generatePath();
     }
@@ -167,6 +162,10 @@ public abstract class Tower {
     public int getY() {
         return (int)( ( row + getSize() ) * game.map.getTileSize() - image.getHeight() - game.camera.getY() );
     }
+    
+    public abstract void draw( Graphics g );
+    
+    public abstract void update();
 
     public abstract Tower createNew( Game game, int column, int row );
 

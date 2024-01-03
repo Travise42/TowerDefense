@@ -22,6 +22,11 @@ public class TroopTower extends Tower {
     }
 
     @Override
+    public void update() {
+        
+    }
+
+    @Override
     public TroopTower createNew( Game game, int column, int row ) {
         return new TroopTower( game, column, row );
     }

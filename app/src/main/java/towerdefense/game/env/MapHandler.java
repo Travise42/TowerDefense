@@ -168,11 +168,12 @@ public class MapHandler {
         return Panel.WIDTH / (Game.instance.camera.viewx);
     }
 
-    public float[] getEntrance() {
-        return new float[] {
-            Game.instance.camera.getX() - getTileSize(),
-            Map.ROWS * getTileSize() / 2
-        };
+    public float getEntranceX() {
+        return Game.instance.camera.getX() - getTileSize();
+    }
+
+    public float getEntranceY() {
+        return Map.ROWS * getTileSize() / 2;
     }
 
 }

@@ -1,15 +1,16 @@
 package towerdefense.game.enemies;
 
-import java.awt.Graphics;
-import java.awt.Color;
-
 import towerdefense.game.Game;
 import towerdefense.game.env.Map;
 import towerdefense.game.env.MapConversions;
 import towerdefense.game.towers.Tower;
 
+import java.awt.Color;
+import java.awt.Graphics;
+
 public class Enemy {
 
+    // Constants defining enemy types and their attributes
     public static final float BULLET = 0.3f;
     public static final float NINJA = 0.4f;
     public static final float FAST = 0.6f;
@@ -20,8 +21,9 @@ public class Enemy {
     public static final float BEAST = 1.2f;
     public static final float TANK = 1.5f;
 
-    private static final float FRICTION = 0.96f;
+    public static final float FRICTION = 0.96f;
 
+    // Enemy attributes
     private float type;
     private float x, y;
     private float vx, vy;
@@ -30,26 +32,29 @@ public class Enemy {
 
     private int animationFrame;
 
+    // Pointers used for acceleration calculation
     private static final int[] POINTER_X = { -1, 1, -1, 1, 0 };
     private static final int[] POINTER_Y = { -1, -1, 1, 1, 0 };
 
     public Enemy(float enemy_type) {
         type = enemy_type;
 
-        float[] pos = Game.instance.map.getEntrance();
-        x = pos[0];
-        y = pos[1] + (float) Math.random() * MapConversions.gridToCord(Game.instance.map.map.getOpenRows())
-                - MapConversions.gridToCord(Game.instance.map.map.getOpenRows()) / 2;
+        // Set initial position and attributes based on enemy type
+        x = Game.instance.map.getEntranceX();
+        y = Game.instance.map.getEntranceY()
+                + (float) (Math.random() - 0.5) * MapConversions.gridToCord(Game.instance.map.map.getOpenRows());
 
-        size = MapConversions.gridToCord(type);
-        speed = (2 - enemy_type) * Game.instance.map.getTileSize() / 1000;
+        float tileSize = Game.instance.map.getTileSize();
+        size = (int) (type * tileSize);
+        speed = (2 - enemy_type) * tileSize / 1000;
 
         animationFrame = 0;
     }
 
     public void draw(Graphics g) {
-        int viewX = MapConversions.xToViewX((int) x);
-        int viewY = MapConversions.yToViewY((int) y);
+        // Rendering logic to draw the enemy on the screen
+        int viewX = MapConversions.xToViewX(x);
+        int viewY = MapConversions.yToViewY(y);
 
         double a = Math.sin(animationFrame / 600f);
         int thirdSize = size / 3;
@@ -64,24 +69,28 @@ public class Enemy {
         drawCircle(g, viewX, viewY, size);
     }
 
+    // Helper method to draw a circle
     private void drawCircle(Graphics g, int x, int y, int diameter) {
         g.fillOval(x - diameter / 2, y - diameter / 2, diameter, diameter);
     }
 
     public void move() {
+        // Method controlling the movement of the enemy
+
+        // Check if acceleration leads to damage
         if (handleAcceleration()) {
-            // TODO damage the player
+            // TODO: damage the player
             Game.instance.map.enemies.remove(this);
             return;
         }
 
         animationFrame += 40 * Math.sqrt(vx * vx + vy * vy);
 
-        // Decelerate
+        // Apply friction to decelerate
         vx *= FRICTION;
         vy *= FRICTION;
 
-        // Move
+        // Move the enemy
         if (checkIfOnWall(x, y) || !checkIfOnWall(x, y + vy))
             y += vy;
         if (checkIfOnTower(x, y) || !checkIfOnTower(x + vx, y)) {
@@ -89,6 +98,7 @@ public class Enemy {
             return;
         }
 
+        // Check for collisions with towers and damage them if collided
         for (int m = -1; m < 2; m += 2) {
             for (int n = -1; n < 2; n += 2) {
                 int column = (int) ((x + vx + m * size / 2) / Game.instance.map.getTileSize());
@@ -104,6 +114,7 @@ public class Enemy {
         }
     }
 
+    // Helper methods for collision detection
     private boolean checkIfOnWall(float x, float y) {
         return pointOnWall(x - size / 2, y - size / 2)
                 || pointOnWall(x + size / 2, y - size / 2)
@@ -132,6 +143,7 @@ public class Enemy {
                         (int) (y / Game.instance.map.getTileSize()));
     }
 
+    // Helper method to handle enemy acceleration
     private boolean handleAcceleration() {
         final int LEFT_COLUMN = (Map.COLUMNS - Game.instance.map.map.getOpenColumns()) / 2;
         final int TOP_ROW = (Map.ROWS - Game.instance.map.map.getOpenRows()) / 2;
@@ -153,7 +165,7 @@ public class Enemy {
             int dir = -Game.instance.em.path[pc][pr];
 
             if (Math.abs(dir) == 1) {
-                // Accelerate
+                // Accelerate in the respective direction
                 my += dir;
                 continue;
             }
@@ -170,13 +182,14 @@ public class Enemy {
         double dx = mx * speed / hyp;
         double dy = my * speed / hyp;
 
-        // Accelerate
+        // Apply calculated acceleration
         vx += dx;
         vy += dy;
 
         return false;
     }
 
+    // Getter methods
     public int getX() {
         return (int) x;
     }
@@ -185,4 +198,3 @@ public class Enemy {
         return (int) y;
     }
 }
-

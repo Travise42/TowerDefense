@@ -10,6 +10,7 @@ import towerdefense.game.env.Camera;
 import towerdefense.game.env.MapHandler;
 import towerdefense.game.env.MapInteractions;
 import towerdefense.game.player.Player;
+import towerdefense.game.towers.ProjectileHandler;
 
 public class Game {
 
@@ -21,6 +22,7 @@ public class Game {
     public MapHandler map;
     public MapInteractions mi;
     public EnemyMovement em;
+    public ProjectileHandler ph;
 
     public int gameTick = 0;
     public int mx = 0, my = 0;
@@ -34,6 +36,7 @@ public class Game {
         map = new MapHandler();
         player = new Player();
         em = new EnemyMovement(EnemyMovement.BIRD);
+        ph = new ProjectileHandler();
 
         newGame();
         System.out.println("Started!");
@@ -51,12 +54,14 @@ public class Game {
 
         camera.update();
         map.update();
+        ph.update();
     }
 
     public void draw(Graphics g) {
         map.draw(g);
 
         mi.drawHighlightedRegion(g, mx, my);
+        ph.draw(g);
     }
 
     public void click() {

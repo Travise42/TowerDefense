@@ -24,11 +24,12 @@ public class Enemy {
     public static final float FRICTION = 0.96f;
 
     // Enemy attributes
-    private float type;
+    public float type;
+
     private float x, y;
     private float vx, vy;
     private int size;
-    private float speed;
+    public float speed;
 
     private float animationFrame;
 
@@ -212,5 +213,13 @@ public class Enemy {
 
     public int getY() {
         return (int) y;
+    }
+
+    public float getVelocityX() {
+        return vx;
+    }
+
+    public float getVelocityY() {
+        return vy;
     }
 }

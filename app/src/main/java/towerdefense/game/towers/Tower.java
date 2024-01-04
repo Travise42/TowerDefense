@@ -9,6 +9,7 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 
 import towerdefense.game.Game;
+import towerdefense.game.env.MapConversions;
 
 public abstract class Tower {
 
@@ -55,11 +56,11 @@ public abstract class Tower {
     }
 
     protected void drawTower( Graphics g ) {
-        g.drawImage( image, getX(), getY(), game.panel );
+        g.drawImage( image, getScreenX(), getScreenY(), game.panel );
     }
 
     public void drawHighlight( Graphics g ) {
-        g.drawImage( highlight, getX() - HIGHLIGHT_BORDER_THICKNESS, getY() - HIGHLIGHT_BORDER_THICKNESS, game.panel );
+        g.drawImage( highlight, getScreenX() - HIGHLIGHT_BORDER_THICKNESS, getScreenY() - HIGHLIGHT_BORDER_THICKNESS, game.panel );
     }
 
     protected void loadHighlight() {
@@ -156,11 +157,23 @@ public abstract class Tower {
     }
 
     public int getX() {
-        return (int)( column * game.map.getTileSize() - game.camera.getX() );
+        return MapConversions.gridToCord( getColumn() );
     }
 
     public int getY() {
-        return (int)( ( row + getSize() ) * game.map.getTileSize() - image.getHeight() - game.camera.getY() );
+        return MapConversions.gridToCord( getRow() );
+    }
+
+    public int getImageY() {
+        return MapConversions.gridToCord( getRow() + getSize() ) - image.getHeight();
+    }
+
+    public int getScreenX() {
+        return MapConversions.xToViewX( getX() );
+    }
+
+    public int getScreenY() {
+        return MapConversions.yToViewY( getImageY() );
     }
     
     public abstract void draw( Graphics g );

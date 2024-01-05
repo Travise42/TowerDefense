@@ -21,8 +21,6 @@ public abstract class Tower {
     protected float health;
     protected float maxHealth;
 
-    protected Game game;
-
     protected BufferedImage image;
     protected BufferedImage highlight;
 
@@ -35,9 +33,7 @@ public abstract class Tower {
         path = -1;
     }
 
-    protected Tower( Game game, int column, int row, String tower_id ) {
-        this.game = game;
-        
+    protected Tower( int column, int row, String tower_id ) {
         this.column = column;
         this.row = row;
         
@@ -56,11 +52,11 @@ public abstract class Tower {
     }
 
     protected void drawTower( Graphics g ) {
-        g.drawImage( image, getScreenX(), getScreenY(), game.panel );
+        g.drawImage( image, getScreenX(), getScreenY(), Game.instance.panel );
     }
 
     public void drawHighlight( Graphics g ) {
-        g.drawImage( highlight, getScreenX() - HIGHLIGHT_BORDER_THICKNESS, getScreenY() - HIGHLIGHT_BORDER_THICKNESS, game.panel );
+        g.drawImage( highlight, getScreenX() - HIGHLIGHT_BORDER_THICKNESS, getScreenY() - HIGHLIGHT_BORDER_THICKNESS, Game.instance.panel );
     }
 
     protected void loadHighlight() {
@@ -99,11 +95,11 @@ public abstract class Tower {
                             : getGraphics().getTowerImage( path, tier - 1 );
 
         // Scale image
-        int size = ( int )( getSize() * game.map.getTileSize() );
+        int size = ( int )( getSize() * Game.instance.map.getTileSize() );
         image = resizeImage( image, size, image.getHeight() * size / image.getWidth() );
 
         // Refresh highlight
-        if ( this == game.mi.getSelectedTower() ) loadHighlight();
+        if ( this == Game.instance.mi.getSelectedTower() ) loadHighlight();
     }
 
     public void upgrade( int path ) {
@@ -133,11 +129,11 @@ public abstract class Tower {
     }
 
     public void remove() {
-        game.map.towers.remove( this );
-        game.mi.deselectTower();
+        Game.instance.map.towers.remove( this );
+        Game.instance.mi.deselectTower();
 
-        game.map.map.fill( column, row, getSize(), getSize(), true );
-        game.em.generatePath();
+        Game.instance.map.map.fill( column, row, getSize(), getSize(), true );
+        Game.instance.em.generatePath();
     }
 
     public int getUpgradeTier() {
@@ -180,7 +176,7 @@ public abstract class Tower {
     
     public abstract void update();
 
-    public abstract Tower createNew( Game game, int column, int row );
+    public abstract Tower createNew( int column, int row );
 
     public abstract int getSize();
 

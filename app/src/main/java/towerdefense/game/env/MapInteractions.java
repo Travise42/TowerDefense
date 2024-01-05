@@ -90,7 +90,7 @@ public class MapInteractions {
         if (SPACE_IS_NOT_AVAIABLE)
             return;
 
-        Game.instance.map.addTower(tower.createNew(Game.instance, towerColumn, towerRow));
+        Game.instance.map.addTower(tower.createNew( towerColumn, towerRow));
     }
 
     private void selectHoveredTower(int mouseX, int mouseY) {

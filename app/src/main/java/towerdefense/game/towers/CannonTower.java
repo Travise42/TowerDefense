@@ -10,8 +10,8 @@ public class CannonTower extends Tower {
     final private static TowerUpgrade upgradeInfo = new TowerUpgrade( TOWER_ID );
     final private static TowerGraphics graphics = new TowerGraphics( TOWER_ID, null );
 
-    public CannonTower( Game game, int column, int row ) {
-        super( game, column, row, TOWER_ID );
+    public CannonTower( int column, int row ) {
+        super( column, row, TOWER_ID );
     }
 
     public CannonTower() { super(); }
@@ -23,12 +23,12 @@ public class CannonTower extends Tower {
 
     @Override
     public void update() {
-        
+
     }
 
     @Override
-    public CannonTower createNew( Game game, int column, int row ) {
-        return new CannonTower( game, column, row );
+    public CannonTower createNew( int column, int row ) {
+        return new CannonTower( column, row );
     }
 
     @Override

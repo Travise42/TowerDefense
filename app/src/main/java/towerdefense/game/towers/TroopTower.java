@@ -10,8 +10,8 @@ public class TroopTower extends Tower {
     final private static TowerUpgrade upgradeInfo = new TowerUpgrade( TOWER_ID );
     final private static TowerGraphics graphics = new TowerGraphics( TOWER_ID, null );
 
-    public TroopTower( Game game, int column, int row ) {
-        super( game, column, row, TOWER_ID );
+    public TroopTower( int column, int row ) {
+        super( column, row, TOWER_ID );
     }
 
     public TroopTower() { super(); }
@@ -27,8 +27,8 @@ public class TroopTower extends Tower {
     }
 
     @Override
-    public TroopTower createNew( Game game, int column, int row ) {
-        return new TroopTower( game, column, row );
+    public TroopTower createNew( int column, int row ) {
+        return new TroopTower( column, row );
     }
 
     @Override

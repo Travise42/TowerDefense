@@ -9,8 +9,8 @@ public class WallTower extends Tower {
     final private static String TOWER_ID = "wall_tower";
     final private static TowerGraphics graphics = new TowerGraphics( TOWER_ID, null, false );
 
-    public WallTower( Game game, int column, int row ) {
-        super( game, column, row, TOWER_ID );
+    public WallTower( int column, int row ) {
+        super( column, row, TOWER_ID );
     }
 
     public WallTower() { super(); }
@@ -26,8 +26,8 @@ public class WallTower extends Tower {
     }
 
     @Override
-    public WallTower createNew( Game game, int column, int row ) {
-        return new WallTower( game, column, row );
+    public WallTower createNew( int column, int row ) {
+        return new WallTower( column, row );
     }
 
     @Override

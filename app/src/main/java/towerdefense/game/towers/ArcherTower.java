@@ -57,7 +57,10 @@ public class ArcherTower extends Tower {
         int x = getScreenX() + offset;
         int y = getScreenY() + offset;
 
+        // Body
         drawPart(g, x, y, size);
+
+        // Hands
         drawPart(g, x - (int) (15 * dx / distance), y - (int) (15 * dy / distance), size/3);
         drawPart(g, x + (int) (30 * dx / distance), y + (int) (30 * dy / distance), size/3);
     }

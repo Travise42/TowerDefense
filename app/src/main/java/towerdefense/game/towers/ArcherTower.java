@@ -61,8 +61,8 @@ public class ArcherTower extends Tower {
         drawPart(g, x, y, size);
 
         // Hands
-        drawPart(g, x - (int) (15 * dx / distance), y - (int) (15 * dy / distance), size/3);
-        drawPart(g, x + (int) (30 * dx / distance), y + (int) (30 * dy / distance), size/3);
+        drawPart(g, x - (int) (15 * dx / distance), y - (int) (15 * dy / distance), size / 3);
+        drawPart(g, x + (int) (30 * dx / distance), y + (int) (30 * dy / distance), size / 3);
     }
 
     private void drawPart(Graphics g, int x, int y, int size) {
@@ -89,16 +89,18 @@ public class ArcherTower extends Tower {
         int y = getScreenY() + MapConversions.gridToCord(getSize() - 1) / 2;
 
         if (firing) {
-            g.drawImage( firedBowImage, x + (int) (20 * dx / distance), y + (int) (20 * dy / distance), Game.instance.panel );
+            g.drawImage(firedBowImage, x + (int) (20 * dx / distance), y + (int) (20 * dy / distance),
+                    Game.instance.panel);
             return;
         }
-        g.drawImage( pulledBowImage, x + (int) (20 * dx / distance), y + (int) (20 * dy / distance), Game.instance.panel );
+        g.drawImage(pulledBowImage, x + (int) (20 * dx / distance), y + (int) (20 * dy / distance),
+                Game.instance.panel);
     }
 
     @Override
     public void update() {
         if (firing) {
-            if (++fireTick >= 100)
+            if (++fireTick >= 50)
                 firing = false;
         } else {
             if (--fireTick < 0)
@@ -107,13 +109,10 @@ public class ArcherTower extends Tower {
 
         // Rotate arrow towards first enemy in range
         Enemy firstEnemyInRange = null;
-        dx = -5;
-        dy = 1;
-        distance = 5.1f;
         for (Enemy enemy : Game.instance.map.enemies) {
-            float temp_dx = MapConversions.cordToSoftGrid(enemy.getX() + 300f * enemy.speed * enemy.getVelocityX())
+            float temp_dx = MapConversions.cordToSoftGrid(enemy.getX())
                     - (column + getSize() / 2);
-            float temp_dy = MapConversions.cordToSoftGrid(enemy.getY() + 300f * enemy.speed * enemy.getVelocityY())
+            float temp_dy = MapConversions.cordToSoftGrid(enemy.getY())
                     - (row - 1 + getSize() / 2);
             double temp_distance = Math.sqrt(temp_dx * temp_dx + temp_dy * temp_dy);
 
@@ -124,10 +123,20 @@ public class ArcherTower extends Tower {
                 continue;
 
             firstEnemyInRange = enemy;
+        }
 
-            dx = temp_dx;
-            dy = temp_dy;
-            distance = (float) temp_distance;
+        if (firstEnemyInRange == null) {
+            dx = -5;
+            dy = 1;
+            distance = 5.1f;
+        } else {
+            dx = MapConversions.cordToSoftGrid(firstEnemyInRange.getX()
+                    + 40 * firstEnemyInRange.speed * firstEnemyInRange.getVelocityX() * distance)
+                    - (column + getSize() / 2);
+            dy = MapConversions.cordToSoftGrid(firstEnemyInRange.getY()
+                    + 40 * firstEnemyInRange.speed * firstEnemyInRange.getVelocityY() * distance)
+                    - (row - 1 + getSize() / 2);
+            distance = (float) Math.sqrt(dx * dx + dy * dy);
         }
 
         if (dx == 0)
@@ -136,34 +145,31 @@ public class ArcherTower extends Tower {
         if (dx > 0)
             angleToEnemy += Math.PI;
 
-        if (!firing) {
-            arrowImage = rotateImage(
+        if (firing) {
+            firedBowImage = rotateImage(
                     resizeImage(
-                            graphics.getEntityImage(ARROW),
+                            graphics.getEntityImage(FIRED_BOW),
                             (int) Game.instance.map.getTileSize(),
                             (int) Game.instance.map.getTileSize()),
                     angleToEnemy);
-            pulledBowImage = rotateImage(
-                    resizeImage(
-                            graphics.getEntityImage(PULLED_BOW),
-                            (int) Game.instance.map.getTileSize(),
-                            (int) Game.instance.map.getTileSize()),
-                    angleToEnemy);
-
-            if (firstEnemyInRange == null || fireTick > 0)
-                return;
-
-            fire();
-
             return;
         }
 
-        firedBowImage = rotateImage(
+        arrowImage = rotateImage(
                 resizeImage(
-                        graphics.getEntityImage(FIRED_BOW),
+                        graphics.getEntityImage(ARROW),
                         (int) Game.instance.map.getTileSize(),
                         (int) Game.instance.map.getTileSize()),
                 angleToEnemy);
+        pulledBowImage = rotateImage(
+                resizeImage(
+                        graphics.getEntityImage(PULLED_BOW),
+                        (int) Game.instance.map.getTileSize(),
+                        (int) Game.instance.map.getTileSize()),
+                angleToEnemy);
+
+        if (firstEnemyInRange != null && fireTick <= 0)
+            fire();
     }
 
     public void fire() {

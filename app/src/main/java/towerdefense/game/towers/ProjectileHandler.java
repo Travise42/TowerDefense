@@ -13,8 +13,13 @@ public class ProjectileHandler {
     }
 
     public void update() {
-        for (Projectile projectile : projectiles) {
-            projectile.update();
+        for ( int i = 0; i < projectiles.size();) {
+            Projectile projectile = projectiles.get( i );
+            if ( projectile.update() ) {
+                i++;
+                continue;
+            }
+            projectiles.remove(i);
         }
     }
 

@@ -33,7 +33,7 @@ public class Projectile {
         g.drawImage( image, MapConversions.xToViewX(this.x) - this.image.getWidth()/2, MapConversions.yToViewY(this.y) - this.image.getHeight()/2, Game.instance.panel );
     }
 
-    // Return true if life of projectile is over
+    // Return false if life of projectile is over
     public boolean update() {
         life--;
         if ( life <= 0 ) return false;

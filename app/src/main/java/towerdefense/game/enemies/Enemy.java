@@ -31,6 +31,8 @@ public class Enemy {
     private int size;
     public float speed;
 
+    private float health;
+
     private float animationFrame;
 
     // Pointers used for acceleration calculation
@@ -46,6 +48,7 @@ public class Enemy {
                 + (float) (Math.random() - 0.5) * MapConversions.gridToCord(Game.instance.map.map.getOpenRows());
 
         float tileSize = Game.instance.map.getTileSize();
+        health = type * 100;
         size = (int) (type * tileSize);
         speed = (2 - enemy_type) * tileSize / 1000;
 
@@ -61,25 +64,25 @@ public class Enemy {
         int viewY = MapConversions.yToViewY(y);
 
         // Calculate hand locations
-        double f = Math.sin(animationFrame/10);
-        
-        double X1 = -( f - 2 ) / 3.0;
-        double X2 = ( f + 2 ) / 3.0;
-        double Y1 = ( 2*f + 9 ) / 12.0;
-        double Y2 = ( 2*f - 9 ) / 12.0;
+        double f = Math.sin(animationFrame / 10);
 
-        double factor = size / ( 2 * Math.sqrt( vx*vx + vy*vy ) );
+        double X1 = -(f - 2) / 3.0;
+        double X2 = (f + 2) / 3.0;
+        double Y1 = (2 * f + 9) / 12.0;
+        double Y2 = (2 * f - 9) / 12.0;
 
-        int x1 = (int) ( factor * ( X1 * vx - Y1 * vy ) );
-        int y1 = (int) ( factor * ( X1 * vy + Y1 * vx ) );
+        double factor = size / (2 * Math.sqrt(vx * vx + vy * vy));
 
-        int x2 = (int) ( factor * ( X2 * vx - Y2 * vy ) );
-        int y2 = (int) ( factor * ( X2 * vy + Y2 * vx ) );
+        int x1 = (int) (factor * (X1 * vx - Y1 * vy));
+        int y1 = (int) (factor * (X1 * vy + Y1 * vx));
+
+        int x2 = (int) (factor * (X2 * vx - Y2 * vy));
+        int y2 = (int) (factor * (X2 * vy + Y2 * vx));
 
         // Draw hands
         g.setColor(new Color(200, 30, 30));
-        drawCircle(g, viewX + x1, viewY + y1, size/3 );
-        drawCircle(g, viewX + x2, viewY + y2, size/3 );
+        drawCircle(g, viewX + x1, viewY + y1, size / 3);
+        drawCircle(g, viewX + x2, viewY + y2, size / 3);
 
         // Draw body
         g.setColor(new Color(240, 15, 15));
@@ -206,6 +209,24 @@ public class Enemy {
         return false;
     }
 
+    // Return false if dead
+    public boolean damage(float amount, float xImpact, float yImpact) {
+        health -= amount;
+
+        if ( health <= 0 )
+            return die();
+
+        vx += xImpact;
+        vy += yImpact;
+
+        return true;
+    }
+
+    public boolean die() {
+        Game.instance.map.enemies.remove( this );
+        return false;
+    }
+
     // Getter methods
     public int getX() {
         return (int) x;
@@ -221,5 +242,9 @@ public class Enemy {
 
     public float getVelocityY() {
         return vy;
+    }
+
+    public float getSize() {
+        return size;
     }
 }

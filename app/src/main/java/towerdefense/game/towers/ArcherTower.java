@@ -25,6 +25,8 @@ public class ArcherTower extends Tower {
     final private static int DEFAULT_DY = 1;
     final private static float DEFAULT_DISTANCE = Calc.pythag(DEFAULT_DX, DEFAULT_DY);
 
+    final private static int DAMAGE = 5;
+    final private static int PIERCE = 5;
     final private static int RELOAD_TIME = 40;
     final private static int PROJECTILE_SPEED = 20;
     final private static int PROJECTILE_LIFETIME = 30;
@@ -175,11 +177,12 @@ public class ArcherTower extends Tower {
         float velocityFactor = PROJECTILE_SPEED / distance;
 
         Game.instance.ph.add(new Projectile(
+                arrowImage,
                 x + offset,
                 y + offset,
                 dx * velocityFactor,
                 dy * velocityFactor,
-                arrowImage, PROJECTILE_LIFETIME));
+                DAMAGE, PIERCE, PROJECTILE_LIFETIME));
     }
 
     @Override

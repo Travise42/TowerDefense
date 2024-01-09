@@ -23,6 +23,8 @@ public class CannonTower extends Tower {
     final private static int DEFAULT_DY = -1;
     final private static float DEFAULT_DISTANCE = Calc.pythag(DEFAULT_DX, DEFAULT_DY);
 
+    final private static int DAMAGE = 10;
+    final private static int PIERCE = 3;
     final private static int RELOAD_TIME = 50;
     final private static int PROJECTILE_SPEED = 10;
     final private static int PROJECTILE_LIFETIME = 40;
@@ -101,12 +103,14 @@ public class CannonTower extends Tower {
             distance = DEFAULT_DISTANCE;
         }
 
+        double angleToEnemy = Calc.getAngle(dx, dy);
+
         cannonImage = rotateImage(
                 resizeImage(
                         graphics.getEntityImage(CANNON),
                         cannonImageSize,
                         cannonImageSize),
-                Calc.getAngle(dx, dy));
+                angleToEnemy);
 
         if (!(fireTick > 0 || firstEnemyInRange == null))
             fire();
@@ -115,12 +119,21 @@ public class CannonTower extends Tower {
     public void fire() {
         firing = true;
         fireTick = 0;
+        
+        float xRatio = dx / distance;
+        float yRatio = dy / distance;
 
-        int x = getX() + MapConversions.gridToCord(getSize() / 2);
-        int y = getY() + MapConversions.gridToCord(getSize() / 2);
+        int x = getX();
+        int y = getY();
+        int offset = MapConversions.gridToCord(getSize() / 2);
 
-        Game.instance.ph.add(new Projectile(x + (int) (dx * 30 / distance), y + (int) (dy * 30 / distance),
-                dx * 15 / distance, dy * 15 / distance, cannonBallImage, PROJECTILE_LIFETIME));
+        Game.instance.ph.add(new Projectile(
+            cannonBallImage,
+            x + offset + (int) (50 * xRatio),
+            y + offset + (int) (50 * yRatio),
+            PROJECTILE_SPEED * xRatio,
+            PROJECTILE_SPEED * yRatio,
+            DAMAGE, PIERCE, PROJECTILE_LIFETIME));
     }
 
     @Override

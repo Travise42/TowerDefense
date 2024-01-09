@@ -7,6 +7,7 @@ import static towerdefense.func.ImageHandler.rotateImage;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
+import towerdefense.func.Calc;
 import towerdefense.func.ImageHandler;
 import towerdefense.game.Game;
 import towerdefense.game.enemies.Enemy;
@@ -17,6 +18,16 @@ public class CannonTower extends Tower {
     final private static String[] entities = { "cannon", "cannon_ball" };
     final private static int CANNON = 0;
     final private static int CANNON_BALL = 1;
+
+    final private static int DEFAULT_DX = -5;
+    final private static int DEFAULT_DY = -1;
+    final private static float DEFAULT_DISTANCE = Calc.pythag(DEFAULT_DX, DEFAULT_DY);
+
+    final private static int RELOAD_TIME = 50;
+    final private static int PROJECTILE_SPEED = 10;
+    final private static int PROJECTILE_LIFETIME = 40;
+
+    final private static int RANGE = 4;
 
     final private static String TOWER_ID = "cannon_tower";
     final private static TowerUpgrade upgradeInfo = new TowerUpgrade(TOWER_ID);
@@ -63,58 +74,42 @@ public class CannonTower extends Tower {
 
     @Override
     public void update() {
+        // Increase fireTick if firing
         if (firing) {
-            if (++fireTick >= 100)
+            // Stop firing after 'projectile_lifetime' frames
+            if (++fireTick >= RELOAD_TIME) {
                 firing = false;
-        } else {
-            if (--fireTick < 0)
                 fireTick = 0;
+            }
         }
 
         // Rotate arrow towards first enemy in range
-        Enemy firstEnemyInRange = null;
-        dx = -5;
-        dy = 1;
-        distance = 5.1f;
-        for (Enemy enemy : Game.instance.map.enemies) {
-            float temp_dx = MapConversions.cordToSoftGrid(enemy.getX() + 100f * enemy.speed * enemy.getVelocityX())
-                    - (column + getSize() / 2);
-            float temp_dy = MapConversions.cordToSoftGrid(enemy.getY() + 100f * enemy.speed * enemy.getVelocityY())
-                    - (row - 1 + getSize() / 2);
-            double temp_distance = Math.sqrt(temp_dx * temp_dx + temp_dy * temp_dy);
+        Enemy firstEnemyInRange = getFirstEnemyInRange(RANGE);
 
-            if (temp_distance > 5)
-                continue;
-
-            if (firstEnemyInRange != null && firstEnemyInRange.getX() >= enemy.getX())
-                continue;
-
-            firstEnemyInRange = enemy;
-
-            dx = temp_dx;
-            dy = temp_dy;
-            distance = (float) temp_distance;
+        if (firstEnemyInRange != null) {
+            float projectionFactor = 2 * PROJECTILE_SPEED * firstEnemyInRange.speed * Calc.pythag(
+                    getColumnsFrom(firstEnemyInRange, 0),
+                    getRowsFrom(firstEnemyInRange, 0));
+            dx = getColumnsFrom(firstEnemyInRange, projectionFactor);
+            dy = getRowsFrom(firstEnemyInRange, projectionFactor);
+            distance = Calc.pythag(dx, dy);
         }
 
-        if (dx == 0)
-            dx = 0.0001f;
-        double angleToEnemy = Math.atan(dy / dx);
-        if (dx > 0)
-            angleToEnemy += Math.PI;
+        else {
+            dx = DEFAULT_DX;
+            dy = DEFAULT_DY;
+            distance = DEFAULT_DISTANCE;
+        }
 
         cannonImage = rotateImage(
                 resizeImage(
                         graphics.getEntityImage(CANNON),
                         cannonImageSize,
                         cannonImageSize),
-                angleToEnemy);
+                Calc.getAngle(dx, dy));
 
-        if ( firing || firstEnemyInRange == null || fireTick > 0)
-            return;
-
-        fire();
-
-        return;
+        if (!(fireTick > 0 || firstEnemyInRange == null))
+            fire();
     }
 
     public void fire() {
@@ -124,7 +119,8 @@ public class CannonTower extends Tower {
         int x = getX() + MapConversions.gridToCord(getSize() / 2);
         int y = getY() + MapConversions.gridToCord(getSize() / 2);
 
-        Game.instance.ph.add(new Projectile(x + (int) ( dx * 30 / distance ), y + (int) ( dy * 30 / distance ), dx * 15 / distance, dy * 15 / distance, cannonBallImage, 50));
+        Game.instance.ph.add(new Projectile(x + (int) (dx * 30 / distance), y + (int) (dy * 30 / distance),
+                dx * 15 / distance, dy * 15 / distance, cannonBallImage, PROJECTILE_LIFETIME));
     }
 
     @Override

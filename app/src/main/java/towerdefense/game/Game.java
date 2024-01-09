@@ -78,12 +78,15 @@ public class Game {
     }
 
     public void keyCalled(int key) {
-        // Placing Towers
-        if (KeyEvent.VK_0 <= key && key <= KeyEvent.VK_0 + 5) {
-            mi.selectTowerPlacement(key - KeyEvent.VK_1);
-            return;
-        }
         switch (key) {
+            // Placing Towers
+            case KeyEvent.VK_ESCAPE -> mi.selectTowerPlacement(-1);
+            case KeyEvent.VK_1 -> mi.selectTowerPlacement(0);
+            case KeyEvent.VK_2 -> mi.selectTowerPlacement(1);
+            case KeyEvent.VK_3 -> mi.selectTowerPlacement(2);
+            case KeyEvent.VK_4 -> mi.selectTowerPlacement(3);
+            case KeyEvent.VK_5 -> mi.selectTowerPlacement(4);
+            // Map interactions
             case KeyEvent.VK_SPACE -> map.nextStage();
             case KeyEvent.VK_COMMA -> mi.upgradeSelectedTower(0);
             case KeyEvent.VK_PERIOD -> mi.upgradeSelectedTower(1);

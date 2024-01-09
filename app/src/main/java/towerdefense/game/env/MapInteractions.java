@@ -182,7 +182,7 @@ public class MapInteractions {
     }
 
     public void upgradeSelectedTower(int path) {
-        boolean INVALID_PATH = !(path == 0 || path == 1);
+        boolean INVALID_PATH = path >= selectedTower.getPaths();
         if (INVALID_PATH)
             return;
 
@@ -190,11 +190,7 @@ public class MapInteractions {
         if (NO_TOWER_SELECTED)
             return;
 
-        boolean HAS_NO_TIERS = selectedTower.getUpgradeInfo() == null;
-        if (HAS_NO_TIERS)
-            return;
-
-        boolean MAX_TIER = selectedTower.getUpgradeTier() >= 4;
+        boolean MAX_TIER = selectedTower.getUpgradeTier() >= selectedTower.getTiers();
         if (MAX_TIER)
             return;
 

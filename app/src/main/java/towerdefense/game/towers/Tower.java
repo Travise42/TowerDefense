@@ -219,6 +219,10 @@ public abstract class Tower {
 
     public abstract int getSize();
 
+    public abstract int getPaths();
+
+    public abstract int getTiers();
+
     public abstract TowerUpgrade getUpgradeInfo();
 
     public abstract TowerGraphics getGraphics();

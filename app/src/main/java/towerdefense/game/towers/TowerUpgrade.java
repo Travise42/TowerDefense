@@ -5,7 +5,6 @@ public class TowerUpgrade {
     private String[][] upgradeNames, upgradeDescriptions;
     private int[][] upgradeCosts;
 
-
     public TowerUpgrade( String tower_id ) {
         upgradeNames = new String[2][4];
         upgradeDescriptions = new String[2][4];

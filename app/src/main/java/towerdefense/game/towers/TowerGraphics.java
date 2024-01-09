@@ -17,8 +17,6 @@ public class TowerGraphics {
     ////final public static int DAMAGED = 3; // unlikely to develop
     ////final public static int BUILT = 4; // unlikely to develop
     ////final public static int UPGRADED = 5; // unlikely to develop
-    
-    final private static String[] PATH = { "left_path/", "right_path/" };
 
     private BufferedImage baseImage;
     private BufferedImage purchaseImage;
@@ -30,22 +28,19 @@ public class TowerGraphics {
     private String map_dir;
     private String gui_dir;
 
-    public TowerGraphics( String tower_id, String[] entities ) {
-        init( tower_id, entities, true );
-    }
+    private int paths;
+    private int tiers;
 
-    public TowerGraphics( String tower_id, String[] entities, boolean hasTiers ) {
-        init( tower_id, entities, hasTiers );
-    }
-
-    private void init( String tower_id, String[] entities, boolean hasTiers ) {
+    public TowerGraphics( String tower_id, int paths, int tiers, String[] entities ) {
         towerId = tower_id;
 
         map_dir = "map/towers/" + towerId + "/";
         gui_dir = "gui/towers/" + towerId + "/";
 
-        loadBaseImages();
-        if ( hasTiers ) loadUpgradeImages();
+        this.paths = paths;
+        this.tiers = tiers;
+
+        loadUpgradeImages();
         if ( entities != null ) loadEntities( entities );
     }
 
@@ -56,13 +51,15 @@ public class TowerGraphics {
     }
 
     private void loadUpgradeImages() {
-        towerImages = new BufferedImage[2][4];
-        upgradeImages = new BufferedImage[2][4];
+        loadBaseImages();
+        
+        towerImages = new BufferedImage[paths][tiers];
+        upgradeImages = new BufferedImage[paths][tiers];
 
-        for ( int path = 0; path < 2; path++ ) {
-            for ( int tier = 0; tier < 4; tier++ ) {
-                towerImages[path][tier] = loadImage( map_dir + PATH[ path ] + "tier_" + ( tier + 1 ) + ".png" );
-                upgradeImages[path][tier] = loadImage( gui_dir + "upgrades/" + PATH[ path ] + "tier_" + ( tier + 1 ) + ".png" );
+        for ( int path = 1; path <= paths; path++ ) {
+            for ( int tier = 1; tier <= tiers; tier++ ) {
+                towerImages[path-1][tier-1] = loadImage( map_dir + "path_" + path + "/tier_" + tier + ".png" );
+                upgradeImages[path-1][tier-1] = loadImage( gui_dir + "upgrades/" + "path_" + path + "/tier_" + tier + ".png" );
             }
         }
     }

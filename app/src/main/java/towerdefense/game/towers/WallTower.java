@@ -7,7 +7,10 @@ import towerdefense.game.Game;
 public class WallTower extends Tower {
 
     final private static String TOWER_ID = "wall_tower";
-    final private static TowerGraphics graphics = new TowerGraphics( TOWER_ID, null, false );
+    final private static int PATHS = 1;
+    final private static int TIERS = 2;
+    final private static TowerUpgrade upgradeInfo = new TowerUpgrade(TOWER_ID);
+    final private static TowerGraphics graphics = new TowerGraphics( TOWER_ID, PATHS, TIERS, null );
 
     public WallTower( int column, int row ) {
         super( column, row, TOWER_ID );
@@ -36,8 +39,18 @@ public class WallTower extends Tower {
     }
 
     @Override
+    public int getPaths() {
+        return PATHS;
+    }
+
+    @Override
+    public int getTiers() {
+        return TIERS;
+    }
+
+    @Override
     public TowerUpgrade getUpgradeInfo() {
-        return null;
+        return upgradeInfo;
     }
 
     @Override

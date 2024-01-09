@@ -32,8 +32,10 @@ public class CannonTower extends Tower {
     final private static int RANGE = 4;
 
     final private static String TOWER_ID = "cannon_tower";
+    final private static int PATHS = 2;
+    final private static int TIERS = 4;
     final private static TowerUpgrade upgradeInfo = new TowerUpgrade(TOWER_ID);
-    final private static TowerGraphics graphics = new TowerGraphics(TOWER_ID, entities);
+    final private static TowerGraphics graphics = new TowerGraphics(TOWER_ID, PATHS, TIERS, entities);
 
     private BufferedImage cannonImage;
     private int cannonImageSize;
@@ -144,6 +146,16 @@ public class CannonTower extends Tower {
     @Override
     public int getSize() {
         return 2;
+    }
+
+    @Override
+    public int getPaths() {
+        return PATHS;
+    }
+
+    @Override
+    public int getTiers() {
+        return TIERS;
     }
 
     @Override

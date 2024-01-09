@@ -30,13 +30,14 @@ public class ArcherTower extends Tower {
     final private static int RELOAD_TIME = 40;
     final private static int PROJECTILE_SPEED = 20;
     final private static int PROJECTILE_LIFETIME = 30;
-
     final private static int RANGE = 6;
 
     final private static String TOWER_ID = "archer_tower";
+
+    final private static TowerUpgrade upgradeInfo = new TowerUpgrade(TOWER_ID);
+
     final private static int PATHS = 2;
     final private static int TIERS = 4;
-    final private static TowerUpgrade upgradeInfo = new TowerUpgrade(TOWER_ID);
     final private static TowerGraphics graphics = new TowerGraphics(TOWER_ID, PATHS, TIERS, entities);
 
     private BufferedImage arrowImage;

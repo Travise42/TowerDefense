@@ -11,13 +11,13 @@ public class EnemyMovement {
     final public static boolean BAT = false; // AI
     final public static boolean BIRD = true; // PATHFIND
 
-    private boolean mode;
+    //private boolean mode;
 
-    private List<Integer> brain;
+    //private List<Integer> brain;
     public int[][] path;
 
     public EnemyMovement(boolean mode) {
-        this.mode = mode;
+        //this.mode = mode;
 
         generatePath();
     }

@@ -2,8 +2,6 @@ package towerdefense.game.towers;
 
 import java.awt.Graphics;
 
-import towerdefense.game.Game;
-
 public class WizardTower extends Tower {
 
     final private static String TOWER_ID = "wizard_tower";

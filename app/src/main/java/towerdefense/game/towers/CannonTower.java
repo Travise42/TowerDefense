@@ -1,6 +1,5 @@
 package towerdefense.game.towers;
 
-import static towerdefense.func.ImageHandler.loadImage;
 import static towerdefense.func.ImageHandler.resizeImage;
 import static towerdefense.func.ImageHandler.rotateImage;
 
@@ -8,7 +7,6 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
 import towerdefense.func.Calc;
-import towerdefense.func.ImageHandler;
 import towerdefense.game.Game;
 import towerdefense.game.enemies.Enemy;
 import towerdefense.game.env.MapConversions;

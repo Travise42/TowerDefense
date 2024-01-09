@@ -8,7 +8,6 @@ import java.awt.image.BufferedImage;
 import java.awt.BasicStroke;
 import java.awt.Color;
 
-import towerdefense.func.Calc;
 import towerdefense.game.Game;
 import towerdefense.game.enemies.Enemy;
 import towerdefense.game.env.MapConversions;

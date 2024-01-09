@@ -101,8 +101,7 @@ public class Map {
         return getOpenColumns() * 2 / 3;
     }
 
-    /// Obstacles /// ------------------------------------------------------------
-    /// ///
+    /// Obstacles /// ------------------------------------------------------------ ///
 
     // TODO
     public void createNewTree() {

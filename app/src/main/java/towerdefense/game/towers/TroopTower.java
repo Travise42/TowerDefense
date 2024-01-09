@@ -2,8 +2,6 @@ package towerdefense.game.towers;
 
 import java.awt.Graphics;
 
-import towerdefense.game.Game;
-
 public class TroopTower extends Tower {
 
     final private static String TOWER_ID = "troop_tower";

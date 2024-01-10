@@ -35,6 +35,9 @@ public class Enemy {
 
     private float animationFrame;
 
+    // Damage indication
+    private int damaged;
+
     // Pointers used for acceleration calculation
     private static final int[] POINTER_X = { -1, 1, -1, 1, 0 };
     private static final int[] POINTER_Y = { -1, -1, 1, 1, 0 };
@@ -54,6 +57,8 @@ public class Enemy {
 
         vx = 0;
         vy = 0;
+
+        damaged = 0;
 
         animationFrame = 0;
     }
@@ -80,13 +85,17 @@ public class Enemy {
         int y2 = (int) (factor * (X2 * vy + Y2 * vx));
 
         // Draw hands
-        g.setColor(new Color(200, 30, 30));
+        if ( damaged > 0 ) g.setColor(new Color(220, 200, 100));
+        else g.setColor(new Color(200, 30, 30));
         drawCircle(g, viewX + x1, viewY + y1, size / 3);
         drawCircle(g, viewX + x2, viewY + y2, size / 3);
 
         // Draw body
-        g.setColor(new Color(240, 15, 15));
+        if ( damaged > 0 ) g.setColor(new Color(220, 200, 100));
+        else g.setColor(new Color(240, 15, 15));
         drawCircle(g, viewX, viewY, size);
+
+        if ( damaged > 0 ) damaged--;
     }
 
     // Helper method to draw a circle
@@ -212,12 +221,14 @@ public class Enemy {
     // Return false if dead
     public boolean damage(float amount, float xImpact, float yImpact) {
         health -= amount;
+        damaged = 3;
 
         if ( health <= 0 )
             return die();
 
-        vx += xImpact;
-        vy += yImpact;
+        // Knockback
+        //vx += xImpact;
+        //vy += yImpact;
 
         return true;
     }

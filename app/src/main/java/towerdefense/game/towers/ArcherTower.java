@@ -42,28 +42,28 @@ public class ArcherTower extends Tower {
 
     final private static int[][] DAMAGE = {
             { 5 },
-            { 5, 5, 5, 5 },
-            { 5, 5, 5, 5 } };
+            { 10, 12, 15, 20 },
+            { 5, 8, 10, 15 } };
     final private static int[][] PIERCE = {
-            { 5 },
-            { 5, 5, 5, 5 },
-            { 5, 5, 5, 5 } };
+            { 3 },
+            { 5, 6, 7, 8 },
+            { 5, 6, 7, 8 } };
     final private static int[][] RELOAD_TIME = {
-            { 40 },
-            { 40, 40, 40, 40 },
+            { 50 },
+            { 40, 20, 10, 5 },
             { 40, 40, 40, 40 } };
     final private static int[][] PROJECTILE_SPEED = {
             { 20 },
-            { 20, 20, 20, 20 },
+            { 25, 30, 35, 40 },
             { 20, 20, 20, 20 } };
     final private static int[][] PROJECTILE_LIFETIME = {
             { 30 },
-            { 30, 30, 30, 30 },
+            { 30, 28, 24, 20 },
             { 30, 30, 30, 30 } };
     final private static int[][] RANGE = {
-            { 6 },
-            { 60, 6, 6, 6 },
-            { 6, 6, 6, 6 } };
+            { 5 },
+            { 6, 6, 6, 8 },
+            { 8, 8, 8, 10 } };
 
     final private static TowerUpgrade upgradeInfo = new TowerUpgrade(
             TOWER_ID,
@@ -159,7 +159,7 @@ public class ArcherTower extends Tower {
         Enemy firstEnemyInRange = getFirstEnemyInRange(upgradeInfo.getRange(path, tier));
 
         if (firstEnemyInRange != null) {
-            float projectionFactor = 2 * upgradeInfo.getProjectileSpeed(path, tier) * firstEnemyInRange.speed * Calc.pythag(
+            float projectionFactor = 1000 * firstEnemyInRange.speed / upgradeInfo.getProjectileSpeed(path, tier) * Calc.pythag(
                     getColumnsFrom(firstEnemyInRange, 0),
                     getRowsFrom(firstEnemyInRange, 0, -1));
             dx = getColumnsFrom(firstEnemyInRange, projectionFactor);

@@ -65,7 +65,7 @@ public class Projectile {
 
             if (squareDistance < Game.instance.map.getTileSize()*Game.instance.map.getTileSize()) {
                 // Hit enemy
-                if ( enemy.damage(damage, xVel/10f, yVel/10f) ) {
+                if ( enemy.damage(damage, xVel/15f, yVel/15f) ) {
                     // Enemy lives
                     hitEnemies.add(enemy);
                     return (--pierce != 0);

@@ -31,7 +31,7 @@ public abstract class Tower {
     // Empty tower
     protected Tower() {
         tier = 0;
-        path = -1;
+        path = 0;
     }
 
     protected Tower(int column, int row, String tower_id) {
@@ -39,7 +39,7 @@ public abstract class Tower {
         this.row = row;
 
         this.tier = 0;
-        this.path = -1;
+        this.path = 0;
 
         this.health = 300;
         this.maxHealth = 300;
@@ -138,24 +138,18 @@ public abstract class Tower {
     }
 
     public void upgrade(int path) {
-        if (path < 0 || 1 < path) {
-            System.out.println("Invalid Path: " + path + "!");
-            return;
-        }
-
-        if (this.path == -1)
+        if (this.path == 0)
             this.path = path;
         if (this.path != path)
             return;
-
-        if (tier == 4) {
-            System.out.println("Invalid Tier: 5!");
+        if (tier >= getUpgradeInfo().getTiers())
             return;
-        }
-        tier += 1;
 
+        tier += 1;
         maxHealth += 150;
-        health += 150;
+        health += 150; //TODO put into tower upgrade info
+
+        Game.instance.player.spend( getUpgradeInfo().getCost(path, path) );
 
         resize();
     }
@@ -174,7 +168,7 @@ public abstract class Tower {
         Game.instance.em.generatePath();
     }
 
-    public int getUpgradeTier() {
+    public int getTier() {
         return tier;
     }
 
@@ -217,10 +211,6 @@ public abstract class Tower {
     public abstract Tower createNew(int column, int row);
 
     public abstract int getSize();
-
-    public abstract int getPaths();
-
-    public abstract int getTiers();
 
     public abstract TowerUpgrade getUpgradeInfo();
 

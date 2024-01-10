@@ -88,8 +88,8 @@ public class Game {
             case KeyEvent.VK_5 -> mi.selectTowerPlacement(4);
             // Map interactions
             case KeyEvent.VK_SPACE -> map.nextStage();
-            case KeyEvent.VK_COMMA -> mi.upgradeSelectedTower(0);
-            case KeyEvent.VK_PERIOD -> mi.upgradeSelectedTower(1);
+            case KeyEvent.VK_COMMA -> mi.upgradeSelectedTower(1);
+            case KeyEvent.VK_PERIOD -> mi.upgradeSelectedTower(2);
             case KeyEvent.VK_BACK_SPACE -> mi.deleteSelectedTower();
             // Spawning enenmies
             case KeyEvent.VK_Q -> map.newEnemy(Enemy.BULLET);

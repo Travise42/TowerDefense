@@ -25,20 +25,58 @@ public class ArcherTower extends Tower {
     final private static int DEFAULT_DY = 1;
     final private static float DEFAULT_DISTANCE = Calc.pythag(DEFAULT_DX, DEFAULT_DY);
 
-    final private static int DAMAGE = 5;
-    final private static int PIERCE = 5;
-    final private static int RELOAD_TIME = 40;
-    final private static int PROJECTILE_SPEED = 20;
-    final private static int PROJECTILE_LIFETIME = 30;
-    final private static int RANGE = 6;
-
     final private static String TOWER_ID = "archer_tower";
-
-    final private static TowerUpgrade upgradeInfo = new TowerUpgrade(TOWER_ID);
 
     final private static int PATHS = 2;
     final private static int TIERS = 4;
     final private static TowerGraphics graphics = new TowerGraphics(TOWER_ID, PATHS, TIERS, entities);
+
+    final private static String[][] UPGRADE_NAMES = {
+            { "Archer Tower" },
+            { "Sharper Arrows", "Faster Shooting", "Even Faster Shooting", "Elite Firing" },
+            { "Greater Range", "Double Shot", "triple Shot", "Special Arrows" } };
+    final private static int[][] UPGRADE_COSTS = {
+            { 500 },
+            { 400, 1000, 1200, 3200 },
+            { 200, 1500, 2000, 5000 } };
+
+    final private static int[][] DAMAGE = {
+            { 5 },
+            { 5, 5, 5, 5 },
+            { 5, 5, 5, 5 } };
+    final private static int[][] PIERCE = {
+            { 5 },
+            { 5, 5, 5, 5 },
+            { 5, 5, 5, 5 } };
+    final private static int[][] RELOAD_TIME = {
+            { 40 },
+            { 40, 40, 40, 40 },
+            { 40, 40, 40, 40 } };
+    final private static int[][] PROJECTILE_SPEED = {
+            { 20 },
+            { 20, 20, 20, 20 },
+            { 20, 20, 20, 20 } };
+    final private static int[][] PROJECTILE_LIFETIME = {
+            { 30 },
+            { 30, 30, 30, 30 },
+            { 30, 30, 30, 30 } };
+    final private static int[][] RANGE = {
+            { 6 },
+            { 60, 6, 6, 6 },
+            { 6, 6, 6, 6 } };
+
+    final private static TowerUpgrade upgradeInfo = new TowerUpgrade(
+            TOWER_ID,
+            PATHS,
+            TIERS,
+            UPGRADE_NAMES,
+            UPGRADE_COSTS,
+            DAMAGE,
+            PIERCE,
+            RELOAD_TIME,
+            PROJECTILE_SPEED,
+            PROJECTILE_LIFETIME,
+            RANGE);
 
     private BufferedImage arrowImage;
     private BufferedImage bowImage;
@@ -109,7 +147,7 @@ public class ArcherTower extends Tower {
         // Increase fireTick if firing, otherwise, decrease fireTick
         if (firing) {
             // Stop firing after 'projectile_lifetime' frames
-            if (++fireTick >= RELOAD_TIME)
+            if (++fireTick >= upgradeInfo.getReloadTime(path, tier))
                 firing = false;
         } else {
             // Decrease fireTick if positive
@@ -118,10 +156,10 @@ public class ArcherTower extends Tower {
         }
 
         // Rotate arrow towards first enemy in range
-        Enemy firstEnemyInRange = getFirstEnemyInRange(RANGE);
+        Enemy firstEnemyInRange = getFirstEnemyInRange(upgradeInfo.getRange(path, tier));
 
         if (firstEnemyInRange != null) {
-            float projectionFactor = 2 * PROJECTILE_SPEED * firstEnemyInRange.speed * Calc.pythag(
+            float projectionFactor = 2 * upgradeInfo.getProjectileSpeed(path, tier) * firstEnemyInRange.speed * Calc.pythag(
                     getColumnsFrom(firstEnemyInRange, 0),
                     getRowsFrom(firstEnemyInRange, 0, -1));
             dx = getColumnsFrom(firstEnemyInRange, projectionFactor);
@@ -177,7 +215,7 @@ public class ArcherTower extends Tower {
         int y = getImageY();
         int offset = MapConversions.gridToCord(getSize() / 2);
 
-        float velocityFactor = PROJECTILE_SPEED / distance;
+        float velocityFactor = upgradeInfo.getProjectileSpeed(path, tier) / distance;
 
         Game.instance.ph.add(new Projectile(
                 arrowImage,
@@ -185,7 +223,7 @@ public class ArcherTower extends Tower {
                 y + offset,
                 dx * velocityFactor,
                 dy * velocityFactor,
-                DAMAGE, PIERCE, PROJECTILE_LIFETIME));
+                upgradeInfo.getDamage(path, tier), upgradeInfo.getPierce(path, tier), upgradeInfo.getProjectileLifetime(path, tier)));
     }
 
     @Override
@@ -196,16 +234,6 @@ public class ArcherTower extends Tower {
     @Override
     public int getSize() {
         return 2;
-    }
-
-    @Override
-    public int getPaths() {
-        return PATHS;
-    }
-
-    @Override
-    public int getTiers() {
-        return TIERS;
     }
 
     @Override

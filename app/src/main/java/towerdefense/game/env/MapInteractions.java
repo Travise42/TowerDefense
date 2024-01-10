@@ -182,20 +182,20 @@ public class MapInteractions {
     }
 
     public void upgradeSelectedTower(int path) {
-        boolean INVALID_PATH = path >= selectedTower.getPaths();
-        if (INVALID_PATH)
-            return;
-
         boolean NO_TOWER_SELECTED = selectedTower == null;
         if (NO_TOWER_SELECTED)
             return;
 
-        boolean MAX_TIER = selectedTower.getUpgradeTier() >= selectedTower.getTiers();
+        boolean INVALID_PATH = path > selectedTower.getUpgradeInfo().getPaths();
+        if (INVALID_PATH)
+            return;
+
+        boolean MAX_TIER = selectedTower.getTier() >= selectedTower.getUpgradeInfo().getTiers();
         if (MAX_TIER)
             return;
 
         boolean NOT_ENOUGH_GOLD = Game.instance.player.gold < selectedTower.getUpgradeInfo().getCost(path,
-                selectedTower.getUpgradeTier());
+                selectedTower.getTier());
         if (NOT_ENOUGH_GOLD)
             return;
 
@@ -203,6 +203,10 @@ public class MapInteractions {
     }
 
     public void deleteSelectedTower() {
+        boolean NO_TOWER_SELECTED = selectedTower == null;
+        if (NO_TOWER_SELECTED)
+            return;
+            
         selectedTower.remove();
     }
 

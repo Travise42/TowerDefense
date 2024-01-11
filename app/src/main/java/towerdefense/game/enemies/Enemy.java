@@ -53,7 +53,7 @@ public class Enemy {
         float tileSize = Game.instance.map.getTileSize();
         health = type * 100;
         size = (int) (type * tileSize);
-        speed = (2 - enemy_type) * tileSize / 1000;
+        speed = (4 - enemy_type) / 100;
 
         vx = 0;
         vy = 0;
@@ -179,7 +179,7 @@ public class Enemy {
 
         int mx = 0, my = 0;
         for (int i = 0; i < POINTER_X.length; i++) {
-            int pc = (int) (x / Game.instance.map.getTileSize() - LEFT_COLUMN - POINTER_X[i] / 3.0);
+            int pc = (int) (x / Map.TILE_SIZE - LEFT_COLUMN - POINTER_X[i] / 3.0);
             if (Game.instance.map.map.getOpenColumns() + 2 < pc)
                 return true;
             if (pc < 0 || Game.instance.map.map.getOpenColumns() <= pc) {
@@ -187,7 +187,7 @@ public class Enemy {
                 continue;
             }
 
-            int pr = (int) (y / Game.instance.map.getTileSize() - TOP_ROW - POINTER_Y[i] / 3.0);
+            int pr = (int) (y / Map.TILE_SIZE - TOP_ROW - POINTER_Y[i] / 3.0);
             if (pr < 0 || Game.instance.map.map.getOpenRows() <= pr)
                 continue;
 

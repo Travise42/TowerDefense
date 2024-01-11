@@ -42,7 +42,7 @@ public abstract class Obstacle {
 
     public void draw(Graphics g) {
         int imgX = MapConversions.xToViewX(x - MapConversions.screenCordToCord(getImage().getWidth() / 2));
-        int imgY = MapConversions.yToViewY(y - MapConversions.screenCordToCord(getImage().getHeight()));
+        int imgY = MapConversions.yToViewY(y - MapConversions.screenCordToCord(getImage().getHeight() * 3 / 4));
         if (destroyed > 0) {
             double factor = Math.sin(destroyed / 3f) / 5f;
             g.drawImage(

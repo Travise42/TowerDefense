@@ -31,7 +31,7 @@ public class MapHandler {
     private static BufferedImage[] tileImages;
     private static BufferedImage[] testTileImages;
 
-    private static String[] tileDests = { "grass" };
+    private static String[] tileDests = { "grass", "forest" };
     private static String[] testTileDests = { "testObstructed", "testOpen" };
 
     public Map map;
@@ -100,7 +100,12 @@ public class MapHandler {
 
         for (int c = firstColumn; c < lastColumn; c++) {
             for (int r = firstRow; r < lastRow; r++) {
-                g.drawImage(tileImages[0], MapConversions.columnToViewX(c), MapConversions.rowToViewY(r),
+                if ( map.isOpen(c, r)) {
+                    g.drawImage(tileImages[0], MapConversions.columnToViewX(c), MapConversions.rowToViewY(r),
+                            Game.instance.panel);
+                    continue;
+                }
+                g.drawImage(tileImages[1], MapConversions.columnToViewX(c), MapConversions.rowToViewY(r),
                         Game.instance.panel);
             }
         }

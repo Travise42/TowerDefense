@@ -22,7 +22,7 @@ public class Camera {
     }
 
     public int getY() {
-        return (int) ( Map.ROWS*Game.instance.map.getTileSize() - Panel.HEIGHT ) / 2;
+        return (int) ( (Map.ROWS - 0.5f )*Game.instance.map.getTileSize() - Panel.HEIGHT ) / 2;
     }
 
     public void update() {

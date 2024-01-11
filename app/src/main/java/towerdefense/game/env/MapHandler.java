@@ -13,6 +13,8 @@ import java.util.List;
 import towerdefense.game.Game;
 import towerdefense.game.Panel;
 import towerdefense.game.enemies.Enemy;
+import towerdefense.game.env.obstacles.Obstacle;
+import towerdefense.game.env.obstacles.Tree;
 import towerdefense.game.towers.Tower;
 
 /**
@@ -29,7 +31,7 @@ public class MapHandler {
     private static BufferedImage[] tileImages;
     private static BufferedImage[] testTileImages;
 
-    private static String[] tileDests = { "wall", "tile" };
+    private static String[] tileDests = { "grass" };
     private static String[] testTileDests = { "testObstructed", "testOpen" };
 
     public Map map;
@@ -49,7 +51,8 @@ public class MapHandler {
         resize();
     }
 
-    /// Graphics /// ------------------------------------------------------------ ///
+    /// Graphics /// ------------------------------------------------------------
+    /// ///
 
     private void loadTileImages() {
         tileImages = new BufferedImage[tileDests.length];
@@ -67,8 +70,8 @@ public class MapHandler {
         // temp for testing
         drawTestMap(g);
 
-        drawEnemies(g);
         drawMap(g);
+        drawEnemies(g);
         drawTowers(g);
     }
 
@@ -88,14 +91,31 @@ public class MapHandler {
     }
 
     private void drawMap(Graphics g) {
+        // Draw tiles
+        int firstColumn = MapConversions.cordToGrid(Game.instance.camera.getX() + 1);
+        int lastColumn = MapConversions.cordToGrid(Game.instance.camera.getX() + Panel.WIDTH + 1);
 
+        int firstRow = MapConversions.cordToGrid(Game.instance.camera.getY() + 1);
+        int lastRow = MapConversions.cordToGrid(Game.instance.camera.getY() + Panel.HEIGHT + 1) + 1;
+
+        for (int c = firstColumn; c < lastColumn; c++) {
+            for (int r = firstRow; r < lastRow; r++) {
+                g.drawImage(tileImages[0], MapConversions.columnToViewX(c), MapConversions.rowToViewY(r),
+                        Game.instance.panel);
+            }
+        }
+
+        //Draw obstacles
+        for (Obstacle obstacle : map.obstacles) {
+            obstacle.draw(g);
+        }
     }
 
     private void drawTowers(Graphics g) {
         // Draw towers top to bottom ( furthest to closest )
         for (int i = 0; i < towers.size(); i++) {
             towers.get(i).update();
-            
+
             towers.get(i).draw(g);
         }
 
@@ -122,9 +142,12 @@ public class MapHandler {
         // Resize towers
         for (int i = 0; i < towers.size(); i++)
             towers.get(i).resize();
+
+        Tree.resize((int) getTileSize());
     }
 
-    /// Game Loop /// ------------------------------------------------------------ ///
+    /// Game Loop /// ------------------------------------------------------------
+    /// ///
 
     public void newGame() {
         map.reset();
@@ -144,7 +167,7 @@ public class MapHandler {
     }
 
     /// Enemies /// ------------------------------------------------------------ ///
-    
+
     public void newEnemy(float enemy_type) {
         enemies.add(new Enemy(enemy_type));
     }
@@ -157,7 +180,9 @@ public class MapHandler {
 
         // Insert tower in list ordered lowest to highest y values
         int pointer = -1;
-        do if (towers.size() <= ++pointer) break;
+        do
+            if (towers.size() <= ++pointer)
+                break;
         while (towers.get(pointer).getY() < tower.getY());
         towers.add(pointer, tower);
     }

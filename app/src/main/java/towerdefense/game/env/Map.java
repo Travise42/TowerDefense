@@ -6,8 +6,11 @@ import java.util.List;
 
 import towerdefense.game.Game;
 import towerdefense.game.env.obstacles.Obstacle;
+import towerdefense.game.env.obstacles.Tree;
 
 public class Map {
+
+    final public static int TILE_SIZE = 16;
 
     final public static int INITIAL_OPEN_COLUMNS = 12;
     final public static int INITIAL_OPEN_ROWS = 8;
@@ -19,25 +22,27 @@ public class Map {
     // false: obstructed
     private boolean[][] gridOccupancy;
 
-    private List<Obstacle> obstacles;
+    public List<Obstacle> obstacles;
 
     public int stage;
 
     public Map() {
         obstacles = new ArrayList<>();
 
-        reset();
+        setup();
     }
 
     /// Grid Occupancy ///
     /// ------------------------------------------------------------ ///
 
     public void reset() {
-        gridOccupancy = new boolean[COLUMNS][ROWS];
         setup();
+        generateObstacles();
     }
 
     private void setup() {
+        gridOccupancy = new boolean[COLUMNS][ROWS];
+
         stage = 0;
 
         final int LEFT_COLUMN = (COLUMNS - INITIAL_OPEN_COLUMNS) / 2;
@@ -74,6 +79,7 @@ public class Map {
 
         Game.instance.em.generatePath();
         Game.instance.camera.expand();
+        //createNewTree(MapConversions.gridToCord( 15.5f ), MapConversions.gridToCord( 10.5f ) );
     }
 
     public void fill(int column, int row, int columnspan, int rowspan, boolean open) {
@@ -101,11 +107,20 @@ public class Map {
         return getOpenColumns() * 2 / 3;
     }
 
-    /// Obstacles /// ------------------------------------------------------------ ///
+    /// Obstacles ///------------------------------------------------------------///
 
-    // TODO
-    public void createNewTree() {
+    public void generateObstacles() {
+        // obstacles.clear();
+        // for ( int j = 0; j < ROWS; j++) {
+        //     for ( float i = 0; i < COLUMNS/2; i++) {
+        //         createNewTree(MapConversions.gridToCord( (float) Math.random() * COLUMNS ), MapConversions.gridToCord(j + i / COLUMNS) );
+        //     }
+        // }
+        createNewTree(MapConversions.gridToCord( 15.5f ), MapConversions.gridToCord( 10.5f ) );
+    }
 
+    public void createNewTree(int x, int y) {
+        obstacles.add(new Tree(x, y));
     }
 
 }

@@ -7,39 +7,48 @@ public class MapConversions{
     /// X/Y <-> COLUMN/ROW /// ------------------------------------------------------------ ///
 
     public static int cordToGrid(float cord) {
-        return (int) ( cord / Game.instance.map.getTileSize() );
+        return (int) ( cord / Map.TILE_SIZE );
     }
 
     public static float cordToSoftGrid(float cord) {
-        return cord / Game.instance.map.getTileSize();
+        return cord / Map.TILE_SIZE;
     }
 
 
     public static int gridToCord(int grid) {
-        return (int) ( grid * Game.instance.map.getTileSize() );
+        return (int) ( grid * Map.TILE_SIZE );
     }
 
     public static int gridToCord(float grid) {
-        return (int) ( grid * Game.instance.map.getTileSize() );
+        return (int) ( grid * Map.TILE_SIZE );
     }
 
     /// X/Y <-> VIEWX/VIEWY /// ------------------------------------------------------------ ///
 
     public static int xToViewX(float x) {
-        return (int) (x - Game.instance.camera.getX());
+        return (int) (cordToScreenCord(x) - Game.instance.camera.getX());
     }
 
     public static int yToViewY(float y) {
-        return (int) (y - Game.instance.camera.getY());
+        return (int) (cordToScreenCord(y) - Game.instance.camera.getY());
     }
 
 
     public static int viewXToX(float viewX) {
-        return (int) (viewX + Game.instance.camera.getX());
+        return (int) screenCordtoCord(viewX + Game.instance.camera.getX());
     }
 
     public static int viewYToY(float viewY) {
-        return (int) (viewY + Game.instance.camera.getY());
+        return (int) screenCordtoCord(viewY + Game.instance.camera.getY());
+    }
+
+
+    private static float cordToScreenCord( float cord ) {
+        return cord * Game.instance.map.getTileSize() / Map.TILE_SIZE;
+    }
+
+    private static float screenCordtoCord( float cord ) {
+        return cord * Map.TILE_SIZE / Game.instance.map.getTileSize();
     }
 
     /// COLUMN/ROW <-> OPEN_COLUMN/OPEN_ROW /// ------------------------------------------------------------ ///

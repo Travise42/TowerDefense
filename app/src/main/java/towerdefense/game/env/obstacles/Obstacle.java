@@ -1,6 +1,8 @@
 package towerdefense.game.env.obstacles;
 
 import static towerdefense.func.ImageHandler.loadImage;
+import static towerdefense.func.ImageHandler.resizeImage;
+import static towerdefense.func.ImageHandler.rotateImage;
 
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
@@ -14,12 +16,12 @@ public abstract class Obstacle {
 
     private int x;
     private int y;
-    private int column;
-    private int row;
+    public int column;
+    public int row;
 
     public int destroyed;
-    
-    public Obstacle( int x, int y ) {
+
+    public Obstacle(int x, int y) {
         this.x = x;
         this.y = y;
 
@@ -31,17 +33,26 @@ public abstract class Obstacle {
 
     // return false if deleted
     public boolean update() {
-        if ( destroyed > 0 ) destroyed++;
-        else if (Game.instance.map.map.isOpen(column, row)) destroyed = 1;
-        return destroyed >= 60;
+        if (destroyed > 0)
+            destroyed++;
+        else if (Game.instance.map.map.isOpen(column, row))
+            destroyed = 1;
+        return destroyed < 60;
     }
 
-    public void draw( Graphics g ) {
-        int imgX = x - getImage().getWidth()/2;
-        int imgY = y - getImage().getHeight();
-        g.drawImage( getImage(), MapConversions.xToViewX(x), MapConversions.yToViewY(imgY), Game.instance.panel );
-        System.out.println(MapConversions.gridToCord(Map.COLUMNS/2 + 0.5f));
-        g.drawLine(MapConversions.xToViewX(MapConversions.gridToCord(Map.COLUMNS/2 + 0.5f)), 0, MapConversions.columnToViewX(Map.COLUMNS/2 + 0.5f), Panel.HEIGHT);
+    public void draw(Graphics g) {
+        int imgX = MapConversions.xToViewX(x - MapConversions.screenCordToCord(getImage().getWidth() / 2));
+        int imgY = MapConversions.yToViewY(y - MapConversions.screenCordToCord(getImage().getHeight()));
+        if (destroyed > 0) {
+            double factor = Math.sin(destroyed / 3f) / 5f;
+            g.drawImage(
+                    resizeImage(rotateImage(getImage(), factor), getImage().getWidth(),
+                            getImage().getHeight() - (int) MapConversions.cordToScreenCord(destroyed / 3f)),
+                    imgX + (int) MapConversions.cordToScreenCord((float) factor * 20),
+                    imgY + (int) MapConversions.cordToScreenCord(destroyed / 3f), Game.instance.panel);
+            return;
+        }
+        g.drawImage(getImage(), imgX, imgY, Game.instance.panel);
     }
 
     public abstract BufferedImage getImage();

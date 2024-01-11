@@ -35,19 +35,19 @@ public class MapConversions{
 
 
     public static int viewXToX(float viewX) {
-        return (int) screenCordtoCord(viewX + Game.instance.camera.getX());
+        return (int) screenCordToCord(viewX + Game.instance.camera.getX());
     }
 
     public static int viewYToY(float viewY) {
-        return (int) screenCordtoCord(viewY + Game.instance.camera.getY());
+        return (int) screenCordToCord(viewY + Game.instance.camera.getY());
     }
 
 
-    private static float cordToScreenCord( float cord ) {
+    public static float cordToScreenCord( float cord ) {
         return cord * Game.instance.map.getTileSize() / Map.TILE_SIZE;
     }
 
-    private static float screenCordtoCord( float cord ) {
+    public static float screenCordToCord( float cord ) {
         return cord * Map.TILE_SIZE / Game.instance.map.getTileSize();
     }
 

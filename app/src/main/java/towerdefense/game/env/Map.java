@@ -79,12 +79,14 @@ public class Map {
 
         Game.instance.em.generatePath();
         Game.instance.camera.expand();
-        //createNewTree(MapConversions.gridToCord( 15.5f ), MapConversions.gridToCord( 10.5f ) );
+        // createNewTree(MapConversions.gridToCord( 15.5f ), MapConversions.gridToCord(
+        // 10.5f ) );
     }
 
     public void fill(int column, int row, int columnspan, int rowspan, boolean open) {
-        for (int c = column; c < column + columnspan; c++)
+        for (int c = column; c < column + columnspan; c++) {
             Arrays.fill(gridOccupancy[c], row, row + rowspan, open);
+        }
     }
 
     public boolean isOpen(int column, int row, int columnspan, int rowspan) {
@@ -110,13 +112,13 @@ public class Map {
     /// Obstacles ///------------------------------------------------------------///
 
     public void generateObstacles() {
-        // obstacles.clear();
-        // for ( int j = 0; j < ROWS; j++) {
-        //     for ( float i = 0; i < COLUMNS/2; i++) {
-        //         createNewTree(MapConversions.gridToCord( (float) Math.random() * COLUMNS ), MapConversions.gridToCord(j + i / COLUMNS) );
-        //     }
-        // }
-        createNewTree(MapConversions.gridToCord( 15.5f ), MapConversions.gridToCord( 10.5f ) );
+        obstacles.clear();
+        for (int j = 0; j < ROWS; j++) {
+            for (float i = 0; i < COLUMNS / 2; i++) {
+                createNewTree(MapConversions.gridToCord((float) Math.random() * COLUMNS),
+                        MapConversions.gridToCord(j + i / COLUMNS));
+            }
+        }
     }
 
     public void createNewTree(int x, int y) {

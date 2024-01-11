@@ -92,11 +92,11 @@ public class MapHandler {
 
     private void drawMap(Graphics g) {
         // Draw tiles
-        int firstColumn = MapConversions.cordToGrid(Game.instance.camera.getX() + 1);
-        int lastColumn = MapConversions.cordToGrid(Game.instance.camera.getX() + Panel.WIDTH + 1);
+        int firstColumn = MapConversions.cordToGrid(MapConversions.screenCordToCord(Game.instance.camera.getX() + 1));
+        int lastColumn = MapConversions.cordToGrid(MapConversions.screenCordToCord(Game.instance.camera.getX() + Panel.WIDTH + 1));
 
-        int firstRow = MapConversions.cordToGrid(Game.instance.camera.getY() + 1);
-        int lastRow = MapConversions.cordToGrid(Game.instance.camera.getY() + Panel.HEIGHT + 1) + 1;
+        int firstRow = MapConversions.cordToGrid(MapConversions.screenCordToCord(Game.instance.camera.getY() + 1));
+        int lastRow = MapConversions.cordToGrid(MapConversions.screenCordToCord(Game.instance.camera.getY() + Panel.HEIGHT + 1)) + 1;
 
         for (int c = firstColumn; c < lastColumn; c++) {
             for (int r = firstRow; r < lastRow; r++) {
@@ -159,6 +159,15 @@ public class MapHandler {
         // Move all the enemies
         for (int i = 0; i < enemies.size(); i++)
             enemies.get(i).move();
+
+        // Update obstacles
+        for (int i = 0; i < map.obstacles.size();) {
+            if (map.obstacles.get(i).update()) {
+                i++;
+                continue;
+            }
+            map.obstacles.remove(i);
+        }
     }
 
     public void nextStage() {
@@ -197,11 +206,11 @@ public class MapHandler {
     }
 
     public float getEntranceX() {
-        return Game.instance.camera.getX() - getTileSize();
+        return MapConversions.screenCordToCord(Game.instance.camera.getX()) - Map.TILE_SIZE;
     }
 
     public float getEntranceY() {
-        return Map.ROWS * getTileSize() / 2;
+        return Map.ROWS * Map.TILE_SIZE / 2;
     }
 
 }

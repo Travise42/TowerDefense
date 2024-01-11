@@ -105,7 +105,7 @@ public class ArcherTower extends Tower {
 
     private void drawEntity(Graphics g) {
         int size = (int) Game.instance.map.getTileSize() * 4 / 5;
-        int offset = MapConversions.gridToCord(getSize() / 2);
+        int offset = (int) MapConversions.cordToScreenCord(MapConversions.gridToCord(getSize() / 2));
         int x = getScreenX() + offset;
         int y = getScreenY() + offset;
 
@@ -130,7 +130,7 @@ public class ArcherTower extends Tower {
         int x = getScreenX();
         int y = getScreenY();
 
-        int commonOffset = MapConversions.gridToCord(getSize() - 1) / 2;
+        int commonOffset = (int) MapConversions.cordToScreenCord( MapConversions.gridToCord(getSize() - 1) / 2);
         int xOffset = (int) (20 * dx / distance) + commonOffset;
         int yOffset = (int) (20 * dy / distance) + commonOffset;
 

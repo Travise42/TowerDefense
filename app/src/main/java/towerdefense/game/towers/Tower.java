@@ -10,6 +10,7 @@ import java.awt.Color;
 
 import towerdefense.game.Game;
 import towerdefense.game.enemies.Enemy;
+import towerdefense.game.env.Map;
 import towerdefense.game.env.MapConversions;
 
 public abstract class Tower {
@@ -193,7 +194,7 @@ public abstract class Tower {
     }
 
     public int getImageY() {
-        return MapConversions.gridToCord(getRow() + getSize()) - image.getHeight();
+        return MapConversions.gridToCord(getRow() + getSize() - image.getHeight() / Game.instance.map.getTileSize());
     }
 
     public int getScreenX() {

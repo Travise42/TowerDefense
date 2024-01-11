@@ -18,7 +18,7 @@ public class Tree extends Obstacle {
     }
 
     public static void resize( int tileSize) {
-        image = resizeImage(loadImage(IMAGE_DIR), (int) tileSize * 2, (int) tileSize * 3);
+        image = resizeImage(loadImage(IMAGE_DIR), (int) tileSize * 2, (int) tileSize * 2);
     }
 
     @Override

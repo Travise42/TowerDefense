@@ -11,9 +11,9 @@ public class WizardTower extends Tower {
     final private static TowerGraphics graphics = new TowerGraphics( TOWER_ID, PATHS, TIERS, null );
 
     final private static String[][] UPGRADE_NAMES = {
-            { "Archer Tower" },
-            { "Sharper Arrows", "Faster Shooting", "Even Faster Shooting", "Elite Firing" },
-            { "Greater Range", "Double Shot", "triple Shot", "Special Arrows" } };
+            { "Wizard Tower" },
+            { "Bigger Cast", "Intense Magic", "Powerful Magic", "Keen Sorcerer" },
+            { "Faster Cast", "Casting Proficiency", "Seeking Projectile", "Casting Mastery" } };
     final private static int[][] UPGRADE_COSTS = {
             { 500 },
             { 400, 1000, 1200, 3200 },

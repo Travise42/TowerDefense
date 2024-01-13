@@ -10,11 +10,15 @@ public class TroopTower extends Tower {
     final private static int TIERS = 4;
     final private static TowerGraphics graphics = new TowerGraphics( TOWER_ID, PATHS, TIERS, null );
 
-    final private static String[][] UPGRADE_NAMES = {
+    final private static String[][] NAME = {
             { "Archer Tower" },
             { "Sharper Arrows", "Faster Shooting", "Even Faster Shooting", "Elite Firing" },
             { "Greater Range", "Double Shot", "triple Shot", "Special Arrows" } };
-    final private static int[][] UPGRADE_COSTS = {
+    final private static int[][] COST = {
+            { 500 },
+            { 400, 1000, 1200, 3200 },
+            { 200, 1500, 2000, 5000 } };
+    final private static int[][] HEALTH = {
             { 500 },
             { 400, 1000, 1200, 3200 },
             { 200, 1500, 2000, 5000 } };
@@ -48,8 +52,9 @@ public class TroopTower extends Tower {
         TOWER_ID,
         PATHS,
         TIERS,
-        UPGRADE_NAMES,
-        UPGRADE_COSTS,
+        NAME,
+        COST,
+        HEALTH,
         DAMAGE,
         PIERCE,
         RELOAD_TIME,

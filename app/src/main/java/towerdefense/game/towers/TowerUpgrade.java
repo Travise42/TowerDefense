@@ -5,8 +5,9 @@ public class TowerUpgrade {
     private int paths;
     private int tiers;
 
-    private String[][] upgradeNames;
-    private int[][] upgradeCosts;
+    private String[][] names;
+    private int[][] costs;
+    private int[][] healths;
 
     private int[][] damages;
     private int[][] pierces;
@@ -15,13 +16,14 @@ public class TowerUpgrade {
     private int[][] projectileLifetimes;
     private int[][] ranges;
 
-    public TowerUpgrade(String tower_id, int paths, int tiers, String[][] upgrade_names, int[][] upgrade_costs,
+    public TowerUpgrade(String tower_id, int paths, int tiers, String[][] upgrade_names, int[][] cost, int[][] healths,
             int[][] damages, int[][] pierces, int[][] reload_times, int[][] projectile_speeds, int[][] projectile_lifetimes, int[][] ranges) {
         this.paths = paths;
         this.tiers = tiers;
 
-        this.upgradeNames = upgrade_names;
-        this.upgradeCosts = upgrade_costs;
+        this.names = upgrade_names;
+        this.costs = cost;
+        this.healths = healths;
 
         this.damages = damages;
         this.pierces = pierces;
@@ -40,17 +42,24 @@ public class TowerUpgrade {
     }
 
     public String getName(int path, int tier) {
-        if ( tier == 0 ) return upgradeNames[0][0];
+        if ( tier == 0 ) return names[0][0];
         if ( tier > tiers ) return "Invalid Tier";
         if ( path > paths ) return "Invalid Path";
-        return upgradeNames[path][tier-1];
+        return names[path][tier-1];
     }
 
     public int getCost(int path, int tier) {
-        if ( tier == 0 ) return upgradeCosts[0][0];
+        if ( tier == 0 ) return costs[0][0];
         if ( tier > tiers ) return 999999999;
         if ( path > paths ) return 999999999;
-        return upgradeCosts[path][tier-1];
+        return costs[path][tier-1];
+    }
+
+    public int getHealth(int path, int tier) {
+        if ( tier == 0 ) return costs[0][0];
+        if ( tier > tiers ) return 999999999;
+        if ( path > paths ) return 999999999;
+        return healths[path][tier-1];
     }
 
     public int getDamage(int path, int tier) {

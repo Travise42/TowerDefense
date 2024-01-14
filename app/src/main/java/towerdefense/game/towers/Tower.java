@@ -119,7 +119,7 @@ public abstract class Tower {
                 - (row + getSize() / 2);
     }
 
-    protected float getRowsFrom(Enemy enemy, float projectionFactor, int offset) {
+    protected float getRowsFrom(Enemy enemy, float projectionFactor, float offset) {
         return MapConversions.cordToSoftGrid(enemy.getY() + projectionFactor * enemy.getVelocityY())
                 - (row + getSize() / 2 + offset);
     }

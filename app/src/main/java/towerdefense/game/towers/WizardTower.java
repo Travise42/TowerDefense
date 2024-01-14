@@ -56,9 +56,9 @@ public class WizardTower extends Tower {
             { 40, 40, 40, 40 },
             { 40, 40, 40, 40 } };
     final private static int[][] PROJECTILE_SPEED = {
-            { 5 },
-            { 5, 5, 5, 5 },
-            { 5, 5, 10, 10 } };
+            { 2 },
+            { 2, 2, 2, 2 },
+            { 2, 2, 4, 4 } };
     final private static int[][] PROJECTILE_LIFETIME = {
             { 30 },
             { 30, 30, 30, 30 },
@@ -155,12 +155,15 @@ public class WizardTower extends Tower {
         // Rotate arrow towards first enemy in range
         Enemy firstEnemyInRange = getFirstEnemyInRange(upgradeInfo.getRange(path, tier));
 
+
+        float entityHeight = ENTITY_HEIGHT[path][Math.max(0, tier-1)];
+        float yOffset = entityHeight;
         if (firstEnemyInRange != null) {
-            float projectionFactor = 1000 * firstEnemyInRange.speed / upgradeInfo.getProjectileSpeed(path, tier) * Calc.pythag(
+            float projectionFactor = 500 * firstEnemyInRange.speed / upgradeInfo.getProjectileSpeed(path, tier) * Calc.pythag(
                     getColumnsFrom(firstEnemyInRange, 0),
-                    getRowsFrom(firstEnemyInRange, 0, -1));
+                    getRowsFrom(firstEnemyInRange, 0, -yOffset));
             dx = getColumnsFrom(firstEnemyInRange, projectionFactor);
-            dy = getRowsFrom(firstEnemyInRange, projectionFactor, -1);
+            dy = getRowsFrom(firstEnemyInRange, projectionFactor, -yOffset);
             distance = Calc.pythag(dx, dy);
         }
 
@@ -193,14 +196,18 @@ public class WizardTower extends Tower {
 
         int x = getX();
         int y = getImageY();
-        int offset = MapConversions.gridToCord(getSize() / 2);
+
+        float entityHeight = ENTITY_HEIGHT[path][Math.max(0, tier-1)];
+        int xOffset = MapConversions.gridToCord(getSize() / 2);
+        int yOffset = MapConversions.gridToCord(getSize() - entityHeight);
 
         float velocityFactor = upgradeInfo.getProjectileSpeed(path, tier) / distance;
 
+        System.out.println( Calc.pythag( dx/distance, dy/distance ) );
         Game.instance.ph.add(new Projectile(
                 spellImage,
-                x + offset,
-                y + offset,
+                x + xOffset,
+                y + yOffset,
                 dx * velocityFactor,
                 dy * velocityFactor,
                 upgradeInfo.getDamage(path, tier), upgradeInfo.getPierce(path, tier), upgradeInfo.getProjectileLifetime(path, tier)));

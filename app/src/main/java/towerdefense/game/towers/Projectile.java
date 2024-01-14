@@ -6,14 +6,16 @@ import java.util.ArrayList;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
+import towerdefense.func.Calc;
 import towerdefense.game.Game;
 import towerdefense.game.enemies.Enemy;
+import towerdefense.game.env.Map;
 import towerdefense.game.env.MapConversions;
 
 public class Projectile {
 
-    public int x;
-    public int y;
+    public float x;
+    public float y;
 
     private float xVel;
     private float yVel;
@@ -53,17 +55,18 @@ public class Projectile {
 
         x += xVel;
         y += yVel;
+        System.out.println(Calc.pythag(xVel, yVel));
 
         for (int i = 0; i < Game.instance.map.enemies.size(); i++) {
             Enemy enemy = Game.instance.map.enemies.get(i);
             if (hitEnemies.contains(enemy))
                 continue;
 
-            float dx = x + image.getWidth() / 2 - enemy.getX() - enemy.getSize()/2;
-            float dy = y + image.getWidth() / 2 - enemy.getY() - enemy.getSize()/2;
+            float dx = x - enemy.getX() - enemy.getSize()/2;
+            float dy = y - enemy.getY() - enemy.getSize()/2;
             float squareDistance = dx * dx + dy * dy;
 
-            if (squareDistance < Game.instance.map.getTileSize()*Game.instance.map.getTileSize()) {
+            if (squareDistance < Map.TILE_SIZE*Map.TILE_SIZE) {
                 // Hit enemy
                 if ( enemy.damage(damage, xVel/15f, yVel/15f) ) {
                     // Enemy lives

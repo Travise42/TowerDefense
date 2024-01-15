@@ -28,16 +28,16 @@ public class Projectile {
 
     private List<Enemy> hitEnemies;
 
-    public Projectile(BufferedImage image, int x, int y, float xVel, float yVel, int damage, int pierce, int lifetime) {
+    public Projectile(BufferedImage image, int x, int y, float xVel, float yVel, int damage, int pierce, int range, int speed) {
         this.image = image;
 
         this.x = x;
         this.y = y;
-        this.xVel = xVel;
-        this.yVel = yVel;
+        this.xVel = xVel * speed;
+        this.yVel = yVel * speed;
         this.damage = damage;
         this.pierce = pierce;
-        this.lifetime = lifetime;
+        this.lifetime = MapConversions.gridToCord(range)/speed;
 
         hitEnemies = new ArrayList<>();
     }
@@ -55,7 +55,6 @@ public class Projectile {
 
         x += xVel;
         y += yVel;
-        System.out.println(Calc.pythag(xVel, yVel));
 
         for (int i = 0; i < Game.instance.map.enemies.size(); i++) {
             Enemy enemy = Game.instance.map.enemies.get(i);

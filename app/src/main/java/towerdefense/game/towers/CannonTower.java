@@ -56,10 +56,6 @@ public class CannonTower extends Tower {
             { 10 },
             { 10, 10, 10, 10 },
             { 10, 10, 10, 10 } };
-    final private static int[][] PROJECTILE_LIFETIME = {
-            { 40 },
-            { 40, 40, 40, 40 },
-            { 40, 40, 40, 40 } };
     final private static int[][] RANGE = {
             { 4 },
             { 4, 4, 4, 4 },
@@ -76,7 +72,6 @@ public class CannonTower extends Tower {
         PIERCE,
         RELOAD_TIME,
         PROJECTILE_SPEED,
-        PROJECTILE_LIFETIME,
         RANGE);
 
     private BufferedImage cannonImage;
@@ -104,8 +99,15 @@ public class CannonTower extends Tower {
     }
 
     @Override
-    public void draw(Graphics g) {
+    public void drawTower(Graphics g, boolean selected) {
         drawTower(g);
+
+        if (selected)
+            drawTowerHighlight(g);
+    }
+
+    @Override
+    public void drawEntity(Graphics g, boolean selected) {
         drawCannon(g);
         drawWick(g);
     }
@@ -175,9 +177,9 @@ public class CannonTower extends Tower {
             cannonBallImage,
             x + offset + (int) (50 * xRatio),
             y + offset + (int) (50 * yRatio),
-            upgradeInfo.getProjectileSpeed(path, tier) * xRatio,
-            upgradeInfo.getProjectileSpeed(path, tier) * yRatio,
-            upgradeInfo.getDamage(path, tier), upgradeInfo.getPierce(path, tier), upgradeInfo.getProjectileLifetime(path, tier)));
+            xRatio,
+            yRatio,
+            upgradeInfo.getDamage(path, tier), upgradeInfo.getPierce(path, tier), upgradeInfo.getRange(path, tier), upgradeInfo.getProjectileSpeed(path, tier)));
     }
 
     @Override

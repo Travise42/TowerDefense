@@ -117,16 +117,24 @@ public class MapHandler {
     }
 
     private void drawTowers(Graphics g) {
+        Tower selectedTower = Game.instance.mi.getSelectedTower();
+
         // Draw towers top to bottom ( furthest to closest )
         for (int i = 0; i < towers.size(); i++) {
-            towers.get(i).update();
+            Tower tower = towers.get(i);
+            tower.update();
 
-            towers.get(i).draw(g);
+            if ( tower == selectedTower ) continue;
+            tower.drawTower(g, false);
+            tower.drawEntity(g, false);
         }
 
         // Draw selection outline infront of all the towers
-        if (Game.instance.mi.getSelectedTower() != null)
-            Game.instance.mi.getSelectedTower().drawHighlight(g);
+        if (selectedTower != null) {
+            selectedTower.drawRange(g);
+            selectedTower.drawTower(g, true);
+            selectedTower.drawEntity(g, true);
+        }
     }
 
     public void resize() {

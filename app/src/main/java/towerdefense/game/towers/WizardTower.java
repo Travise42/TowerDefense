@@ -12,6 +12,7 @@ import java.awt.image.BufferedImage;
 import towerdefense.func.Calc;
 import towerdefense.game.Game;
 import towerdefense.game.enemies.Enemy;
+import towerdefense.game.env.Map;
 import towerdefense.game.env.MapConversions;
 
 public class WizardTower extends Tower {
@@ -59,10 +60,6 @@ public class WizardTower extends Tower {
             { 2 },
             { 2, 2, 2, 2 },
             { 2, 2, 4, 4 } };
-    final private static int[][] PROJECTILE_LIFETIME = {
-            { 30 },
-            { 30, 30, 30, 30 },
-            { 30, 30, 30, 30 } };
     final private static int[][] RANGE = {
             { 6 },
             { 6, 6, 6, 6 },
@@ -79,7 +76,6 @@ public class WizardTower extends Tower {
             PIERCE,
             RELOAD_TIME,
             PROJECTILE_SPEED,
-            PROJECTILE_LIFETIME,
             RANGE);
 
     final private static float[][] ENTITY_HEIGHT = {
@@ -103,9 +99,15 @@ public class WizardTower extends Tower {
     public WizardTower() { super(); }
 
     @Override
-    public void draw( Graphics g ) {
+    public void drawTower( Graphics g, boolean selected ) {
         drawTower( g );
 
+        if (selected)
+            drawTowerHighlight(g);
+    }
+
+    @Override
+    public void drawEntity( Graphics g, boolean selected ) {
         drawEntity(g);
     }
 
@@ -159,7 +161,7 @@ public class WizardTower extends Tower {
         float entityHeight = ENTITY_HEIGHT[path][Math.max(0, tier-1)];
         float yOffset = entityHeight;
         if (firstEnemyInRange != null) {
-            float projectionFactor = 500 * firstEnemyInRange.speed / upgradeInfo.getProjectileSpeed(path, tier) * Calc.pythag(
+            float projectionFactor = Map.TILE_SIZE / upgradeInfo.getProjectileSpeed(path, tier) * Calc.pythag(
                     getColumnsFrom(firstEnemyInRange, 0),
                     getRowsFrom(firstEnemyInRange, 0, -yOffset));
             dx = getColumnsFrom(firstEnemyInRange, projectionFactor);
@@ -201,16 +203,13 @@ public class WizardTower extends Tower {
         int xOffset = MapConversions.gridToCord(getSize() / 2);
         int yOffset = MapConversions.gridToCord(getSize() - entityHeight);
 
-        float velocityFactor = upgradeInfo.getProjectileSpeed(path, tier) / distance;
-
-        System.out.println( Calc.pythag( dx/distance, dy/distance ) );
         Game.instance.ph.add(new Projectile(
                 spellImage,
                 x + xOffset,
                 y + yOffset,
-                dx * velocityFactor,
-                dy * velocityFactor,
-                upgradeInfo.getDamage(path, tier), upgradeInfo.getPierce(path, tier), upgradeInfo.getProjectileLifetime(path, tier)));
+                dx / distance,
+                dy / distance,
+                upgradeInfo.getDamage(path, tier), upgradeInfo.getPierce(path, tier), upgradeInfo.getRange(path, tier), upgradeInfo.getProjectileSpeed(path, tier)));
     }
 
     @Override

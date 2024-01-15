@@ -13,11 +13,10 @@ public class TowerUpgrade {
     private int[][] pierces;
     private int[][] reloadTimes;
     private int[][] projectileSpeeds;
-    private int[][] projectileLifetimes;
     private int[][] ranges;
 
     public TowerUpgrade(String tower_id, int paths, int tiers, String[][] upgrade_names, int[][] cost, int[][] healths,
-            int[][] damages, int[][] pierces, int[][] reload_times, int[][] projectile_speeds, int[][] projectile_lifetimes, int[][] ranges) {
+            int[][] damages, int[][] pierces, int[][] reload_times, int[][] projectile_speeds, int[][] ranges) {
         this.paths = paths;
         this.tiers = tiers;
 
@@ -29,7 +28,6 @@ public class TowerUpgrade {
         this.pierces = pierces;
         this.reloadTimes = reload_times;
         this.projectileSpeeds = projectile_speeds;
-        this.projectileLifetimes = projectile_lifetimes;
         this.ranges = ranges;
     }
 
@@ -88,13 +86,6 @@ public class TowerUpgrade {
         if ( tier > tiers ) return 999999999;
         if ( path > paths ) return 999999999;
         return projectileSpeeds[path][tier-1];
-    }
-
-    public int getProjectileLifetime(int path, int tier) {
-        if ( tier == 0 ) return projectileLifetimes[0][0];
-        if ( tier > tiers ) return 999999999;
-        if ( path > paths ) return 999999999;
-        return projectileLifetimes[path][tier-1];
     }
 
     public int getRange(int path, int tier) {

@@ -57,9 +57,20 @@ public abstract class Tower {
         g.drawImage(image, getScreenX(), getScreenY(), Game.instance.panel);
     }
 
-    public void drawHighlight(Graphics g) {
+    protected void drawTowerHighlight(Graphics g) {
         g.drawImage(highlight, getScreenX() - HIGHLIGHT_BORDER_THICKNESS, getScreenY() - HIGHLIGHT_BORDER_THICKNESS,
                 Game.instance.panel);
+    }
+
+    public void drawRange(Graphics g) {
+        int size = (int) MapConversions.cordToScreenCord(MapConversions.gridToCord(getUpgradeInfo().getRange(getUpgradePath(), getTier())));
+        int offset = (int) MapConversions.cordToScreenCord(MapConversions.gridToCord(getSize() / 2));
+
+        g.setColor(new Color( 50, 50, 50, 50 ));
+        g.fillOval(MapConversions.xToViewX(getX()) + offset - size,
+                MapConversions.yToViewY(getY()) + offset - size,
+                2*size,
+                2*size);
     }
 
     protected void loadHighlight() {
@@ -205,7 +216,9 @@ public abstract class Tower {
         return MapConversions.yToViewY(getImageY());
     }
 
-    public abstract void draw(Graphics g);
+    public abstract void drawTower(Graphics g, boolean selected);
+
+    public abstract void drawEntity(Graphics g, boolean selected);
 
     public abstract void update();
 

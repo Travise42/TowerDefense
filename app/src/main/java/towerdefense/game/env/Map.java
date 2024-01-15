@@ -15,8 +15,8 @@ public class Map {
     final public static int INITIAL_OPEN_COLUMNS = 12;
     final public static int INITIAL_OPEN_ROWS = 8;
 
-    final public static int COLUMNS = 30;
-    final public static int ROWS = 20;
+    final public static int COLUMNS = 60;
+    final public static int ROWS = 40;
 
     // true: open
     // false: obstructed

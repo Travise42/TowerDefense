@@ -39,10 +39,6 @@ public class TroopTower extends Tower {
             { 10 },
             { 10, 10, 10, 10 },
             { 10, 10, 10, 10 } };
-    final private static int[][] PROJECTILE_LIFETIME = {
-            { 40 },
-            { 40, 40, 40, 40 },
-            { 40, 40, 40, 40 } };
     final private static int[][] RANGE = {
             { 4 },
             { 4, 4, 4, 4 },
@@ -59,7 +55,6 @@ public class TroopTower extends Tower {
         PIERCE,
         RELOAD_TIME,
         PROJECTILE_SPEED,
-        PROJECTILE_LIFETIME,
         RANGE);
 
     public TroopTower( int column, int row ) {
@@ -69,8 +64,13 @@ public class TroopTower extends Tower {
     public TroopTower() { super(); }
 
     @Override
-    public void draw( Graphics g ) {
+    public void drawTower( Graphics g, boolean selected ) {
         drawTower( g );
+    }
+
+    @Override
+    public void drawEntity( Graphics g, boolean selected ) {
+        
     }
 
     @Override

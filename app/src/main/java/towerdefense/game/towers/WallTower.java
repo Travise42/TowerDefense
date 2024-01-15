@@ -32,9 +32,6 @@ public class WallTower extends Tower {
     final private static int[][] PROJECTILE_SPEED = {
             { 10 },
             { 10, 10}};
-    final private static int[][] PROJECTILE_LIFETIME = {
-            { 40 },
-            { 40, 40}};
     final private static int[][] RANGE = {
             { 4 },
             { 4, 4}};
@@ -50,18 +47,24 @@ public class WallTower extends Tower {
         PIERCE,
         RELOAD_TIME,
         PROJECTILE_SPEED,
-        PROJECTILE_LIFETIME,
         RANGE);
 
     public WallTower( int column, int row ) {
         super( column, row, TOWER_ID );
     }
 
-    public WallTower() { super(); }
+    public WallTower() {
+        super();
+    }
 
     @Override
-    public void draw( Graphics g ) {
+    public void drawTower( Graphics g, boolean selected ) {
         drawTower( g );
+    }
+
+    @Override
+    public void drawEntity( Graphics g, boolean selected ) {
+        
     }
 
     @Override

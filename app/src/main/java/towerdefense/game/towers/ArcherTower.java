@@ -12,6 +12,7 @@ import java.awt.image.BufferedImage;
 import towerdefense.func.Calc;
 import towerdefense.game.Game;
 import towerdefense.game.enemies.Enemy;
+import towerdefense.game.env.Map;
 import towerdefense.game.env.MapConversions;
 
 public class ArcherTower extends Tower {
@@ -57,13 +58,9 @@ public class ArcherTower extends Tower {
             { 40, 20, 10, 5 },
             { 40, 40, 40, 40 } };
     final private static int[][] PROJECTILE_SPEED = {
-            { 20 },
-            { 25, 30, 35, 40 },
-            { 20, 20, 20, 20 } };
-    final private static int[][] PROJECTILE_LIFETIME = {
-            { 30 },
-            { 30, 28, 24, 20 },
-            { 30, 30, 30, 30 } };
+            { 3 },
+            { 5, 8, 10, 15 },
+            { 5, 5, 5, 5 } };
     final private static int[][] RANGE = {
             { 5 },
             { 6, 6, 6, 8 },
@@ -80,7 +77,6 @@ public class ArcherTower extends Tower {
             PIERCE,
             RELOAD_TIME,
             PROJECTILE_SPEED,
-            PROJECTILE_LIFETIME,
             RANGE);
 
     private BufferedImage arrowImage;
@@ -102,10 +98,19 @@ public class ArcherTower extends Tower {
     }
 
     @Override
-    public void draw(Graphics g) {
+    public void drawTower(Graphics g, boolean selected) {
         drawTower(g);
+        
+        if (selected)
+            drawTowerHighlight(g);
+    }
+
+    public void drawEntity(Graphics g, boolean selected) {
         drawEntity(g);
         drawBowAndArrow(g);
+
+        if (selected)
+            drawEntityHighlight(g);
     }
 
     private void drawEntity(Graphics g) {
@@ -128,6 +133,26 @@ public class ArcherTower extends Tower {
 
         ((Graphics2D) g).setStroke(new BasicStroke(5));
         g.setColor(new Color(50, 30, 10));
+        g.drawOval(x - size / 2, y - size / 2, size, size);
+    }
+
+    private void drawEntityHighlight(Graphics g) {
+        int size = (int) Game.instance.map.getTileSize() * 4 / 5;
+        int offset = (int) MapConversions.cordToScreenCord(MapConversions.gridToCord(getSize() / 2));
+        int x = getScreenX() + offset;
+        int y = getScreenY() + offset;
+
+        // Body
+        drawPartHighlight(g, x, y, size);
+
+        // Hands
+        drawPartHighlight(g, x - (int) (15 * dx / distance), y - (int) (15 * dy / distance), size / 3);
+        drawPartHighlight(g, x + (int) (30 * dx / distance), y + (int) (30 * dy / distance), size / 3);
+    }
+
+    private void drawPartHighlight(Graphics g, int x, int y, int size) {
+        ((Graphics2D) g).setStroke(new BasicStroke(5));
+        g.setColor(Color.WHITE);
         g.drawOval(x - size / 2, y - size / 2, size, size);
     }
 
@@ -164,7 +189,7 @@ public class ArcherTower extends Tower {
         Enemy firstEnemyInRange = getFirstEnemyInRange(upgradeInfo.getRange(path, tier));
 
         if (firstEnemyInRange != null) {
-            float projectionFactor = 1000 * firstEnemyInRange.speed / upgradeInfo.getProjectileSpeed(path, tier) * Calc.pythag(
+            float projectionFactor = Map.TILE_SIZE / upgradeInfo.getProjectileSpeed(path, tier) * Calc.pythag(
                     getColumnsFrom(firstEnemyInRange, 0),
                     getRowsFrom(firstEnemyInRange, 0, -1));
             dx = getColumnsFrom(firstEnemyInRange, projectionFactor);
@@ -220,15 +245,13 @@ public class ArcherTower extends Tower {
         int y = getImageY();
         int offset = MapConversions.gridToCord(getSize() / 2);
 
-        float velocityFactor = upgradeInfo.getProjectileSpeed(path, tier) / distance;
-
         Game.instance.ph.add(new Projectile(
                 arrowImage,
                 x + offset,
                 y + offset,
-                dx * velocityFactor,
-                dy * velocityFactor,
-                upgradeInfo.getDamage(path, tier), upgradeInfo.getPierce(path, tier), upgradeInfo.getProjectileLifetime(path, tier)));
+                dx / distance,
+                dy / distance,
+                upgradeInfo.getDamage(path, tier), upgradeInfo.getPierce(path, tier), upgradeInfo.getRange(path, tier), upgradeInfo.getProjectileSpeed(path, tier)));
     }
 
     @Override

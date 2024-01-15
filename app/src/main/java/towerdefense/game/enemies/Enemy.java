@@ -85,17 +85,22 @@ public class Enemy {
         int y2 = (int) (factor * (X2 * vy + Y2 * vx));
 
         // Draw hands
-        if ( damaged > 0 ) g.setColor(new Color(220, 200, 100));
-        else g.setColor(new Color(200, 30, 30));
+        if (damaged > 0)
+            g.setColor(new Color(220, 200, 100));
+        else
+            g.setColor(new Color(200, 30, 30));
         drawCircle(g, viewX + x1, viewY + y1, size / 3);
         drawCircle(g, viewX + x2, viewY + y2, size / 3);
 
         // Draw body
-        if ( damaged > 0 ) g.setColor(new Color(220, 200, 100));
-        else g.setColor(new Color(240, 15, 15));
+        if (damaged > 0)
+            g.setColor(new Color(220, 200, 100));
+        else
+            g.setColor(new Color(240, 15, 15));
         drawCircle(g, viewX, viewY, size);
 
-        if ( damaged > 0 ) damaged--;
+        if (damaged > 0)
+            damaged--;
     }
 
     // Helper method to draw a circle
@@ -145,31 +150,32 @@ public class Enemy {
 
     // Helper methods for collision detection
     private boolean checkIfOnWall(float x, float y) {
-        return pointOnWall(x - size / 2, y - size / 2)
-                || pointOnWall(x + size / 2, y - size / 2)
-                || pointOnWall(x - size / 2, y + size / 2)
-                || pointOnWall(x + size / 2, y + size / 2);
+        float s = MapConversions.cordToScreenCord(size / 2f);
+        return pointOnWall(x - s, y - s)
+                || pointOnWall(x + s, y - s)
+                || pointOnWall(x - s, y + s)
+                || pointOnWall(x + s, y + s);
     }
 
     private boolean pointOnWall(float x, float y) {
-        return !Game.instance.map.map.isOpen((int) (x / Game.instance.map.getTileSize()),
-                (int) (y / Game.instance.map.getTileSize()));
+        return !Game.instance.map.map.isOpen(MapConversions.cordToGrid(x), MapConversions.cordToGrid(y));
     }
 
     private boolean checkIfOnTower(float x, float y) {
-        return pointOnTower(x - size / 2, y - size / 2)
-                || pointOnTower(x + size / 2, y - size / 2)
-                || pointOnTower(x - size / 2, y + size / 2)
-                || pointOnTower(x + size / 2, y + size / 2);
+        // float s = size / 2;
+        // return pointOnTower(x - s, y - s)
+        //         || pointOnTower(x + s, y - s)
+        //         || pointOnTower(x - s, y + s)
+        //         || pointOnTower(x + s, y + s);
+        return pointOnTower(x, y);
     }
 
     private boolean pointOnTower(float x, float y) {
-        float c = x / Game.instance.map.getTileSize() - (Map.COLUMNS - Game.instance.map.map.getOpenColumns()) / 2;
-        float r = y / Game.instance.map.getTileSize() - (Map.ROWS - Game.instance.map.map.getOpenRows()) / 2;
-        return !(c < 0 || r < 0 || c > Game.instance.map.map.getOpenColumns()
-                || r > Game.instance.map.map.getOpenRows())
-                && !Game.instance.map.map.isOpen((int) (x / Game.instance.map.getTileSize()),
-                        (int) (y / Game.instance.map.getTileSize()));
+        float c = MapConversions.columnToOpenColumn(MapConversions.cordToGrid(x));
+        float r = MapConversions.rowToOpenRow(MapConversions.cordToGrid(y));
+        return !(c < 0 || c >= Game.instance.map.map.getOpenColumns()
+                || r < 0 || r >= Game.instance.map.map.getOpenRows()
+                || Game.instance.map.map.isOpen(MapConversions.cordToGrid(x), MapConversions.cordToGrid(y)));
     }
 
     // Helper method to handle enemy acceleration
@@ -223,18 +229,18 @@ public class Enemy {
         health -= amount;
         damaged = 3;
 
-        if ( health <= 0 )
+        if (health <= 0)
             return die();
 
         // Knockback
-        //vx += xImpact;
-        //vy += yImpact;
+        // vx += xImpact;
+        // vy += yImpact;
 
         return true;
     }
 
     public boolean die() {
-        Game.instance.map.enemies.remove( this );
+        Game.instance.map.enemies.remove(this);
         return false;
     }
 

@@ -61,7 +61,7 @@ public abstract class Tower {
 
     public void drawRange(Graphics g) {
         int size = (int) MapConv.cordToScreenCord(MapConv.gridToCord(getUpgradeInfo().getRange(getPath(), getTier())));
-        int offset = (int) MapConv.cordToScreenCord(MapConv.gridToCord(getSize() / 2));
+        int offset = (int) MapConv.cordToScreenCord(MapConv.gridToCord((float) getSize() / 2));
 
         g.setColor(new Color( 50, 50, 50, 50 ));
         g.fillOval(MapConv.xToViewX(getX()) + offset - size,

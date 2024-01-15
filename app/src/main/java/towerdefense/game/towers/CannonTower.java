@@ -78,9 +78,14 @@ public class CannonTower extends Tower {
         PROJECTILE_SPEED,
         RANGE);
 
+    final private static float[][] ENTITY_HEIGHT = {
+            { 1 },
+            { 1.2f, 1.2f, 1.2f, 1.4f },
+            { 1, 1, 1, 1.4f }};
+
     private BufferedImage cannonImage;
     private BufferedImage highlightedCannonImage;
-    private BufferedImage cannonBallImage;
+    private double lastAngleToEnemy;
 
     private boolean firing = false;
     private int fireTick = 0;
@@ -112,7 +117,10 @@ public class CannonTower extends Tower {
     }
 
     private void drawCannon(Graphics g, boolean selected) {
-        g.drawImage(selected ? highlightedCannonImage : cannonImage, getScreenX(), MapConv.yToViewY(getY()), Game.instance.panel);
+        float entityHeight = ENTITY_HEIGHT[path][Math.max(0, tier-1)];
+        int yOffset = (int) MapConv.cordToScreenCord(MapConv.gridToCord( getSize() - entityHeight));
+
+        g.drawImage(selected ? highlightedCannonImage : cannonImage, getScreenX(), getScreenY() + yOffset, Game.instance.panel);
     }
 
     private void drawWick(Graphics g) {
@@ -133,12 +141,13 @@ public class CannonTower extends Tower {
         // Rotate arrow towards first enemy in range
         Enemy firstEnemyInRange = getFirstEnemyInRange(upgradeInfo.getRange(path, tier));
 
+        float entityHeight = ENTITY_HEIGHT[path][Math.max(0, tier-1)];
         if (firstEnemyInRange != null) {
             float projectionFactor = Map.TILE_SIZE / upgradeInfo.getProjectileSpeed(path, tier) * Calc.pythag(
                     getColumnsFrom(firstEnemyInRange, 0),
-                    getRowsFrom(firstEnemyInRange, 0));
+                    getRowsFrom(firstEnemyInRange, 0, 1-entityHeight));
             dx = getColumnsFrom(firstEnemyInRange, projectionFactor);
-            dy = getRowsFrom(firstEnemyInRange, projectionFactor);
+            dy = getRowsFrom(firstEnemyInRange, projectionFactor, 1-entityHeight);
             distance = Calc.pythag(dx, dy);
         }
 
@@ -150,19 +159,22 @@ public class CannonTower extends Tower {
 
         double angleToEnemy = dx == 0 ? Math.PI / 2 : Math.atan(dy / dx);
 
-        int cannonImageSize = (int) (Game.instance.map.getTileSize() * 2);
-        cannonImage = rotateImage(
-                resizeImage(
-                        dx > 0 ? flipImage(graphics.getEntityImage(CANNON)) : graphics.getEntityImage(CANNON),
-                        cannonImageSize,
-                        cannonImageSize),
-                angleToEnemy);
-        highlightedCannonImage = rotateImage(
-                resizeImage(
-                        dx > 0 ? flipImage(graphics.getEntityImage(HIGHLIGHTED_CANNON)) : graphics.getEntityImage(HIGHLIGHTED_CANNON),
-                        cannonImageSize,
-                        cannonImageSize),
-                angleToEnemy);
+        if (Math.abs(angleToEnemy - lastAngleToEnemy) > Math.PI/25 || angleToEnemy > 0 != lastAngleToEnemy > 0) {
+            lastAngleToEnemy = angleToEnemy;
+            int cannonImageSize = (int) (Game.instance.map.getTileSize() * 2);
+            cannonImage = rotateImage(
+                    resizeImage(
+                            dx > 0 ? flipImage(graphics.getEntityImage(CANNON)) : graphics.getEntityImage(CANNON),
+                            cannonImageSize,
+                            cannonImageSize),
+                    angleToEnemy);
+            highlightedCannonImage = rotateImage(
+                    resizeImage(
+                            dx > 0 ? flipImage(graphics.getEntityImage(HIGHLIGHTED_CANNON)) : graphics.getEntityImage(HIGHLIGHTED_CANNON),
+                            cannonImageSize,
+                            cannonImageSize),
+                    angleToEnemy);
+        }
 
         if (!(fireTick > 0 || firstEnemyInRange == null))
             fire();
@@ -176,17 +188,16 @@ public class CannonTower extends Tower {
         float xRatio = dx / distance;
         float yRatio = dy / distance;
 
-        int x = getX();
-        int y = getY();
-        int offset = MapConv.gridToCord(getSize() / 2);
+        float entityHeight = ENTITY_HEIGHT[path][Math.max(0, tier-1)];
+        int xOffset = MapConv.gridToCord(getSize() / 2);
+        int yOffset = MapConv.gridToCord(getSize() + 1 - entityHeight);
 
         Game.instance.ph.add(new Projectile(
-            cannonBallImage = resizeImage(
-                graphics.getEntityImage(CANNON_BALL),
+            resizeImage(graphics.getEntityImage(CANNON_BALL),
                 (int) Game.instance.map.getTileSize(),
                 (int) Game.instance.map.getTileSize()),
-            x + offset + (int) (amplitude * xRatio),
-            y + offset + (int) (amplitude * yRatio),
+            getX() + xOffset + (int) (amplitude * xRatio),
+            getImageY() + yOffset + (int) (amplitude * yRatio),
             xRatio,
             yRatio,
             upgradeInfo.getDamage(path, tier), upgradeInfo.getPierce(path, tier), upgradeInfo.getRange(path, tier), upgradeInfo.getProjectileSpeed(path, tier)));

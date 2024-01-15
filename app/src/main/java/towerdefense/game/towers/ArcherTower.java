@@ -79,6 +79,11 @@ public class ArcherTower extends Tower {
             PROJECTILE_SPEED,
             RANGE);
 
+    // final private static float[][] ENTITY_HEIGHT = {
+    //         { 1.5f },
+    //         { 1.5f, 1.5f, 1.5f, 1.5f },
+    //         { 1.5f, 1.5f, 1.5f, 1.5f }};
+
     final private static float ENTITY_SIZE = 0.8f;
 
     private BufferedImage arrowImage;

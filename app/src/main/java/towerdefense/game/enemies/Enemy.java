@@ -113,7 +113,7 @@ public class Enemy {
 
         // Check if acceleration leads to damage
         if (handleAcceleration()) {
-            // TODO: damage the player
+            Game.instance.player.damage(size);
             Game.instance.map.enemies.remove(this);
             return;
         }

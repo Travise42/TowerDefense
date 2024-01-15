@@ -23,7 +23,7 @@ public class WizardTower extends Tower {
     final private static int STAR = 0;
     final private static int FIRE = 1;
 
-    final private static int DEFAULT_DX = -5;
+    final private static int DEFAULT_DX = -1;
     final private static int DEFAULT_DY = 1;
     final private static float DEFAULT_DISTANCE = Calc.pythag(DEFAULT_DX, DEFAULT_DY);
 
@@ -111,6 +111,9 @@ public class WizardTower extends Tower {
     @Override
     public void drawEntity( Graphics g, boolean selected ) {
         drawEntity(g);
+
+        if (selected)
+            drawEntityHighlight(g);
     }
 
     private void drawEntity(Graphics g) {
@@ -145,6 +148,38 @@ public class WizardTower extends Tower {
 
         ((Graphics2D) g).setStroke(new BasicStroke(5));
         g.setColor(new Color(50, 30, 10));
+        g.drawOval((int) x - size / 2, (int) y - size / 2, size, size);
+    }
+
+    private void drawEntityHighlight(Graphics g) {
+        int size = (int) ( Game.instance.map.getTileSize() * ENTITY_SIZE );
+
+        float entityHeight = ENTITY_HEIGHT[path][Math.max(0, tier-1)];
+        int xOffset = (int) MapConv.cordToScreenCord(MapConv.gridToCord(getSize() / 2));
+        int yOffset = (int) MapConv.cordToScreenCord(MapConv.gridToCord( getSize() - entityHeight));
+
+        int x = getScreenX() + xOffset;
+        int y = getScreenY() + yOffset;
+
+        float dxd = MapConv.cordToScreenCord(0.5f) * dx / distance;
+        float dyd = MapConv.cordToScreenCord(0.5f) * dy / distance;
+
+        // Body
+        drawPartHighlight(g, x, y, size);
+
+        // Hands
+        if( dx > 0 ) {
+            drawPartHighlight(g, x + 3 * (int) (3*dxd + 2*dyd), y + 2 * (int) (3*dyd - 2*dxd), size/3);
+            drawPartHighlight(g, x + 3 * (int) (3*dxd - 2*dyd), y + 2 * (int) (3*dyd + 2*dxd), size/3);
+            return;
+        }
+        drawPartHighlight(g, x + 3 * (int) (3*dxd - 2*dyd), y + 2 * (int) (3*dyd + 2*dxd), size/3);
+        drawPartHighlight(g, x + 3 * (int) (3*dxd + 2*dyd), y + 2 * (int) (3*dyd - 2*dxd), size/3);
+    }
+
+    private void drawPartHighlight(Graphics g, float x, float y, int size) {
+        ((Graphics2D) g).setStroke(new BasicStroke(5));
+        g.setColor(Color.WHITE);
         g.drawOval((int) x - size / 2, (int) y - size / 2, size, size);
     }
 

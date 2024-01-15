@@ -159,22 +159,20 @@ public class CannonTower extends Tower {
 
         double angleToEnemy = dx == 0 ? Math.PI / 2 : Math.atan(dy / dx);
 
-        if (Math.abs(angleToEnemy - lastAngleToEnemy) > Math.PI/25 || angleToEnemy > 0 != lastAngleToEnemy > 0) {
-            lastAngleToEnemy = angleToEnemy;
-            int cannonImageSize = (int) (Game.instance.map.getTileSize() * 2);
-            cannonImage = rotateImage(
-                    resizeImage(
-                            dx > 0 ? flipImage(graphics.getEntityImage(CANNON)) : graphics.getEntityImage(CANNON),
-                            cannonImageSize,
-                            cannonImageSize),
-                    angleToEnemy);
-            highlightedCannonImage = rotateImage(
-                    resizeImage(
-                            dx > 0 ? flipImage(graphics.getEntityImage(HIGHLIGHTED_CANNON)) : graphics.getEntityImage(HIGHLIGHTED_CANNON),
-                            cannonImageSize,
-                            cannonImageSize),
-                    angleToEnemy);
-        }
+        lastAngleToEnemy = angleToEnemy;
+        int cannonImageSize = (int) (Game.instance.map.getTileSize() * 2);
+        cannonImage = rotateImage(
+                resizeImage(
+                        dx > 0 ? flipImage(graphics.getEntityImage(CANNON)) : graphics.getEntityImage(CANNON),
+                        cannonImageSize,
+                        cannonImageSize),
+                angleToEnemy);
+        highlightedCannonImage = rotateImage(
+                resizeImage(
+                        dx > 0 ? flipImage(graphics.getEntityImage(HIGHLIGHTED_CANNON)) : graphics.getEntityImage(HIGHLIGHTED_CANNON),
+                        cannonImageSize,
+                        cannonImageSize),
+                angleToEnemy);
 
         if (!(fireTick > 0 || firstEnemyInRange == null))
             fire();

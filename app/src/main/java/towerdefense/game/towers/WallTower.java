@@ -60,6 +60,9 @@ public class WallTower extends Tower {
     @Override
     public void drawTower( Graphics g, boolean selected ) {
         drawTower( g );
+        
+        if (selected)
+            drawTowerHighlight(g);
     }
 
     @Override

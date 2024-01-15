@@ -13,7 +13,7 @@ import towerdefense.func.Calc;
 import towerdefense.game.Game;
 import towerdefense.game.enemies.Enemy;
 import towerdefense.game.env.Map;
-import towerdefense.game.env.MapConversions;
+import towerdefense.game.env.MapConv;
 
 public class ArcherTower extends Tower {
 
@@ -79,6 +79,8 @@ public class ArcherTower extends Tower {
             PROJECTILE_SPEED,
             RANGE);
 
+    final private static float ENTITY_SIZE = 0.8f;
+
     private BufferedImage arrowImage;
     private BufferedImage bowImage;
 
@@ -115,7 +117,7 @@ public class ArcherTower extends Tower {
 
     private void drawEntity(Graphics g) {
         int size = (int) Game.instance.map.getTileSize() * 4 / 5;
-        int offset = (int) MapConversions.cordToScreenCord(MapConversions.gridToCord(getSize() / 2));
+        int offset = (int) MapConv.cordToScreenCord(MapConv.gridToCord(getSize() / 2));
         int x = getScreenX() + offset;
         int y = getScreenY() + offset;
 
@@ -138,7 +140,7 @@ public class ArcherTower extends Tower {
 
     private void drawEntityHighlight(Graphics g) {
         int size = (int) Game.instance.map.getTileSize() * 4 / 5;
-        int offset = (int) MapConversions.cordToScreenCord(MapConversions.gridToCord(getSize() / 2));
+        int offset = (int) MapConv.cordToScreenCord(MapConv.gridToCord(getSize() / 2));
         int x = getScreenX() + offset;
         int y = getScreenY() + offset;
 
@@ -160,7 +162,7 @@ public class ArcherTower extends Tower {
         int x = getScreenX();
         int y = getScreenY();
 
-        int commonOffset = (int) MapConversions.cordToScreenCord( MapConversions.gridToCord(getSize() - 1) / 2);
+        int commonOffset = (int) MapConv.cordToScreenCord( MapConv.gridToCord(getSize() - 1) / 2);
         int xOffset = (int) (20 * dx / distance) + commonOffset;
         int yOffset = (int) (20 * dy / distance) + commonOffset;
 
@@ -243,7 +245,7 @@ public class ArcherTower extends Tower {
 
         int x = getX();
         int y = getImageY();
-        int offset = MapConversions.gridToCord(getSize() / 2);
+        int offset = MapConv.gridToCord(getSize() / 2);
 
         Game.instance.ph.add(new Projectile(
                 arrowImage,

@@ -2,7 +2,7 @@ package towerdefense.game.env;
 
 import towerdefense.game.Game;
 
-public class MapConversions{
+public class MapConv {
 
     /// X/Y <-> COLUMN/ROW /// ------------------------------------------------------------ ///
 

@@ -115,8 +115,8 @@ public class Map {
         obstacles.clear();
         for (int j = 0; j < ROWS; j++) {
             for (float i = 0; i < COLUMNS - 1;) {
-                createNewTree((int) MapConversions.gridToCord(i), MapConversions.gridToCord(j + (float) Math.random() / 2));
-                i += MapConversions.cordToSoftGrid((float) Math.random() * 3 * Map.TILE_SIZE) + 0.5f;
+                createNewTree((int) MapConv.gridToCord(i), MapConv.gridToCord(j + (float) Math.random() / 2));
+                i += MapConv.cordToSoftGrid((float) Math.random() * 3 * Map.TILE_SIZE) + 0.5f;
             }
         }
     }

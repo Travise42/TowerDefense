@@ -2,7 +2,7 @@ package towerdefense.game.enemies;
 
 import towerdefense.game.Game;
 import towerdefense.game.env.Map;
-import towerdefense.game.env.MapConversions;
+import towerdefense.game.env.MapConv;
 import towerdefense.game.towers.Tower;
 
 import java.awt.Color;
@@ -48,7 +48,7 @@ public class Enemy {
         // Set initial position and attributes based on enemy type
         x = Game.instance.map.getEntranceX();
         y = Game.instance.map.getEntranceY()
-                + (float) (Math.random() - 0.5) * MapConversions.gridToCord(Game.instance.map.map.getOpenRows());
+                + (float) (Math.random() - 0.5) * MapConv.gridToCord(Game.instance.map.map.getOpenRows());
 
         float tileSize = Game.instance.map.getTileSize();
         health = type * 100;
@@ -65,8 +65,8 @@ public class Enemy {
 
     public void draw(Graphics g) {
         // Rendering logic to draw the enemy on the screen
-        int viewX = MapConversions.xToViewX(x);
-        int viewY = MapConversions.yToViewY(y);
+        int viewX = MapConv.xToViewX(x);
+        int viewY = MapConv.yToViewY(y);
 
         // Calculate hand locations
         double f = Math.sin(animationFrame / 10);
@@ -133,11 +133,11 @@ public class Enemy {
         }
 
         // Check for collisions with towers and damage them if collided
-        int s = (int) MapConversions.screenCordToCord(size / 2);
+        int s = (int) MapConv.screenCordToCord(size / 2);
         for (int m = -1; m < 2; m += 2) {
             for (int n = -1; n < 2; n += 2) {
-                int column = MapConversions.cordToGrid(x + vx + s*m);
-                int row = MapConversions.cordToGrid(y + vy + s*n);
+                int column = MapConv.cordToGrid(x + vx + s*m);
+                int row = MapConv.cordToGrid(y + vy + s*n);
                 for (Tower tower : Game.instance.map.towers) {
                     if (tower.getColumn() <= column && column < tower.getColumn() + tower.getSize()
                             && tower.getRow() <= row && row < tower.getRow() + tower.getSize()) {
@@ -151,7 +151,7 @@ public class Enemy {
 
     // Helper methods for collision detection
     private boolean checkIfOnWall(float x, float y) {
-        int s = (int) MapConversions.screenCordToCord(size / 2);
+        int s = (int) MapConv.screenCordToCord(size / 2);
         return pointOnWall(x - s, y - s)
                 || pointOnWall(x + s, y - s)
                 || pointOnWall(x - s, y + s)
@@ -159,11 +159,11 @@ public class Enemy {
     }
 
     private boolean pointOnWall(float x, float y) {
-        return !Game.instance.map.map.isOpen(MapConversions.cordToGrid(x), MapConversions.cordToGrid(y));
+        return !Game.instance.map.map.isOpen(MapConv.cordToGrid(x), MapConv.cordToGrid(y));
     }
 
     private boolean checkIfOnTower(float x, float y) {
-        int s = (int) MapConversions.screenCordToCord(size / 2);
+        int s = (int) MapConv.screenCordToCord(size / 2);
         return pointOnTower(x - s, y - s)
                 || pointOnTower(x + s, y - s)
                 || pointOnTower(x - s, y + s)
@@ -171,11 +171,11 @@ public class Enemy {
     }
 
     private boolean pointOnTower(float x, float y) {
-        float c = MapConversions.columnToOpenColumn(MapConversions.cordToGrid(x));
-        float r = MapConversions.rowToOpenRow(MapConversions.cordToGrid(y));
+        float c = MapConv.columnToOpenColumn(MapConv.cordToGrid(x));
+        float r = MapConv.rowToOpenRow(MapConv.cordToGrid(y));
         return !(c < 0 || c >= Game.instance.map.map.getOpenColumns()
                 || r < 0 || r >= Game.instance.map.map.getOpenRows()
-                || Game.instance.map.map.isOpen(MapConversions.cordToGrid(x), MapConversions.cordToGrid(y)));
+                || Game.instance.map.map.isOpen(MapConv.cordToGrid(x), MapConv.cordToGrid(y)));
     }
 
     // Helper method to handle enemy acceleration

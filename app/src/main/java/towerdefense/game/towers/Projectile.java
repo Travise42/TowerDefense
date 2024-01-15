@@ -10,7 +10,7 @@ import towerdefense.func.Calc;
 import towerdefense.game.Game;
 import towerdefense.game.enemies.Enemy;
 import towerdefense.game.env.Map;
-import towerdefense.game.env.MapConversions;
+import towerdefense.game.env.MapConv;
 
 public class Projectile {
 
@@ -37,14 +37,14 @@ public class Projectile {
         this.yVel = yVel * speed;
         this.damage = damage;
         this.pierce = pierce;
-        this.lifetime = MapConversions.gridToCord(range)/speed;
+        this.lifetime = MapConv.gridToCord(range)/speed;
 
         hitEnemies = new ArrayList<>();
     }
 
     public void draw(Graphics g) {
-        g.drawImage(image, MapConversions.xToViewX(this.x) - this.image.getWidth() / 2,
-                MapConversions.yToViewY(this.y) - this.image.getHeight() / 2, Game.instance.panel);
+        g.drawImage(image, MapConv.xToViewX(this.x) - this.image.getWidth() / 2,
+                MapConv.yToViewY(this.y) - this.image.getHeight() / 2, Game.instance.panel);
     }
 
     // Return false if lifetime of projectile is over

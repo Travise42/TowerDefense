@@ -13,7 +13,7 @@ import towerdefense.func.Calc;
 import towerdefense.game.Game;
 import towerdefense.game.enemies.Enemy;
 import towerdefense.game.env.Map;
-import towerdefense.game.env.MapConversions;
+import towerdefense.game.env.MapConv;
 
 public class WizardTower extends Tower {
 
@@ -115,8 +115,8 @@ public class WizardTower extends Tower {
         int size = (int) Game.instance.map.getTileSize() * 4 / 5;
 
         float entityHeight = ENTITY_HEIGHT[path][Math.max(0, tier-1)];
-        int xOffset = (int) MapConversions.cordToScreenCord(MapConversions.gridToCord(getSize() / 2));
-        int yOffset = (int) MapConversions.cordToScreenCord(MapConversions.gridToCord( getSize() - entityHeight));
+        int xOffset = (int) MapConv.cordToScreenCord(MapConv.gridToCord(getSize() / 2));
+        int yOffset = (int) MapConv.cordToScreenCord(MapConv.gridToCord( getSize() - entityHeight));
 
         int x = getScreenX() + xOffset;
         int y = getScreenY() + yOffset;
@@ -200,8 +200,8 @@ public class WizardTower extends Tower {
         int y = getImageY();
 
         float entityHeight = ENTITY_HEIGHT[path][Math.max(0, tier-1)];
-        int xOffset = MapConversions.gridToCord(getSize() / 2);
-        int yOffset = MapConversions.gridToCord(getSize() - entityHeight);
+        int xOffset = MapConv.gridToCord(getSize() / 2);
+        int yOffset = MapConv.gridToCord(getSize() - entityHeight);
 
         Game.instance.ph.add(new Projectile(
                 spellImage,

@@ -9,7 +9,7 @@ import java.awt.image.BufferedImage;
 import towerdefense.func.Calc;
 import towerdefense.game.Game;
 import towerdefense.game.enemies.Enemy;
-import towerdefense.game.env.MapConversions;
+import towerdefense.game.env.MapConv;
 
 public class CannonTower extends Tower {
 
@@ -113,7 +113,7 @@ public class CannonTower extends Tower {
     }
 
     private void drawCannon(Graphics g) {
-        g.drawImage(cannonImage, getScreenX(), MapConversions.yToViewY(getY()), Game.instance.panel);
+        g.drawImage(cannonImage, getScreenX(), MapConv.yToViewY(getY()), Game.instance.panel);
     }
 
     private void drawWick(Graphics g) {
@@ -171,7 +171,7 @@ public class CannonTower extends Tower {
 
         int x = getX();
         int y = getY();
-        int offset = MapConversions.gridToCord(getSize() / 2);
+        int offset = MapConv.gridToCord(getSize() / 2);
 
         Game.instance.ph.add(new Projectile(
             cannonBallImage,

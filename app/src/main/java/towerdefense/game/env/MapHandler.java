@@ -92,20 +92,20 @@ public class MapHandler {
 
     private void drawMap(Graphics g) {
         // Draw tiles
-        int firstColumn = MapConversions.cordToGrid(MapConversions.screenCordToCord(Game.instance.camera.getX() + 1));
-        int lastColumn = MapConversions.cordToGrid(MapConversions.screenCordToCord(Game.instance.camera.getX() + Panel.WIDTH + 1));
+        int firstColumn = MapConv.cordToGrid(MapConv.screenCordToCord(Game.instance.camera.getX() + 1));
+        int lastColumn = MapConv.cordToGrid(MapConv.screenCordToCord(Game.instance.camera.getX() + Panel.WIDTH + 1));
 
-        int firstRow = MapConversions.cordToGrid(MapConversions.screenCordToCord(Game.instance.camera.getY() + 1));
-        int lastRow = MapConversions.cordToGrid(MapConversions.screenCordToCord(Game.instance.camera.getY() + Panel.HEIGHT + 1)) + 1;
+        int firstRow = MapConv.cordToGrid(MapConv.screenCordToCord(Game.instance.camera.getY() + 1));
+        int lastRow = MapConv.cordToGrid(MapConv.screenCordToCord(Game.instance.camera.getY() + Panel.HEIGHT + 1)) + 1;
 
         for (int c = firstColumn; c < lastColumn; c++) {
             for (int r = firstRow; r < lastRow; r++) {
                 if ( map.isOpen(c, r)) {
-                    g.drawImage(tileImages[0], MapConversions.columnToViewX(c), MapConversions.rowToViewY(r),
+                    g.drawImage(tileImages[0], MapConv.columnToViewX(c), MapConv.rowToViewY(r),
                             Game.instance.panel);
                     continue;
                 }
-                g.drawImage(tileImages[1], MapConversions.columnToViewX(c), MapConversions.rowToViewY(r),
+                g.drawImage(tileImages[1], MapConv.columnToViewX(c), MapConv.rowToViewY(r),
                         Game.instance.panel);
             }
         }
@@ -219,7 +219,7 @@ public class MapHandler {
     }
 
     public float getEntranceX() {
-        return MapConversions.screenCordToCord(Game.instance.camera.getX()) - Map.TILE_SIZE;
+        return MapConv.screenCordToCord(Game.instance.camera.getX()) - Map.TILE_SIZE;
     }
 
     public float getEntranceY() {

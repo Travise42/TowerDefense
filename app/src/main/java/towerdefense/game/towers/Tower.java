@@ -11,7 +11,7 @@ import java.awt.Color;
 import towerdefense.game.Game;
 import towerdefense.game.enemies.Enemy;
 import towerdefense.game.env.Map;
-import towerdefense.game.env.MapConversions;
+import towerdefense.game.env.MapConv;
 
 public abstract class Tower {
 
@@ -60,12 +60,12 @@ public abstract class Tower {
     }
 
     public void drawRange(Graphics g) {
-        int size = (int) MapConversions.cordToScreenCord(MapConversions.gridToCord(getUpgradeInfo().getRange(getPath(), getTier())));
-        int offset = (int) MapConversions.cordToScreenCord(MapConversions.gridToCord(getSize() / 2));
+        int size = (int) MapConv.cordToScreenCord(MapConv.gridToCord(getUpgradeInfo().getRange(getPath(), getTier())));
+        int offset = (int) MapConv.cordToScreenCord(MapConv.gridToCord(getSize() / 2));
 
         g.setColor(new Color( 50, 50, 50, 50 ));
-        g.fillOval(MapConversions.xToViewX(getX()) + offset - size,
-                MapConversions.yToViewY(getY()) + offset - size,
+        g.fillOval(MapConv.xToViewX(getX()) + offset - size,
+                MapConv.yToViewY(getY()) + offset - size,
                 2*size,
                 2*size);
     }
@@ -119,17 +119,17 @@ public abstract class Tower {
     }
 
     protected float getColumnsFrom(Enemy enemy, float projectionFactor) {
-        return MapConversions.cordToSoftGrid(enemy.getX() + projectionFactor * enemy.getVelocityX())
+        return MapConv.cordToSoftGrid(enemy.getX() + projectionFactor * enemy.getVelocityX())
                 - (column + getSize() / 2);
     }
 
     protected float getRowsFrom(Enemy enemy, float projectionFactor) {
-        return MapConversions.cordToSoftGrid(enemy.getY() + projectionFactor * enemy.getVelocityY())
+        return MapConv.cordToSoftGrid(enemy.getY() + projectionFactor * enemy.getVelocityY())
                 - (row + getSize() / 2);
     }
 
     protected float getRowsFrom(Enemy enemy, float projectionFactor, float offset) {
-        return MapConversions.cordToSoftGrid(enemy.getY() + projectionFactor * enemy.getVelocityY())
+        return MapConv.cordToSoftGrid(enemy.getY() + projectionFactor * enemy.getVelocityY())
                 - (row + getSize() / 2 + offset);
     }
 
@@ -193,23 +193,23 @@ public abstract class Tower {
     }
 
     public int getX() {
-        return MapConversions.gridToCord(getColumn());
+        return MapConv.gridToCord(getColumn());
     }
 
     public int getY() {
-        return MapConversions.gridToCord(getRow());
+        return MapConv.gridToCord(getRow());
     }
 
     public int getImageY() {
-        return MapConversions.gridToCord(getRow() + getSize() - image.getHeight() / Game.instance.map.getTileSize());
+        return MapConv.gridToCord(getRow() + getSize() - image.getHeight() / Game.instance.map.getTileSize());
     }
 
     public int getScreenX() {
-        return MapConversions.xToViewX(getX());
+        return MapConv.xToViewX(getX());
     }
 
     public int getScreenY() {
-        return MapConversions.yToViewY(getImageY());
+        return MapConv.yToViewY(getImageY());
     }
 
     public abstract void drawTower(Graphics g, boolean selected);

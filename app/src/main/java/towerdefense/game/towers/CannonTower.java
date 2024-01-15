@@ -81,7 +81,7 @@ public class CannonTower extends Tower {
     final private static float[][] ENTITY_HEIGHT = {
             { 1 },
             { 1.2f, 1.2f, 1.2f, 1.4f },
-            { 1, 1, 1, 1.4f }};
+            { 1, 1, 1.3f, 1.5f }};
 
     private BufferedImage cannonImage;
     private BufferedImage highlightedCannonImage;

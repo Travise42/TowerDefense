@@ -1,6 +1,8 @@
 package towerdefense.func;
 
 import java.awt.Graphics2D;
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
@@ -65,6 +67,12 @@ public class ImageHandler {
         g2d.dispose();
 
         return rotatedImage;
+    }
+
+    public static BufferedImage flipImage(BufferedImage originalImage) {
+        AffineTransform flip = AffineTransform.getScaleInstance(-1, 1);
+        flip.translate(-originalImage.getWidth(), 0);
+        return new AffineTransformOp(flip, AffineTransformOp.TYPE_BILINEAR).filter(originalImage, null);
     }
     
 }

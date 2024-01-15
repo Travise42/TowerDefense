@@ -1,5 +1,7 @@
 package towerdefense.game.towers;
 
+import static towerdefense.func.ImageHandler.flipImage;
+import static towerdefense.func.ImageHandler.loadImage;
 import static towerdefense.func.ImageHandler.resizeImage;
 import static towerdefense.func.ImageHandler.rotateImage;
 
@@ -9,13 +11,15 @@ import java.awt.image.BufferedImage;
 import towerdefense.func.Calc;
 import towerdefense.game.Game;
 import towerdefense.game.enemies.Enemy;
+import towerdefense.game.env.Map;
 import towerdefense.game.env.MapConv;
 
 public class CannonTower extends Tower {
 
-    final private static String[] entities = { "cannon", "cannon_ball" };
+    final private static String[] entities = { "cannon", "highlighted_cannon", "cannon_ball" };
     final private static int CANNON = 0;
-    final private static int CANNON_BALL = 1;
+    final private static int HIGHLIGHTED_CANNON = 1;
+    final private static int CANNON_BALL = 2;
 
     final private static int DEFAULT_DX = -5;
     final private static int DEFAULT_DY = -1;
@@ -53,9 +57,9 @@ public class CannonTower extends Tower {
             { 50, 50, 50, 50 },
             { 50, 50, 50, 50 } };
     final private static int[][] PROJECTILE_SPEED = {
-            { 10 },
-            { 10, 10, 10, 10 },
-            { 10, 10, 10, 10 } };
+            { 2 },
+            { 2, 2, 2, 2 },
+            { 2, 2, 2, 2 } };
     final private static int[][] RANGE = {
             { 4 },
             { 4, 4, 4, 4 },
@@ -75,7 +79,7 @@ public class CannonTower extends Tower {
         RANGE);
 
     private BufferedImage cannonImage;
-    private int cannonImageSize;
+    private BufferedImage highlightedCannonImage;
     private BufferedImage cannonBallImage;
 
     private boolean firing = false;
@@ -87,11 +91,6 @@ public class CannonTower extends Tower {
 
     public CannonTower(int column, int row) {
         super(column, row, TOWER_ID);
-
-        cannonImageSize = (int) (Game.instance.map.getTileSize() * 2);
-        cannonBallImage = resizeImage(graphics.getEntityImage(CANNON_BALL),
-                (int) Game.instance.map.getTileSize(),
-                (int) Game.instance.map.getTileSize());
     }
 
     public CannonTower() {
@@ -108,12 +107,12 @@ public class CannonTower extends Tower {
 
     @Override
     public void drawEntity(Graphics g, boolean selected) {
-        drawCannon(g);
+        drawCannon(g, selected);
         drawWick(g);
     }
 
-    private void drawCannon(Graphics g) {
-        g.drawImage(cannonImage, getScreenX(), MapConv.yToViewY(getY()), Game.instance.panel);
+    private void drawCannon(Graphics g, boolean selected) {
+        g.drawImage(selected ? highlightedCannonImage : cannonImage, getScreenX(), MapConv.yToViewY(getY()), Game.instance.panel);
     }
 
     private void drawWick(Graphics g) {
@@ -135,7 +134,7 @@ public class CannonTower extends Tower {
         Enemy firstEnemyInRange = getFirstEnemyInRange(upgradeInfo.getRange(path, tier));
 
         if (firstEnemyInRange != null) {
-            float projectionFactor = 2 * upgradeInfo.getProjectileSpeed(path, tier) * firstEnemyInRange.speed * Calc.pythag(
+            float projectionFactor = Map.TILE_SIZE / upgradeInfo.getProjectileSpeed(path, tier) * Calc.pythag(
                     getColumnsFrom(firstEnemyInRange, 0),
                     getRowsFrom(firstEnemyInRange, 0));
             dx = getColumnsFrom(firstEnemyInRange, projectionFactor);
@@ -149,11 +148,18 @@ public class CannonTower extends Tower {
             distance = DEFAULT_DISTANCE;
         }
 
-        double angleToEnemy = Calc.getAngle(dx, dy);
+        double angleToEnemy = dx == 0 ? Math.PI / 2 : Math.atan(dy / dx);
 
+        int cannonImageSize = (int) (Game.instance.map.getTileSize() * 2);
         cannonImage = rotateImage(
                 resizeImage(
-                        graphics.getEntityImage(CANNON),
+                        dx > 0 ? flipImage(graphics.getEntityImage(CANNON)) : graphics.getEntityImage(CANNON),
+                        cannonImageSize,
+                        cannonImageSize),
+                angleToEnemy);
+        highlightedCannonImage = rotateImage(
+                resizeImage(
+                        dx > 0 ? flipImage(graphics.getEntityImage(HIGHLIGHTED_CANNON)) : graphics.getEntityImage(HIGHLIGHTED_CANNON),
                         cannonImageSize,
                         cannonImageSize),
                 angleToEnemy);
@@ -166,6 +172,7 @@ public class CannonTower extends Tower {
         firing = true;
         fireTick = 0;
         
+        float amplitude = MapConv.cordToScreenCord(2);
         float xRatio = dx / distance;
         float yRatio = dy / distance;
 
@@ -174,9 +181,12 @@ public class CannonTower extends Tower {
         int offset = MapConv.gridToCord(getSize() / 2);
 
         Game.instance.ph.add(new Projectile(
-            cannonBallImage,
-            x + offset + (int) (50 * xRatio),
-            y + offset + (int) (50 * yRatio),
+            cannonBallImage = resizeImage(
+                graphics.getEntityImage(CANNON_BALL),
+                (int) Game.instance.map.getTileSize(),
+                (int) Game.instance.map.getTileSize()),
+            x + offset + (int) (amplitude * xRatio),
+            y + offset + (int) (amplitude * yRatio),
             xRatio,
             yRatio,
             upgradeInfo.getDamage(path, tier), upgradeInfo.getPierce(path, tier), upgradeInfo.getRange(path, tier), upgradeInfo.getProjectileSpeed(path, tier)));

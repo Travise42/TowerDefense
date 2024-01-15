@@ -133,10 +133,11 @@ public class Enemy {
         }
 
         // Check for collisions with towers and damage them if collided
+        int s = (int) MapConversions.screenCordToCord(size / 2);
         for (int m = -1; m < 2; m += 2) {
             for (int n = -1; n < 2; n += 2) {
-                int column = (int) ((x + vx + m * size / 2) / Game.instance.map.getTileSize());
-                int row = (int) ((y + vy + n * size / 2) / Game.instance.map.getTileSize());
+                int column = MapConversions.cordToGrid(x + vx + s*m);
+                int row = MapConversions.cordToGrid(y + vy + s*n);
                 for (Tower tower : Game.instance.map.towers) {
                     if (tower.getColumn() <= column && column < tower.getColumn() + tower.getSize()
                             && tower.getRow() <= row && row < tower.getRow() + tower.getSize()) {
@@ -150,7 +151,7 @@ public class Enemy {
 
     // Helper methods for collision detection
     private boolean checkIfOnWall(float x, float y) {
-        float s = MapConversions.cordToScreenCord(size / 2f);
+        int s = (int) MapConversions.screenCordToCord(size / 2);
         return pointOnWall(x - s, y - s)
                 || pointOnWall(x + s, y - s)
                 || pointOnWall(x - s, y + s)
@@ -162,12 +163,11 @@ public class Enemy {
     }
 
     private boolean checkIfOnTower(float x, float y) {
-        // float s = size / 2;
-        // return pointOnTower(x - s, y - s)
-        //         || pointOnTower(x + s, y - s)
-        //         || pointOnTower(x - s, y + s)
-        //         || pointOnTower(x + s, y + s);
-        return pointOnTower(x, y);
+        int s = (int) MapConversions.screenCordToCord(size / 2);
+        return pointOnTower(x - s, y - s)
+                || pointOnTower(x + s, y - s)
+                || pointOnTower(x - s, y + s)
+                || pointOnTower(x + s, y + s);
     }
 
     private boolean pointOnTower(float x, float y) {

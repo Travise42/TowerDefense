@@ -20,8 +20,7 @@ public abstract class Tower {
     protected int column;
     protected int row;
 
-    protected float health;
-    protected float maxHealth;
+    protected float damageAmount;
 
     protected BufferedImage image;
     protected BufferedImage highlight;
@@ -42,15 +41,13 @@ public abstract class Tower {
         this.tier = 0;
         this.path = 0;
 
-        this.health = 300;
-        this.maxHealth = 300;
+        this.damageAmount = 0;
 
         resize();
     }
 
     public void select() {
         loadHighlight();
-        // System.out.println( health + "/" + maxHealth );
     }
 
     protected void drawTower(Graphics g) {
@@ -63,7 +60,7 @@ public abstract class Tower {
     }
 
     public void drawRange(Graphics g) {
-        int size = (int) MapConversions.cordToScreenCord(MapConversions.gridToCord(getUpgradeInfo().getRange(getUpgradePath(), getTier())));
+        int size = (int) MapConversions.cordToScreenCord(MapConversions.gridToCord(getUpgradeInfo().getRange(getPath(), getTier())));
         int offset = (int) MapConversions.cordToScreenCord(MapConversions.gridToCord(getSize() / 2));
 
         g.setColor(new Color( 50, 50, 50, 50 ));
@@ -80,6 +77,7 @@ public abstract class Tower {
                 image.getHeight() + HIGHLIGHT_BORDER_THICKNESS * 2,
                 BufferedImage.TYPE_INT_ARGB);
 
+        // Create highlight
         Graphics2D g2d = highlight.createGraphics();
         g2d.setStroke(new BasicStroke(HIGHLIGHT_BORDER_THICKNESS));
         g2d.setColor(Color.WHITE);
@@ -145,7 +143,7 @@ public abstract class Tower {
         image = resizeImage(image, size, image.getHeight() * size / image.getWidth());
 
         // Refresh highlight
-        if (this == Game.instance.mi.getSelectedTower())
+        if (Game.instance.mi.getSelectedTower() == this)
             loadHighlight();
     }
 
@@ -158,8 +156,6 @@ public abstract class Tower {
             return;
 
         tier += 1;
-        maxHealth += 150;
-        health += 150; //TODO put into tower upgrade info
 
         Game.instance.player.spend( getUpgradeInfo().getCost(path, path) );
 
@@ -167,8 +163,8 @@ public abstract class Tower {
     }
 
     public void damage(float damage) {
-        health -= damage;
-        if (health <= 0)
+        damageAmount += damage;
+        if (damageAmount >= getUpgradeInfo().getHealth(getPath(), getTier()))
             remove();
     }
 
@@ -184,7 +180,7 @@ public abstract class Tower {
         return tier;
     }
 
-    public int getUpgradePath() {
+    public int getPath() {
         return path;
     }
 

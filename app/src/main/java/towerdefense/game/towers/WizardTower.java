@@ -83,6 +83,8 @@ public class WizardTower extends Tower {
             { 0.7f, 1, 1.6f, 1.6f },
             { 0.6f, 0.7f, 0.8f, 1.2f }};
 
+    final private static float ENTITY_SIZE = 0.8f;
+
     private BufferedImage spellImage;
 
     private float dx;
@@ -112,7 +114,7 @@ public class WizardTower extends Tower {
     }
 
     private void drawEntity(Graphics g) {
-        int size = (int) Game.instance.map.getTileSize() * 4 / 5;
+        int size = (int) ( Game.instance.map.getTileSize() * ENTITY_SIZE );
 
         float entityHeight = ENTITY_HEIGHT[path][Math.max(0, tier-1)];
         int xOffset = (int) MapConv.cordToScreenCord(MapConv.gridToCord(getSize() / 2));
@@ -121,15 +123,20 @@ public class WizardTower extends Tower {
         int x = getScreenX() + xOffset;
         int y = getScreenY() + yOffset;
 
+        float dxd = MapConv.cordToScreenCord(0.5f) * dx / distance;
+        float dyd = MapConv.cordToScreenCord(0.5f) * dy / distance;
+
         // Body
         drawPart(g, x, y, size);
 
-        float dxd = 5 * dx / distance;
-        float dyd = 5 * dy / distance;
-
         // Hands
-        drawPart(g, x + 5*dxd + 3*dyd, y + 2*dyd - 2*dxd, size / 3);
-        drawPart(g, x + 5*dxd - 3*dyd, y + 2*dyd + 2*dxd, size / 3);
+        if( dx > 0 ) {
+            drawPart(g, x + 3 * (int) (3*dxd + 2*dyd), y + 2 * (int) (3*dyd - 2*dxd), size/3);
+            drawPart(g, x + 3 * (int) (3*dxd - 2*dyd), y + 2 * (int) (3*dyd + 2*dxd), size/3);
+            return;
+        }
+        drawPart(g, x + 3 * (int) (3*dxd - 2*dyd), y + 2 * (int) (3*dyd + 2*dxd), size/3);
+        drawPart(g, x + 3 * (int) (3*dxd + 2*dyd), y + 2 * (int) (3*dyd - 2*dxd), size/3);
     }
 
     private void drawPart(Graphics g, float x, float y, int size) {

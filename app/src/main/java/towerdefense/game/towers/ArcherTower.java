@@ -107,6 +107,7 @@ public class ArcherTower extends Tower {
             drawTowerHighlight(g);
     }
 
+    @Override
     public void drawEntity(Graphics g, boolean selected) {
         drawEntity(g);
         drawBowAndArrow(g);
@@ -116,17 +117,20 @@ public class ArcherTower extends Tower {
     }
 
     private void drawEntity(Graphics g) {
-        int size = (int) Game.instance.map.getTileSize() * 4 / 5;
+        int size = (int) ( Game.instance.map.getTileSize() * ENTITY_SIZE );
         int offset = (int) MapConv.cordToScreenCord(MapConv.gridToCord(getSize() / 2));
         int x = getScreenX() + offset;
         int y = getScreenY() + offset;
+
+        float dxd = MapConv.cordToScreenCord(3) * dx / distance;
+        float dyd = MapConv.cordToScreenCord(3) * dy / distance;
 
         // Body
         drawPart(g, x, y, size);
 
         // Hands
-        drawPart(g, x - (int) (15 * dx / distance), y - (int) (15 * dy / distance), size / 3);
-        drawPart(g, x + (int) (30 * dx / distance), y + (int) (30 * dy / distance), size / 3);
+        drawPart(g, x - (int) dxd, y - (int) dyd, size/3);
+        drawPart(g, x + (int) (2*dxd), y + (int) (2*dyd), size/3);
     }
 
     private void drawPart(Graphics g, int x, int y, int size) {
@@ -139,17 +143,20 @@ public class ArcherTower extends Tower {
     }
 
     private void drawEntityHighlight(Graphics g) {
-        int size = (int) Game.instance.map.getTileSize() * 4 / 5;
+        int size = (int) ( Game.instance.map.getTileSize() * ENTITY_SIZE );
         int offset = (int) MapConv.cordToScreenCord(MapConv.gridToCord(getSize() / 2));
         int x = getScreenX() + offset;
         int y = getScreenY() + offset;
+
+        float dxd = MapConv.cordToScreenCord(3) * dx / distance;
+        float dyd = MapConv.cordToScreenCord(3) * dy / distance;
 
         // Body
         drawPartHighlight(g, x, y, size);
 
         // Hands
-        drawPartHighlight(g, x - (int) (15 * dx / distance), y - (int) (15 * dy / distance), size / 3);
-        drawPartHighlight(g, x + (int) (30 * dx / distance), y + (int) (30 * dy / distance), size / 3);
+        drawPartHighlight(g, x - (int) dxd, y - (int) dyd, size/3);
+        drawPartHighlight(g, x + (int) (2*dxd), y + (int) (2*dyd), size/3);
     }
 
     private void drawPartHighlight(Graphics g, int x, int y, int size) {

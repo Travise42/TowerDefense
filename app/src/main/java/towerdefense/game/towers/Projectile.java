@@ -61,8 +61,9 @@ public class Projectile {
             if (hitEnemies.contains(enemy))
                 continue;
 
-            float dx = x - enemy.getX() - enemy.getSize()/2;
-            float dy = y - enemy.getY() - enemy.getSize()/2;
+            int s = (int) MapConv.screenCordToCord(enemy.getSize()/2);
+            float dx = x - (enemy.getX() + s);
+            float dy = y - (enemy.getY() + s);
             float squareDistance = dx * dx + dy * dy;
 
             if (squareDistance < Map.TILE_SIZE*Map.TILE_SIZE) {

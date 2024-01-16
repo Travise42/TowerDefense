@@ -11,20 +11,25 @@ import java.awt.Graphics;
 public class Enemy {
 
     // Constants defining enemy types and their attributes
-    public static final float BULLET = 0.3f;
-    public static final float NINJA = 0.4f;
-    public static final float FAST = 0.6f;
+    public static final int BULLET = 0;
+    public static final int NINJA = 1;
+    public static final int FAST = 2;
+    
+    public static final int NORMAL = 3;
 
-    public static final float NORMAL = 0.7f;
+    public static final int STRONG = 4;
+    public static final int BEAST = 5;
+    public static final int TANK = 6;
 
-    public static final float STRONG = 0.9f;
-    public static final float BEAST = 1.2f;
-    public static final float TANK = 1.5f;
+    private static final int[] HEALTHS = {30, 10, 20, 30, 75, 150, 300};
+    private static final int[] DAMAGES = {10, 2, 3, 5, 10, 25, 75};
+    private static final float[] SPEEDS = {0.08f, 0.04f, 0.02f, 0.01f, 0.005f, 0.002f, 0.001f};
+    private static final float[] SIZES = {0.3f, 0.5f, 0.6f, 0.8f, 1.0f, 1.2f, 1.5f};
 
     public static final float FRICTION = 0.96f;
 
     // Enemy attributes
-    public float type;
+    public int type;
 
     private float x, y;
     private float vx, vy;
@@ -42,7 +47,7 @@ public class Enemy {
     private static final int[] POINTER_X = { -1, 1, -1, 1, 0 };
     private static final int[] POINTER_Y = { -1, -1, 1, 1, 0 };
 
-    public Enemy(float enemy_type) {
+    public Enemy(int enemy_type) {
         type = enemy_type;
 
         // Set initial position and attributes based on enemy type
@@ -50,10 +55,9 @@ public class Enemy {
         y = Game.instance.map.getEntranceY()
                 + (float) (Math.random() - 0.5) * MapConv.gridToCord(Game.instance.map.map.getOpenRows());
 
-        float tileSize = Game.instance.map.getTileSize();
-        health = type * 100;
-        size = (int) (type * tileSize);
-        speed = (4 - enemy_type) / 100;
+        health = HEALTHS[type];
+        speed = SPEEDS[type];
+        size = (int) (SIZES[type] * Game.instance.map.getTileSize());
 
         vx = 0;
         vy = 0;
@@ -69,7 +73,7 @@ public class Enemy {
         int viewY = MapConv.yToViewY(y);
 
         // Calculate hand locations
-        double f = Math.sin(animationFrame / 10);
+        double f = Math.sin(10*animationFrame);
 
         double X1 = -(f - 2) / 3.0;
         double X2 = (f + 2) / 3.0;
@@ -118,7 +122,7 @@ public class Enemy {
             return;
         }
 
-        animationFrame += Math.sqrt(vx * vx + vy * vy);
+        animationFrame += speed;
 
         // Apply friction to decelerate
         vx *= FRICTION;
@@ -141,7 +145,7 @@ public class Enemy {
                 for (Tower tower : Game.instance.map.towers) {
                     if (tower.getColumn() <= column && column < tower.getColumn() + tower.getSize()
                             && tower.getRow() <= row && row < tower.getRow() + tower.getSize()) {
-                        tower.damage(type);
+                        tower.damage(DAMAGES[type]);
                         return;
                     }
                 }

@@ -190,7 +190,7 @@ public class MapHandler {
 
     /// Enemies /// ------------------------------------------------------------ ///
 
-    public void newEnemy(float enemy_type) {
+    public void newEnemy(int enemy_type) {
         enemies.add(new Enemy(enemy_type));
     }
 

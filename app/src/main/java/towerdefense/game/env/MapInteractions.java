@@ -200,12 +200,10 @@ public class MapInteractions {
         if (MAX_TIER)
             return;
 
-        int cost = selectedTower.getUpgradeInfo().getCost(path, selectedTower.getTier());
-        boolean NOT_ENOUGH_GOLD = Game.instance.player.getGold() < cost;
-        if (NOT_ENOUGH_GOLD)
+        int cost = selectedTower.getUpgradeInfo().getCost(path, selectedTower.getTier() + 1);
+        boolean ENOUGH_GOLD = Game.instance.player.canAfford(cost);
+        if (!ENOUGH_GOLD)
             return;
-
-        Game.instance.player.spend(cost);
 
         selectedTower.upgrade(path);
     }

@@ -41,8 +41,8 @@ public class UI {
         // Draw health and gold amount
         g.setFont(font);
         g.setColor(Color.WHITE);
-        g.drawString(String.valueOf(Game.instance.player.health), 20 + DATA_SIZE, 10 + DATA_SIZE);
-        g.drawString(String.valueOf(Game.instance.player.gold), 140 + DATA_SIZE, 10 + DATA_SIZE);
+        g.drawString(String.valueOf(Game.instance.player.getHealth()), 20 + DATA_SIZE, 10 + DATA_SIZE);
+        g.drawString(String.valueOf(Game.instance.player.getGold()), 140 + DATA_SIZE, 10 + DATA_SIZE);
 
         // Draw health and gold icons
         g.drawImage(health, 10, 15, Game.instance.panel);

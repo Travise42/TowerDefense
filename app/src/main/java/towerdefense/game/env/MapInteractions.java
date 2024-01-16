@@ -91,12 +91,12 @@ public class MapInteractions {
             return;
 
         int cost = tower.getUpgradeInfo().getCost(0, 0);
-        boolean NOT_ENOUGH_GOLD = Game.instance.player.gold < cost;
-        if ( NOT_ENOUGH_GOLD )
+        boolean NOT_ENOUGH_GOLD = Game.instance.player.getGold() < cost;
+        if (NOT_ENOUGH_GOLD)
             return;
-        Game.instance.player.spend( cost );
+        Game.instance.player.spend(cost);
 
-        Game.instance.map.addTower(tower.createNew( towerColumn, towerRow));
+        Game.instance.map.addTower(tower.createNew(towerColumn, towerRow));
     }
 
     private void selectHoveredTower(int mouseX, int mouseY) {
@@ -201,7 +201,7 @@ public class MapInteractions {
             return;
 
         int cost = selectedTower.getUpgradeInfo().getCost(path, selectedTower.getTier());
-        boolean NOT_ENOUGH_GOLD = Game.instance.player.gold < cost;
+        boolean NOT_ENOUGH_GOLD = Game.instance.player.getGold() < cost;
         if (NOT_ENOUGH_GOLD)
             return;
 
@@ -214,7 +214,7 @@ public class MapInteractions {
         boolean NO_TOWER_SELECTED = selectedTower == null;
         if (NO_TOWER_SELECTED)
             return;
-            
+
         selectedTower.remove();
     }
 

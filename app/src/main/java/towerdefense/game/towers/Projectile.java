@@ -74,6 +74,7 @@ public class Projectile {
                     return (--pierce != 0);
                 }
                 // Enemy dies
+                Game.instance.player.earn(Enemy.REWARDS[enemy.type]);
                 i--;
                 if (--pierce == 0)
                     return false;

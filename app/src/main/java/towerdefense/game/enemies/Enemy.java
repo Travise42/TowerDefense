@@ -21,10 +21,11 @@ public class Enemy {
     public static final int BEAST = 5;
     public static final int TANK = 6;
 
-    private static final int[] HEALTHS = {30, 10, 20, 30, 75, 150, 300};
-    private static final int[] DAMAGES = {10, 2, 3, 5, 10, 25, 75};
-    private static final float[] SPEEDS = {0.08f, 0.04f, 0.02f, 0.01f, 0.005f, 0.002f, 0.001f};
-    private static final float[] SIZES = {0.3f, 0.5f, 0.6f, 0.8f, 1.0f, 1.2f, 1.5f};
+    public static final int[] HEALTHS = {20, 10, 15, 20, 30, 50, 100};
+    public static final int[] DAMAGES = {10, 2, 3, 5, 10, 25, 75};
+    public static final int[] REWARDS = {200, 100, 50, 30, 50, 200, 500};
+    public static final float[] SPEEDS = {0.08f, 0.04f, 0.02f, 0.01f, 0.005f, 0.002f, 0.001f};
+    public static final float[] SIZES = {0.3f, 0.5f, 0.6f, 0.8f, 1.0f, 1.2f, 1.5f};
 
     public static final float FRICTION = 0.96f;
 

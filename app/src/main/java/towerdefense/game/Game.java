@@ -65,7 +65,7 @@ public class Game {
 
         mi.drawHighlightedRegion(g, mx, my);
         ph.draw(g);
-        if (gameTick > 10) ui.draw(g, gameTick);
+        ui.draw(g, gameTick);
     }
 
     public void click() {

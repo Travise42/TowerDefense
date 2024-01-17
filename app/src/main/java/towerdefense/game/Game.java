@@ -28,6 +28,7 @@ public class Game {
 
     public int gameTick = 0;
     public int mx = 0, my = 0;
+    public boolean mousePressed = false;
 
     public Game(Panel jpanel) {
         instance = this;
@@ -68,8 +69,14 @@ public class Game {
         ui.draw(g, gameTick);
     }
 
-    public void click() {
+    public void mouseUp(MouseEvent e) {
         mi.interactWithMap(mx, my);
+        if (e.getButton() == MouseEvent.BUTTON1) mousePressed = false;
+    }
+
+    public void mouseDown(MouseEvent e) {
+        mi.interactWithMap(mx, my);
+        if (e.getButton() == MouseEvent.BUTTON1) mousePressed = true;
     }
 
     public void moveMouse(MouseEvent e) {

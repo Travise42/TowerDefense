@@ -6,10 +6,14 @@ import static towerdefense.func.ImageHandler.resizeImage;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontFormatException;
+import java.awt.RenderingHints;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+
+import java.util.Arrays;
 
 import towerdefense.game.Game;
 import towerdefense.game.Panel;
@@ -37,6 +41,24 @@ public class UI {
 
     private int mode;
 
+    final private static int PAUSE_BUTTON = 0;
+    final private static int CANCEL_BUTTON = 1;
+    final private static int NEXT_ROUND_BUTTON = 2;
+
+    private Button[] optionButtons;
+
+    final private static int WIZARD_BUTTON = 0;
+    final private static int CANNON_BUTTON = 1;
+    final private static int ARCHER_BUTTON = 2;
+    final private static int WALL_BUTTON = 3;
+
+    private Button[] towerButtons;
+
+    final private static int LEFT_PATH_BUTTON = 0;
+    final private static int RIGHT_PATH_BUTTON = 1;
+    
+    private Button[] upgradeButtons;
+
     public UI() {
         try {
             font = Font.createFont(Font.TRUETYPE_FONT,
@@ -50,6 +72,32 @@ public class UI {
         gold = resizeImage(loadImage(GOLD_IMAGE_LOCATION), DATA_SIZE, DATA_SIZE);
 
         mode = TOWER_SELECT;
+
+        int right = Panel.WIDTH;
+        int bottom = Panel.HEIGHT;
+        optionButtons = new Button[] {
+                // Pause button
+                new Button(right - 90, 20, 60, 60, "gui/ui/pause_button.png", "", ""),
+                // Trash button
+                new Button(right - 90, 20, 60, 60, "gui/ui/trash_button.png", "", ""),
+                // Next round button
+                new Button(right - 100, bottom - 100, 80, 80, "gui/ui/next_round_button.png", "", "") };
+
+        towerButtons = new Button[] {
+                // Wizard tower button
+                new Button(20, bottom - 140, 120, 120, "gui/towers/wizard_tower/icon.png", "Wizard\nTower", "500 G"),
+                // Cannon button
+                new Button(160, bottom - 140, 120, 120, "gui/towers/cannon_tower/icon.png", "Cannon\nTower", "500 G"),
+                // Archer tower button
+                new Button(300, bottom - 140, 120, 120, "gui/towers/archer_tower/icon.png", "Archer\nTower", "500 G"),
+                // Wall button
+                new Button(440, bottom - 140, 120, 120, "gui/towers/wall_tower/icon.png", "Walls", "500 G") };
+
+        upgradeButtons = new Button[] {
+                // Path 1
+                new Button(160, bottom - 140, 120, 120, null, "", "500 G"),
+                // Path 2
+                new Button(300, bottom - 140, 120, 120, null, "", "500 G") };
     }
 
     public void draw(Graphics g, int i) {
@@ -63,6 +111,7 @@ public class UI {
     private void drawData(Graphics g) {
         // Text
         g.setFont(font);
+        ((Graphics2D) g).setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
         g.setColor(Color.WHITE);
 
         final int OFFSET = 10 + DATA_SIZE;
@@ -90,29 +139,31 @@ public class UI {
     }
 
     private void drawTowerSelect(Graphics g) {
-        drawPauseButton(g);
+        optionButtons[PAUSE_BUTTON].draw(g);
+        optionButtons[NEXT_ROUND_BUTTON].draw(g);
+
+        for (Button button : towerButtons) {
+            button.draw(g);
+        }
     }
 
     private void drawTowerUpgrade(Graphics g) {
-        drawPauseButton(g);
+        optionButtons[PAUSE_BUTTON].draw(g);
+        optionButtons[NEXT_ROUND_BUTTON].draw(g);
+
+        for (Button button : upgradeButtons) {
+            button.draw(g);
+        }
     }
 
     private void drawTowerPlacement(Graphics g) {
-        drawCancelButton(g);
+        optionButtons[CANCEL_BUTTON].draw(g);
     }
 
     // Menu
 
-    private void drawPauseButton(Graphics g) {
-
-    }
-
-    private void drawCancelButton(Graphics g) {
-
-    }
-
     private void drawPauseMenu(Graphics g) {
-
+        
     }
 
     private void drawSettingsMenu(Graphics g) {

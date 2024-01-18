@@ -36,7 +36,7 @@ public class WizardTower extends Tower {
             { "Bigger Cast", "Intense Magic", "Powerful Magic", "Keen Sorcerer" },
             { "Faster Cast", "Casting Proficiency", "Seeking Projectile", "Casting Mastery" } };
     final private static int[][] COST = {
-            { 500 },
+            { 800 },
             { 400, 1000, 1200, 3200 },
             { 200, 1500, 2000, 5000 } };
     final private static int[][] HEALTH = {
@@ -70,8 +70,8 @@ public class WizardTower extends Tower {
             PATHS,
             TIERS,
             NAME,
-            HEALTH,
             COST,
+            HEALTH,
             DAMAGE,
             PIERCE,
             RELOAD_TIME,

@@ -3,7 +3,7 @@ package towerdefense.game.player;
 public class Player {
 
     final private static int STARTING_GOLD = 600;
-    final private static int STARTING_HEALTH = 600;
+    final private static int STARTING_HEALTH = 300;
 
     private int gold = 0;
     private int health = 0;

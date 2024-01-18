@@ -37,7 +37,7 @@ public class ArcherTower extends Tower {
             { "Sharper Arrows", "Faster Shooting", "Even Faster Shooting", "Elite Firing" },
             { "Greater Range", "Double Shot", "triple Shot", "Special Arrows" } };
     final private static int[][] COST = {
-            { 500 },
+            { 600 },
             { 400, 1000, 1200, 3200 },
             { 200, 1500, 2000, 5000 } };
     final private static int[][] HEALTH = {

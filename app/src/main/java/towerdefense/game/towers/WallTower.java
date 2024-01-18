@@ -14,7 +14,7 @@ public class WallTower extends Tower {
             { "Archer Tower" },
             { "Sharper Arrows", "Faster Shooting" }};
     final private static int[][] COST = {
-            { 500 },
+            { 100 },
             { 400, 1000 }};
     final private static int[][] HEALTH = {
             { 500 },

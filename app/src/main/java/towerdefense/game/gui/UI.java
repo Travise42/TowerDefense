@@ -27,9 +27,6 @@ public class UI {
     private BufferedImage health;
     private BufferedImage gold;
 
-    final private static int HEALTH_DISPLAY_X = 10;
-    final private static int GOLD_DISPLAY_X = 140;
-
     private Font font;
 
     final public static int TOWER_SELECT = 0;
@@ -73,21 +70,21 @@ public class UI {
         int bottom = Panel.HEIGHT;
         buttons = new Button[] {
                 // Pause button
-                new Button(right - 90, 20, 60, 60, Button.GREEN, "gui/ui/pause_button.png", "", "", () -> {
+                new Button(right - 100, 20, 80, 80, Button.GREEN, "gui/ui/pause_button.png", "", "", () -> {
 
                 }),
                 // Trash button
-                new Button(right - 90, 20, 60, 60, Button.RED, "gui/ui/trash_button.png", "", "", () -> {
+                new Button(right - 100, 20, 80, 80, Button.RED, "gui/ui/trash_button.png", "", "", () -> {
                     Game.instance.mi.selectTowerPlacement(MapInteractions.NO_TOWER);
                     setMode(TOWER_SELECT);
                 }),
                 // Close button
-                new Button(right - 90, 20, 60, 60, Button.RED, "gui/ui/close_button.png", "", "", () -> {
+                new Button(right - 100, 20, 80, 80, Button.RED, "gui/ui/close_button.png", "", "", () -> {
                     Game.instance.mi.deselectTower();
                     setMode(TOWER_SELECT);
                 }),
                 // Next round button
-                new Button(right - 100, bottom - 100, 80, 80, Button.GREEN, "gui/ui/next_round_button.png", "", "",
+                new Button(right - 100, 120, 80, 80, Button.GREEN, "gui/ui/next_round_button.png", "", "",
                         () -> {
 
                         }),
@@ -96,6 +93,11 @@ public class UI {
                 new Button(20, bottom - 140, 120, 120, Button.RED, "gui/towers/wizard_tower/icon.png",
                         "Wizard\nTower",
                         getCost(MapInteractions.WIZARD_TOWER, 0, 0) + " G", () -> {
+                            if (!Game.instance.player.canAfford(getCost(MapInteractions.WIZARD_TOWER, 0, 0))) {
+                                Game.instance.mi.selectTowerPlacement(MapInteractions.NO_TOWER);
+                                setMode(TOWER_SELECT);
+                                return;
+                            }
                             Game.instance.mi.selectTowerPlacement(MapInteractions.WIZARD_TOWER);
                             setMode(TOWER_PLACEMENT);
                             selectedTowerButton = WIZARD_BUTTON;
@@ -104,6 +106,11 @@ public class UI {
                 new Button(160, bottom - 140, 120, 120, Button.RED, "gui/towers/cannon_tower/icon.png",
                         "Cannon\nTower",
                         getCost(MapInteractions.CANNON_TOWER, 0, 0) + " G", () -> {
+                            if (!Game.instance.player.canAfford(getCost(MapInteractions.CANNON_TOWER, 0, 0))) {
+                                Game.instance.mi.selectTowerPlacement(MapInteractions.NO_TOWER);
+                                setMode(TOWER_SELECT);
+                                return;
+                            }
                             Game.instance.mi.selectTowerPlacement(MapInteractions.CANNON_TOWER);
                             setMode(TOWER_PLACEMENT);
                             selectedTowerButton = CANNON_BUTTON;
@@ -112,6 +119,11 @@ public class UI {
                 new Button(300, bottom - 140, 120, 120, Button.RED, "gui/towers/archer_tower/icon.png",
                         "Archer\nTower",
                         getCost(MapInteractions.ARCHER_TOWER, 0, 0) + " G", () -> {
+                            if (!Game.instance.player.canAfford(getCost(MapInteractions.ARCHER_TOWER, 0, 0))) {
+                                Game.instance.mi.selectTowerPlacement(MapInteractions.NO_TOWER);
+                                setMode(TOWER_SELECT);
+                                return;
+                            }
                             Game.instance.mi.selectTowerPlacement(MapInteractions.ARCHER_TOWER);
                             setMode(TOWER_PLACEMENT);
                             selectedTowerButton = ARCHER_BUTTON;
@@ -119,6 +131,11 @@ public class UI {
                 // Wall button
                 new Button(440, bottom - 140, 120, 120, Button.RED, "gui/towers/wall_tower/icon.png", "Walls",
                         getCost(MapInteractions.WALL_TOWER, 0, 0) + " G", () -> {
+                            if (!Game.instance.player.canAfford(getCost(MapInteractions.WALL_TOWER, 0, 0))) {
+                                Game.instance.mi.selectTowerPlacement(MapInteractions.NO_TOWER);
+                                setMode(TOWER_SELECT);
+                                return;
+                            }
                             Game.instance.mi.selectTowerPlacement(MapInteractions.WALL_TOWER);
                             setMode(TOWER_PLACEMENT);
                             selectedTowerButton = WALL_BUTTON;
@@ -157,12 +174,12 @@ public class UI {
         g.setColor(Color.WHITE);
 
         final int OFFSET = 10 + DATA_SIZE;
-        g.drawString(String.valueOf(Game.instance.player.getHealth()), HEALTH_DISPLAY_X + OFFSET, OFFSET);
-        g.drawString(String.valueOf(Game.instance.player.getGold()), GOLD_DISPLAY_X + OFFSET, OFFSET);
+        g.drawString(String.valueOf(Game.instance.player.getHealth()), 10 + OFFSET, OFFSET);
+        g.drawString(String.valueOf(Game.instance.player.getGold()), 10 + OFFSET, 2*OFFSET);
 
         // Icons
-        g.drawImage(health, HEALTH_DISPLAY_X, 15, Game.instance.panel);
-        g.drawImage(gold, GOLD_DISPLAY_X, 15, Game.instance.panel);
+        g.drawImage(health, 10, 15, Game.instance.panel);
+        g.drawImage(gold, 10, 15 + OFFSET, Game.instance.panel);
     }
 
     // Panel

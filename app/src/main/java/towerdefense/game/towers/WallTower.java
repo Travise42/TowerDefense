@@ -14,11 +14,11 @@ public class WallTower extends Tower {
             { "Archer Tower" },
             { "Sharper Arrows", "Faster Shooting" }};
     final private static int[][] COST = {
-            { 100 },
-            { 400, 1000 }};
+            { 20 },
+            { 100, 300 }};
     final private static int[][] HEALTH = {
-            { 500 },
-            { 400, 1000 }};
+            { 400 },
+            { 600, 1000 }};
 
     final private static int[][] DAMAGE = {
             { 10 },
@@ -33,8 +33,8 @@ public class WallTower extends Tower {
             { 10 },
             { 10, 10}};
     final private static int[][] RANGE = {
-            { 4 },
-            { 4, 4}};
+            { 1 },
+            { 1, 1}};
 
     final private static TowerUpgrade upgradeInfo = new TowerUpgrade(
         TOWER_ID,

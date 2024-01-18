@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import towerdefense.game.Game;
+import towerdefense.game.gui.UI;
 import towerdefense.game.towers.ArcherTower;
 import towerdefense.game.towers.CannonTower;
 import towerdefense.game.towers.Tower;
@@ -73,6 +74,7 @@ public class MapInteractions {
 
         placeTower(mouseX, mouseY, TOWER.get(selectedToPlace));
         selectedToPlace = NO_TOWER;
+        Game.instance.ui.setMode(UI.TOWER_SELECT);
     }
 
     private void placeTower(int mouseX, int mouseY, Tower tower) {
@@ -123,6 +125,7 @@ public class MapInteractions {
                 break;
 
             selectTower(tower);
+            Game.instance.ui.setMode(UI.TOWER_UPGRADE);
             return;
         }
         deselectTower();
@@ -162,6 +165,7 @@ public class MapInteractions {
                 if (selectedTower == tower)
                     break;
                 selectTower(tower);
+                Game.instance.ui.setMode(UI.TOWER_UPGRADE);
                 return;
             }
             pointer++;

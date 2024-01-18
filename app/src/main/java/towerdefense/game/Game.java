@@ -9,6 +9,7 @@ import towerdefense.game.enemies.EnemyMovement;
 import towerdefense.game.env.Camera;
 import towerdefense.game.env.MapHandler;
 import towerdefense.game.env.MapInteractions;
+import towerdefense.game.gui.Button;
 import towerdefense.game.gui.UI;
 import towerdefense.game.player.Player;
 import towerdefense.game.towers.ProjectileHandler;
@@ -70,13 +71,15 @@ public class Game {
     }
 
     public void mouseUp(MouseEvent e) {
-        mi.interactWithMap(mx, my);
-        if (e.getButton() == MouseEvent.BUTTON1) mousePressed = false;
+        if (e.getButton() == MouseEvent.BUTTON1)
+            mousePressed = false;
+        if (!Button.clickHovered())
+            mi.interactWithMap(mx, my);
     }
 
     public void mouseDown(MouseEvent e) {
-        mi.interactWithMap(mx, my);
-        if (e.getButton() == MouseEvent.BUTTON1) mousePressed = true;
+        if (e.getButton() == MouseEvent.BUTTON1)
+            mousePressed = true;
     }
 
     public void moveMouse(MouseEvent e) {
@@ -91,12 +94,15 @@ public class Game {
     public void keyCalled(int key) {
         switch (key) {
             // Placing Towers
-            case KeyEvent.VK_ESCAPE -> mi.selectTowerPlacement(-1);
-            case KeyEvent.VK_1 -> mi.selectTowerPlacement(0);
-            case KeyEvent.VK_2 -> mi.selectTowerPlacement(1);
-            case KeyEvent.VK_3 -> mi.selectTowerPlacement(2);
-            case KeyEvent.VK_4 -> mi.selectTowerPlacement(3);
-            case KeyEvent.VK_5 -> mi.selectTowerPlacement(4);
+            case KeyEvent.VK_ESCAPE -> {
+                mi.selectTowerPlacement(MapInteractions.NO_TOWER);
+                Game.instance.ui.setMode(UI.TOWER_SELECT);
+            }
+            case KeyEvent.VK_1 -> mi.selectTowerPlacement(MapInteractions.WIZARD_TOWER);
+            case KeyEvent.VK_2 -> mi.selectTowerPlacement(MapInteractions.CANNON_TOWER);
+            case KeyEvent.VK_3 -> mi.selectTowerPlacement(MapInteractions.ARCHER_TOWER);
+            case KeyEvent.VK_4 -> mi.selectTowerPlacement(MapInteractions.WALL_TOWER);
+            //case KeyEvent.VK_5 -> mi.selectTowerPlacement(MapInteractions.TROOP_TOWER);
             // Map interactions
             case KeyEvent.VK_SPACE -> map.nextStage();
             case KeyEvent.VK_COMMA -> mi.upgradeSelectedTower(1);

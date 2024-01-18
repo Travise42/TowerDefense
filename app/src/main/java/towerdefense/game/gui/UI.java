@@ -16,6 +16,8 @@ import java.io.IOException;
 import towerdefense.game.Game;
 import towerdefense.game.Panel;
 import towerdefense.game.env.MapInteractions;
+import towerdefense.game.towers.Tower;
+import towerdefense.game.towers.TowerUpgrade;
 
 public class UI {
 
@@ -39,18 +41,18 @@ public class UI {
 
     private Button[] buttons;
 
-    final private static int PAUSE_BUTTON = 0;
-    final private static int TRASH_BUTTON = 1;
-    final private static int CLOSE_BUTTON = 2;
-    final private static int NEXT_ROUND_BUTTON = 3;
+    final public static int PAUSE_BUTTON = 0;
+    final public static int TRASH_BUTTON = 1;
+    final public static int CLOSE_BUTTON = 2;
+    final public static int NEXT_ROUND_BUTTON = 3;
 
-    final private static int WIZARD_BUTTON = 4;
-    final private static int CANNON_BUTTON = 5;
-    final private static int ARCHER_BUTTON = 6;
-    final private static int WALL_BUTTON = 7;
+    final public static int WIZARD_BUTTON = 4;
+    final public static int CANNON_BUTTON = 5;
+    final public static int ARCHER_BUTTON = 6;
+    final public static int WALL_BUTTON = 7;
 
-    final private static int LEFT_PATH_BUTTON = 8;
-    final private static int RIGHT_PATH_BUTTON = 9;
+    final public static int LEFT_PATH_BUTTON = 8;
+    final public static int RIGHT_PATH_BUTTON = 9;
 
     private int selectedTowerButton;
 
@@ -143,11 +145,13 @@ public class UI {
 
                 // Path 1
                 new Button(160, bottom - 140, 120, 120, Button.GREEN, null, "", "500 G", () -> {
-
+                    Game.instance.mi.upgradeSelectedTower(1);
+                    updateUpgradeButtons();
                 }),
                 // Path 2
                 new Button(300, bottom - 140, 120, 120, Button.GREEN, null, "", "500 G", () -> {
-
+                    Game.instance.mi.upgradeSelectedTower(2);
+                    updateUpgradeButtons();
                 }) };
 
         setMode(TOWER_SELECT);
@@ -175,7 +179,7 @@ public class UI {
 
         final int OFFSET = 10 + DATA_SIZE;
         g.drawString(String.valueOf(Game.instance.player.getHealth()), 10 + OFFSET, OFFSET);
-        g.drawString(String.valueOf(Game.instance.player.getGold()), 10 + OFFSET, 2*OFFSET);
+        g.drawString(String.valueOf(Game.instance.player.getGold()), 10 + OFFSET, 2 * OFFSET);
 
         // Icons
         g.drawImage(health, 10, 15, Game.instance.panel);
@@ -203,10 +207,10 @@ public class UI {
     }
 
     private void drawTowerSelect(Graphics g) {
-        handleTowerPricing( WIZARD_BUTTON, MapInteractions.WIZARD_TOWER, 0, 0 );
-        handleTowerPricing( CANNON_BUTTON, MapInteractions.CANNON_TOWER, 0, 0 );
-        handleTowerPricing( ARCHER_BUTTON, MapInteractions.ARCHER_TOWER, 0, 0 );
-        handleTowerPricing( WALL_BUTTON, MapInteractions.WALL_TOWER, 0, 0 );
+        handleTowerPricing(WIZARD_BUTTON, MapInteractions.WIZARD_TOWER, 0, 0);
+        handleTowerPricing(CANNON_BUTTON, MapInteractions.CANNON_TOWER, 0, 0);
+        handleTowerPricing(ARCHER_BUTTON, MapInteractions.ARCHER_TOWER, 0, 0);
+        handleTowerPricing(WALL_BUTTON, MapInteractions.WALL_TOWER, 0, 0);
     }
 
     private void drawTowerUpgrade(Graphics g) {
@@ -217,7 +221,7 @@ public class UI {
 
     }
 
-    private void handleTowerPricing( int button, int tower, int path, int tier ) {
+    private void handleTowerPricing(int button, int tower, int path, int tier) {
         if (Game.instance.player.canAfford(getCost(tower, path, tier)))
             buttons[button].setColor(Button.GREEN);
         else
@@ -264,6 +268,7 @@ public class UI {
                 buttons[NEXT_ROUND_BUTTON].show();
             }
             case TOWER_UPGRADE -> {
+                updateUpgradeButtons();
                 showUpgradeButtons();
                 buttons[CLOSE_BUTTON].show();
                 buttons[NEXT_ROUND_BUTTON].show();
@@ -277,6 +282,10 @@ public class UI {
         }
     }
 
+    public int getMode() {
+        return mode;
+    }
+
     private void showTowerButtons() {
         buttons[WIZARD_BUTTON].show();
         buttons[CANNON_BUTTON].show();
@@ -284,9 +293,50 @@ public class UI {
         buttons[WALL_BUTTON].show();
     }
 
+    private void updateUpgradeButtons() {
+        Tower tower = Game.instance.mi.getSelectedTower();
+
+        int lockedPath = -1;
+        if (tower.getPath() == 1) {
+            lockedPath = RIGHT_PATH_BUTTON;
+        } else if (tower.getPath() == 2) {
+            lockedPath = LEFT_PATH_BUTTON;
+        }
+
+        TowerUpgrade upgradeInfo = tower.getUpgradeInfo();
+        // upgradeInfo.getImage(tower.getPath(), tower.getTier() + 1)
+        if (lockedPath != LEFT_PATH_BUTTON) {
+            int cost = upgradeInfo.getCost(1, tower.getTier() + 1);
+            buttons[LEFT_PATH_BUTTON].setFeatures(null, upgradeInfo.getName(1, tower.getTier() + 1),
+                    "" + cost);
+            if (Game.instance.player.canAfford(cost))
+                buttons[LEFT_PATH_BUTTON].setColor(Button.GREEN);
+            else
+                buttons[LEFT_PATH_BUTTON].setColor(Button.RED);
+        }
+        if (lockedPath != RIGHT_PATH_BUTTON && upgradeInfo.getPaths() > 1) {
+            int cost = upgradeInfo.getCost(2, tower.getTier() + 1);
+            buttons[RIGHT_PATH_BUTTON].setFeatures(null, upgradeInfo.getName(2, tower.getTier() + 1),
+                    "" + cost);
+            if (Game.instance.player.canAfford(cost))
+                buttons[RIGHT_PATH_BUTTON].setColor(Button.GREEN);
+            else
+                buttons[RIGHT_PATH_BUTTON].setColor(Button.RED);
+        }
+
+        if (lockedPath != -1) {
+            buttons[lockedPath].setColor(Button.GREY);
+            buttons[lockedPath].setFeatures(null, "Locked\nPath", "");
+        }
+    }
+
     private void showUpgradeButtons() {
         buttons[LEFT_PATH_BUTTON].show();
-        buttons[RIGHT_PATH_BUTTON].show();
+        if ( Game.instance.mi.getSelectedTower().getUpgradeInfo().getPaths() > 1 ) buttons[RIGHT_PATH_BUTTON].show();
+    }
+
+    public Button getButton( int id ) {
+        return buttons[id];
     }
 
 }

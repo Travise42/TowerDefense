@@ -129,6 +129,7 @@ public class MapInteractions {
             return;
         }
         deselectTower();
+        Game.instance.ui.setMode(UI.TOWER_SELECT);
     }
 
     @Deprecated

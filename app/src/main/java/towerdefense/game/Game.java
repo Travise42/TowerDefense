@@ -95,18 +95,19 @@ public class Game {
         switch (key) {
             // Placing Towers
             case KeyEvent.VK_ESCAPE -> {
-                mi.selectTowerPlacement(MapInteractions.NO_TOWER);
-                Game.instance.ui.setMode(UI.TOWER_SELECT);
+                if (ui.getMode() == UI.TOWER_SELECT) ui.getButton(UI.PAUSE_BUTTON).click();
+                if (ui.getMode() == UI.TOWER_PLACEMENT) ui.getButton(UI.TRASH_BUTTON).click();
+                if (ui.getMode() == UI.TOWER_UPGRADE) ui.getButton(UI.CLOSE_BUTTON).click();
             }
-            case KeyEvent.VK_1 -> mi.selectTowerPlacement(MapInteractions.WIZARD_TOWER);
-            case KeyEvent.VK_2 -> mi.selectTowerPlacement(MapInteractions.CANNON_TOWER);
-            case KeyEvent.VK_3 -> mi.selectTowerPlacement(MapInteractions.ARCHER_TOWER);
-            case KeyEvent.VK_4 -> mi.selectTowerPlacement(MapInteractions.WALL_TOWER);
+            case KeyEvent.VK_1 -> ui.getButton(UI.WIZARD_BUTTON).click();
+            case KeyEvent.VK_2 -> ui.getButton(UI.CANNON_BUTTON).click();
+            case KeyEvent.VK_3 -> ui.getButton(UI.ARCHER_BUTTON).click();
+            case KeyEvent.VK_4 -> ui.getButton(UI.WALL_BUTTON).click();
             //case KeyEvent.VK_5 -> mi.selectTowerPlacement(MapInteractions.TROOP_TOWER);
             // Map interactions
             case KeyEvent.VK_SPACE -> map.nextStage();
-            case KeyEvent.VK_COMMA -> mi.upgradeSelectedTower(1);
-            case KeyEvent.VK_PERIOD -> mi.upgradeSelectedTower(2);
+            case KeyEvent.VK_COMMA -> ui.getButton(UI.LEFT_PATH_BUTTON).click();
+            case KeyEvent.VK_PERIOD -> ui.getButton(UI.RIGHT_PATH_BUTTON).click();
             case KeyEvent.VK_BACK_SPACE -> mi.deleteSelectedTower();
             // Spawning enenmies
             case KeyEvent.VK_Q -> map.newEnemy(Enemy.BULLET);

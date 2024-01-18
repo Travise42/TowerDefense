@@ -32,6 +32,7 @@ public class Button {
 
     final public static int GREEN = 0;
     final public static int RED = 1;
+    final public static int GREY = 2;
 
     final private static int BORDER = 0;
     final private static int STANDARD = 1;
@@ -40,7 +41,8 @@ public class Button {
 
     final private static Color[][] colors = {
             { new Color(70, 200, 110), new Color(100, 230, 120), new Color(200, 250, 215), new Color(70, 160, 80) },
-            { new Color(191, 61, 61), new Color(181, 20, 20), new Color(242, 94, 94), new Color(148, 41, 41) }
+            { new Color(191, 61, 61), new Color(181, 20, 20), new Color(242, 94, 94), new Color(148, 41, 41) },
+            { new Color(165, 182, 212), new Color(173, 198, 240), new Color(197, 212, 240), new Color(141, 157, 186) }
     };
 
     private static Font font;
@@ -144,8 +146,8 @@ public class Button {
             Rectangle stringMetrics = font.getStringBounds(text[i], g2d.getFontRenderContext()).getBounds();
             g2d.drawString(text[i],
                     (int) (width - stringMetrics.getWidth()) / 2,
-                    (int) (text2 == "" ? (width - stringMetrics.getWidth()) / 2
-                            : 8 + (i + 1) * (stringMetrics.getHeight() - 5)));
+                    (int) (text2 == "" ? ( height/2 + ((1.5f-text.length)/2 + i) * stringMetrics.getHeight() )
+                            : ( 8 + (i + 1) * (stringMetrics.getHeight() - 5) )));
         }
 
         Rectangle text2Metrics = font.getStringBounds(text2, g2d.getFontRenderContext()).getBounds();
@@ -193,6 +195,14 @@ public class Button {
 
     public int getColor() {
         return color;
+    }
+
+    // Inputs can be null
+    public void setFeatures( String newIcon, String newText1, String newText2 ) {
+        if (newText1 != null) text1 = newText1;
+        if (newText2 != null) text2 = newText2;
+        icon = icon == null ? null : resizeImage(loadImage(newIcon), width * 2 / 3, height * 2 / 3);
+        updateButtonDetails();
     }
 
     public static boolean clickHovered() {

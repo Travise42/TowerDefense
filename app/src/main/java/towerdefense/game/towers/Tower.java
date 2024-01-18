@@ -157,7 +157,7 @@ public abstract class Tower {
 
         tier += 1;
 
-        Game.instance.player.spend( getUpgradeInfo().getCost(path, path) );
+        Game.instance.player.spend( getUpgradeInfo().getCost(path, tier) );
 
         resize();
     }

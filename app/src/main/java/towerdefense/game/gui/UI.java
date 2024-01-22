@@ -15,6 +15,7 @@ import java.io.IOException;
 
 import towerdefense.game.Game;
 import towerdefense.game.Panel;
+import towerdefense.game.enemies.Enemy;
 import towerdefense.game.env.MapInteractions;
 import towerdefense.game.towers.Tower;
 import towerdefense.game.towers.TowerUpgrade;
@@ -88,7 +89,10 @@ public class UI {
                 // Next round button
                 new Button(right - 100, 120, 80, 80, Button.GREEN, "gui/ui/next_round_button.png", "", "",
                         () -> {
-
+                            Game.instance.player.changeRound();
+                            for (int i = 0; i < Game.instance.player.getRound() + 2; i++) {
+                                Game.instance.map.newEnemy(Enemy.NINJA);
+                            }
                         }),
 
                 // Wizard tower button

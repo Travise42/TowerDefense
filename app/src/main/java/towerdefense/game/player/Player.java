@@ -7,6 +7,7 @@ public class Player {
 
     private int gold = 0;
     private int health = 0;
+    private int round = 0;
 
     public Player() {
 
@@ -74,6 +75,10 @@ public class Player {
         return (health -= amount) > 0;
     }
 
+    public void changeRound() {
+        round+= 1;
+    }
+
     // Calculations
 
     /**
@@ -95,6 +100,10 @@ public class Player {
 
     public int getHealth() {
         return health;
+    }
+
+    public int getRound() {
+        return round;
     }
 
 }
